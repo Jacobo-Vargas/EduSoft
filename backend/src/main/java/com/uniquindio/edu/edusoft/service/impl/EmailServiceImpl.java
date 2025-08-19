@@ -11,11 +11,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
-    /* Envía un correo al usuario con un código de verificación
-     * para completar el registro en la plataforma */
+    /**
+     * Envía un correo al usuario con un código de verificación
+     * para completar el registro en la plataforma
+     * @param email
+     * @param code
+     * @throws Exception
+     */
     @Override
     public void sendCodeVerifaction(String email, String code) throws Exception {
         String subject = "Código de verificación EduSoft";
@@ -38,8 +42,12 @@ public class EmailServiceImpl implements EmailService {
         mailSender.send(message);
     }
 
-    /* Envía un correo de bienvenida al estudiante
-     * después de registrarse en la plataforma */
+    /**
+     * Envía un correo de bienvenida al estudiante
+     * después de registrarse en la plataforma
+     * @param email
+     * @throws Exception
+     */
     @Override
     public void SendMailHome(String email) throws Exception {
         String subject = "Gracias por registrarse a Edusoft";
