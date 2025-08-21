@@ -12,11 +12,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    /**
-     * toca revisar esto ya que se se pone todo el mundo como estudiante si no que depende del correo
-     * @param userDTO
-     * @return
-     */
+    @Mapping(source = "documentNumber", target = "documentNumber")
     User toDocumentCreate(CreateUserDTO userDTO);
 
     User toDocumentUpdate(UpdateUserDto updateUserDto);

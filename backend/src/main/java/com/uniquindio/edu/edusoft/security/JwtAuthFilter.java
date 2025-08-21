@@ -30,17 +30,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        System.out.println(">>> Filtro JWT ejecutado para: " + request.getRequestURI());
+
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
 
-            if (jwtService.validateToken(token) && tokenStoreService.isTokenValid(token)) {
+            if (jwtService.validateToken(token) && tokenStoreService.isTokenValid(jwtService.extractJti(token))) {
                 String username = jwtService.extractSubject(token);
 
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(username, null, List.of());
-                SecurityContextHolder.getContext().setAuthentication(auth);
-
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(auth);

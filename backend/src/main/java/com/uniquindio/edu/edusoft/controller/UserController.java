@@ -15,20 +15,21 @@ public class UserController {
 
     private final UserService userService;
 
-    //enviar codigo verificaion
+    // crear usuario
+    @PostMapping("/createUser")
+    public ResponseEntity<?> createUser(@RequestBody @Valid CreateUserDTO createUserDTO) throws Exception {
+        return userService.createUser(createUserDTO);
+    }
+
+    // enviar código verificación
     @PostMapping("/sendCodeConfirmation/{email}")
     public ResponseEntity<?> sendCodeConfirmation(@PathVariable String email) throws Exception {
         return userService.sendCodeConfirmation(email);
     }
-    //crear usuario
-    @PostMapping("/createUser/")
-    public ResponseEntity<?> createUser(@RequestBody @Valid CreateUserDTO createUserDTO) throws Exception {
-        return userService.createUser(createUserDTO);
-    }
-    //verificar cuenta
+
+    // verificar cuenta
     @PutMapping("/verifyAccountEmailCode")
-    ResponseEntity<?> verifyAccountEmailCode(@RequestBody @Valid VerifyAccountEmailCodeDto verifyAccountEmailCodeDto) throws  Exception {
+    ResponseEntity<?> verifyAccountEmailCode(@RequestBody @Valid VerifyAccountEmailCodeDto verifyAccountEmailCodeDto) throws Exception {
         return userService.verifyAccountEmailCode(verifyAccountEmailCodeDto);
     }
-
 }

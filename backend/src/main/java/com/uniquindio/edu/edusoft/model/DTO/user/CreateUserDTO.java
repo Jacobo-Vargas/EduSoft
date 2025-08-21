@@ -15,10 +15,6 @@ public record CreateUserDTO(
         @Length(max = 50)
         String name,
 
-        @NotBlank(message = "Debe registrar una ciudad de residencia")
-        @Length(min = 3, max = 50)
-        String residenceCity,
-
         @NotBlank(message = "El número de celular es obligatorio")
         @Pattern(regexp = "^\\d{10}$", message = "El número de celular debe tener 10 dígitos")
         String phone,
