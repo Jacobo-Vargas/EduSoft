@@ -17,8 +17,6 @@ public interface UserMapper {
      * @param userDTO
      * @return
      */
-    @Mapping(target = "userType", constant = "ESTUDIANTE")
-    @Mapping(target = "createdAt", expression = "java(java.time.LocalDate.now())")
     User toDocumentCreate(CreateUserDTO userDTO);
 
     User toDocumentUpdate(UpdateUserDto updateUserDto);
