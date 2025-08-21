@@ -7,6 +7,7 @@ import com.uniquindio.edu.edusoft.model.DTO.user.respose.ResponseUserDto;
 import com.uniquindio.edu.edusoft.model.entities.User;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.repository.UserRepository;
+import com.uniquindio.edu.edusoft.service.EmailService;
 import com.uniquindio.edu.edusoft.service.UserService;
 import com.uniquindio.edu.edusoft.utils.ResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final EmailServiceImpl emailService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -65,6 +67,8 @@ public class UserServiceImpl implements UserService {
 
         // Construir respuesta
         ResponseUserDto responseUserDto = userMapper.toDtoResponseUser(savedUser);
+
+        emailService.SendMailHome(user.getEmail());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseDto(201, "Usuario creado exitosamente", responseUserDto));
