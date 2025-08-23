@@ -1,4 +1,4 @@
-package com.uniquindio.edu.edusoft.security;
+package com.uniquindio.edu.edusoft.config.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

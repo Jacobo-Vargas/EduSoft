@@ -1,4 +1,4 @@
-package com.uniquindio.edu.edusoft.utils;
+package com.uniquindio.edu.edusoft.model.dto.respose;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

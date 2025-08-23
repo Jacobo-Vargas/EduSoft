@@ -1,15 +1,14 @@
 package com.uniquindio.edu.edusoft.service.impl;
 
-import com.uniquindio.edu.edusoft.mapper.UserMapper;
-import com.uniquindio.edu.edusoft.model.DTO.user.CreateUserDTO;
-import com.uniquindio.edu.edusoft.model.DTO.user.VerifyAccountEmailCodeDto;
-import com.uniquindio.edu.edusoft.model.DTO.user.respose.ResponseUserDto;
+import com.uniquindio.edu.edusoft.model.mapper.UserMapper;
+import com.uniquindio.edu.edusoft.model.dto.user.CreateUserDTO;
+import com.uniquindio.edu.edusoft.model.dto.VerifyAccountEmailCodeDTO;
+import com.uniquindio.edu.edusoft.model.dto.respose.ResponseUserDto;
 import com.uniquindio.edu.edusoft.model.entities.User;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.repository.UserRepository;
-import com.uniquindio.edu.edusoft.service.EmailService;
 import com.uniquindio.edu.edusoft.service.UserService;
-import com.uniquindio.edu.edusoft.utils.ResponseDto;
+import com.uniquindio.edu.edusoft.model.dto.respose.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,7 +79,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> verifyAccountEmailCode(VerifyAccountEmailCodeDto verifyAccountEmailCodeDto) throws Exception {
+    public ResponseEntity<?> verifyAccountEmailCode(VerifyAccountEmailCodeDTO verifyAccountEmailCodeDto) throws Exception {
         return null;
     }
 }

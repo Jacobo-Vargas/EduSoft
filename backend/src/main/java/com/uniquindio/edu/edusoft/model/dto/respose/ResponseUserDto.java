@@ -1,4 +1,4 @@
-package com.uniquindio.edu.edusoft.model.DTO.user.respose;
+package com.uniquindio.edu.edusoft.model.dto.respose;
 
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 

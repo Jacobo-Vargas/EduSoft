@@ -1,4 +1,4 @@
-package com.uniquindio.edu.edusoft.security;
+package com.uniquindio.edu.edusoft.config.security;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

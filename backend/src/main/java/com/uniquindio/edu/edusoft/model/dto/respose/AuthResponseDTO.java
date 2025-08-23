@@ -1,10 +1,10 @@
-package com.uniquindio.edu.edusoft.dto;
+package com.uniquindio.edu.edusoft.model.dto.respose;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AuthResponse {
+public class AuthResponseDTO {
     private String accessToken;
 }

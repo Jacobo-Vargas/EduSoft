@@ -1,8 +1,8 @@
-package com.uniquindio.edu.edusoft.mapper;
+package com.uniquindio.edu.edusoft.model.mapper;
 
-import com.uniquindio.edu.edusoft.model.DTO.user.CreateUserDTO;
-import com.uniquindio.edu.edusoft.model.DTO.user.UpdateUserDto;
-import com.uniquindio.edu.edusoft.model.DTO.user.respose.ResponseUserDto;
+import com.uniquindio.edu.edusoft.model.dto.user.CreateUserDTO;
+import com.uniquindio.edu.edusoft.model.dto.user.UpdateUserDTO;
+import com.uniquindio.edu.edusoft.model.dto.respose.ResponseUserDto;
 import com.uniquindio.edu.edusoft.model.entities.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,7 +15,7 @@ public interface UserMapper {
     @Mapping(source = "documentNumber", target = "documentNumber")
     User toDocumentCreate(CreateUserDTO userDTO);
 
-    User toDocumentUpdate(UpdateUserDto updateUserDto);
+    User toDocumentUpdate(UpdateUserDTO updateUserDto);
 
     CreateUserDTO toDTO(User user);
 

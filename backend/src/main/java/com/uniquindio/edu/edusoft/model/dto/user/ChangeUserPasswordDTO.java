@@ -1,10 +1,10 @@
-package com.uniquindio.edu.edusoft.model.DTO.user;
+package com.uniquindio.edu.edusoft.model.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record ChangeUserPassword(
+public record ChangeUserPasswordDTO(
 
         @NotBlank(message = "EL documento de identificación  es obligatorio para poder cambiar la clave del usuario")
         String documentNumber,

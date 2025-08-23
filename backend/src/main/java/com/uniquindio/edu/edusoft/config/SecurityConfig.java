@@ -1,7 +1,7 @@
 package com.uniquindio.edu.edusoft.config;
 
 
-import com.uniquindio.edu.edusoft.security.JwtAuthFilter;
+import com.uniquindio.edu.edusoft.config.security.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

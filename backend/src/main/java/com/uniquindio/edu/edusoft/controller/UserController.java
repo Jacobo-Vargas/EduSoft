@@ -1,7 +1,7 @@
 package com.uniquindio.edu.edusoft.controller;
 
-import com.uniquindio.edu.edusoft.model.DTO.user.CreateUserDTO;
-import com.uniquindio.edu.edusoft.model.DTO.user.VerifyAccountEmailCodeDto;
+import com.uniquindio.edu.edusoft.model.dto.user.CreateUserDTO;
+import com.uniquindio.edu.edusoft.model.dto.VerifyAccountEmailCodeDTO;
 import com.uniquindio.edu.edusoft.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class UserController {
 
     // verificar cuenta
     @PutMapping("/verifyAccountEmailCode")
-    ResponseEntity<?> verifyAccountEmailCode(@RequestBody @Valid VerifyAccountEmailCodeDto verifyAccountEmailCodeDto) throws Exception {
+    ResponseEntity<?> verifyAccountEmailCode(@RequestBody @Valid VerifyAccountEmailCodeDTO verifyAccountEmailCodeDto) throws Exception {
         return userService.verifyAccountEmailCode(verifyAccountEmailCodeDto);
     }
 }

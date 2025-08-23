@@ -2,8 +2,8 @@ package com.uniquindio.edu.edusoft.Auth;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uniquindio.edu.edusoft.security.JwtService;
-import com.uniquindio.edu.edusoft.security.TokenStoreService;
+import com.uniquindio.edu.edusoft.config.security.JwtService;
+import com.uniquindio.edu.edusoft.config.security.TokenStoreService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

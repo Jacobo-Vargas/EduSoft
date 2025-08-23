@@ -1,9 +1,9 @@
 package com.uniquindio.edu.edusoft.controller;
 
-import com.uniquindio.edu.edusoft.dto.AuthResponse;
-import com.uniquindio.edu.edusoft.dto.LoginRequest;
-import com.uniquindio.edu.edusoft.security.JwtService;
-import com.uniquindio.edu.edusoft.security.TokenStoreService;
+import com.uniquindio.edu.edusoft.model.dto.respose.AuthResponseDTO;
+import com.uniquindio.edu.edusoft.model.dto.LoginRequestDTO;
+import com.uniquindio.edu.edusoft.config.security.JwtService;
+import com.uniquindio.edu.edusoft.config.security.TokenStoreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +20,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO request) {
         if ("admin".equals(request.getUsername()) && "1234".equals(request.getPassword())) {
 
 
@@ -34,7 +34,7 @@ public class AuthController {
             tokenStoreService.storeToken(jti, request.getUsername());
 
             // 3. Retornar token
-            return ResponseEntity.ok(new AuthResponse(accessToken));
+            return ResponseEntity.ok(new AuthResponseDTO(accessToken));
         }
         return ResponseEntity.status(401).build();
     }

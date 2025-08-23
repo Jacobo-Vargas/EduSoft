@@ -1,9 +1,9 @@
-package com.uniquindio.edu.edusoft.model.DTO.user;
+package com.uniquindio.edu.edusoft.model.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public record VerifyAccountEmailCodeDto(
+public record VerifyAccountEmailCodeDTO(
         @Email
         String email,
 
