@@ -2,10 +2,11 @@ package com.uniquindio.edu.edusoft.service.impl;
 
 import com.uniquindio.edu.edusoft.service.EmailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 @RequiredArgsConstructor
@@ -14,146 +15,129 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
 
     /**
-     * Envía un correo al usuario con un código de verificación
-     * para completar el registro en la plataforma
-     * @param email
-     * @param code
-     * @throws Exception
+     * Plantilla base para correos
      */
+    private String buildTemplate(String title, String bodyContent) {
+        return """
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <style>
+            body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+            .container { max-width: 600px; margin: auto; background: #ffffff; border-radius: 12px;
+                         box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 20px; }
+            .header { background: #004b23; color: white; text-align: center; padding: 15px;
+                      border-radius: 12px 12px 0 0; }
+            .content { padding: 20px; font-size: 14px; color: #333; line-height: 1.5; }
+            .highlight { font-size: 22px; font-weight: bold; color: #006400; margin: 20px 0; text-align: center; }
+            .button { display: inline-block; padding: 12px 20px; background: #004b23; color: white;
+                      text-decoration: none; border-radius: 25px; margin-top: 20px; }
+            .footer { margin-top: 20px; font-size: 12px; color: #777; text-align: center; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header"><h2>%s</h2></div>
+            <div class="content">%s</div>
+            <div class="footer">© 2025 EduSoft - Universidad del Quindío</div>
+          </div>
+        </body>
+        </html>
+        """.formatted(title, bodyContent);
+    }
+
     @Override
     public void sendCodeVerifaction(String email, String code) throws Exception {
         String subject = "Código de verificación EduSoft";
-        String emailBody = """
-                ¡Hola!
-                
-                Para completar tu registro en EduSoft, utiliza el siguiente código:
-                
-                👉 CÓDIGO: %s
-                
-                Este código expirará en 1 minuto.
-                
-                Atentamente, Equipo EduSoft, Universidad del Quindío
-                """.formatted(code);
+        String content = """
+            <p>Hola 👋,</p>
+            <p>Para completar tu registro en <b>EduSoft</b>, utiliza el siguiente código:</p>
+            <div class="highlight">%s</div>
+            <p>⚠️ Este código expirará en 1 minuto.</p>
+        """.formatted(code);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject(subject);
-        message.setText(emailBody);
-        mailSender.send(message);
+        sendHtmlMail(email, subject, buildTemplate("Verificación de cuenta", content));
     }
 
-    /**
-     * Envía un correo de bienvenida al estudiante
-     * después de registrarse en la plataforma
-     * @param email
-     * @throws Exception
-     */
     @Override
     public void SendMailHome(String email) throws Exception {
-        String subject = "Gracias por registrarse a Edusoft";
-        String emailBody = "¡Hola!\n\n" +
-                "Gracias por registrarte en EduSoft, la plataforma académica de la Universidad del Quindío estamos muy felices de tenerte con nosotros.\n\n" +
-                "Con EduSoft podrás acceder a herramientas diseñadas para apoyar tu aprendizaje, facilitar tu experiencia académica y mantenerte conectado con la comunidad universitaria.\n\n" +
-                "Tu registro es el primer paso para vivir una experiencia innovadora en la educación.\n\n" +
-                "¡Bienvenido a la familia UQ!\n\n" +
-                "Atentamente, Equipo EduSoft, Universidad del Quindío";
+        String subject = "¡Bienvenido a EduSoft - Universidad del Quindío!";
+        String content = """
+            <p>Hola 👋,</p>
+            <p>Gracias por registrarte en <b>EduSoft</b>, la plataforma académica de la <b>Universidad del Quindío</b>. 
+            Estamos muy felices de tenerte con nosotros.</p>
+            <p>Con EduSoft podrás acceder a herramientas diseñadas para apoyar tu aprendizaje y mantenerte conectado con la comunidad universitaria.</p>
+        """;
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject(subject);
-        message.setText(emailBody);
-
-        mailSender.send(message);
+        sendHtmlMail(email, subject, buildTemplate("Bienvenido a EduSoft", content));
     }
 
-    /* Envía un correo de confirmación al estudiante
-     * cuando se inscribe en un curso */
     @Override
     public void sendmailcourse(String email, String nameCourse) throws Exception {
         String subject = "Inscripción exitosa al curso " + nameCourse;
-        String emailBody = """
-                ¡Hola!
-                
-                Te confirmamos que te has inscrito exitosamente en el curso: %s.
-                
-                A partir de ahora podrás acceder a todos los contenidos, actividades y recursos disponibles en la plataforma EduSoft de la Universidad del Quindío.
-                
-                Te deseamos muchos éxitos en tu proceso de aprendizaje.
-                
-                Atentamente, Equipo EduSoft, Universidad del Quindío
-                """.formatted(nameCourse);
+        String content = """
+            <p>Hola 👋,</p>
+            <p>Te confirmamos que te has inscrito exitosamente en el curso:</p>
+            <div class="highlight">%s</div>
+            <p>A partir de ahora podrás acceder a todos los contenidos, actividades y recursos disponibles en la plataforma EduSoft de la Universidad del Quindío.</p>
+            <p>Te deseamos muchos éxitos en tu proceso de aprendizaje. 📘</p>
+        """.formatted(nameCourse);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject(subject);
-        message.setText(emailBody);
-
-        mailSender.send(message);
+        sendHtmlMail(email, subject, buildTemplate("Inscripción confirmada", content));
     }
 
-    /* Envía un correo al profesor confirmando la solicitud
-     * de registro de un curso en la plataforma */
     @Override
     public void sendMailTeacher(String email, String nameCourse) throws Exception {
         String subject = "Solicitud de registro del curso " + nameCourse;
-        String emailBody = """
-                ¡Hola!
-                
-                Te confirmamos que te has enviado la solicitud de regisitro del curso : %s exitosamente.
-                
-                A partir de ahora nustro equipo de auditores verificara el contenido del curso segun los estndares de la Universidad del Quindío.
-                Pronto se te informara de si el curso necesita alguna modificacion o se publica correctamente
-                
-                Atentamente, Equipo EduSoft, Universidad del Quindío
-                """.formatted(nameCourse);
+        String content = """
+            <p>Hola 👋,</p>
+            <p>Te confirmamos que se ha enviado la solicitud de registro del curso:</p>
+            <div class="highlight">%s</div>
+            <p>Nuestro equipo de auditores verificará el contenido del curso según los estándares de la Universidad del Quindío.</p>
+            <p>Pronto se te informará si el curso necesita modificaciones o si fue publicado correctamente.</p>
+        """.formatted(nameCourse);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject(subject);
-        message.setText(emailBody);
-
-        mailSender.send(message);
+        sendHtmlMail(email, subject, buildTemplate("Solicitud recibida", content));
     }
 
-    /* Envía un correo al profesor con las modificaciones
-     * solicitadas por los auditores en un curso */
     @Override
     public void sendMailAuditor(String email, String nameCourse, String information) throws Exception {
-        String subject = "Solictud de modificacion del curso " + nameCourse;
-        String emailBody = """
-                
-                Se solicita la modificaion en los siguentes puntos:
-                
-                %s
-                
-                al hacer la modificacion de estos cursos se volvera a verificar el curso
-                
-                Atentamente, Equipo EduSoft, Universidad del Quindío
-                """.formatted(information);
+        String subject = "Solicitud de modificación del curso " + nameCourse;
+        String content = """
+            <p>Hola 👋,</p>
+            <p>Se solicita realizar las siguientes modificaciones en el curso:</p>
+            <div class="highlight">%s</div>
+            <p>Una vez aplicadas, el curso será nuevamente verificado por nuestros auditores.</p>
+        """.formatted(information);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject(subject);
-        message.setText(emailBody);
-
-        mailSender.send(message);
+        sendHtmlMail(email, subject, buildTemplate("Modificaciones requeridas", content));
     }
 
-    /* Envía un correo al profesor confirmando que
-     * su curso fue aprobado y publicado exitosamente */
     @Override
     public void sendMailAuditorOK(String email, String nameCourse) throws Exception {
         String subject = "Registro exitoso del curso " + nameCourse;
-        String emailBody = """
-                su curso fue aceptado y publicado correctamente en nustra plataforma.
-                
-                Atentamente, Equipo EduSoft, Universidad del Quindío
-                """;
+        String content = """
+            <p>Hola 👋,</p>
+            <p>¡Excelente noticia! 🎉</p>
+            <p>Tu curso:</p>
+            <div class="highlight">%s</div>
+            <p>ha sido aceptado y publicado correctamente en nuestra plataforma.</p>
+        """.formatted(nameCourse);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject(subject);
-        message.setText(emailBody);
+        sendHtmlMail(email, subject, buildTemplate("Curso aprobado", content));
+    }
+
+    /**
+     * Método genérico para enviar correos HTML
+     */
+    private void sendHtmlMail(String to, String subject, String htmlContent) throws Exception {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(htmlContent, true);
 
         mailSender.send(message);
     }
