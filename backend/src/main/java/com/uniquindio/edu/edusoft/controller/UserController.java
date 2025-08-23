@@ -1,7 +1,7 @@
 package com.uniquindio.edu.edusoft.controller;
 
-import com.uniquindio.edu.edusoft.model.dto.user.CreateUserDTO;
-import com.uniquindio.edu.edusoft.model.dto.user.VerifyAccountEmailCodeDTO;
+import com.uniquindio.edu.edusoft.model.dto.respose.ResponseDTO;
+import com.uniquindio.edu.edusoft.model.dto.user.RequestUserDTO;
 import com.uniquindio.edu.edusoft.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,21 +15,23 @@ public class UserController {
 
     private final UserService userService;
 
-    // crear usuario
+    // Crear usuario
     @PostMapping("/createUser")
-    public ResponseEntity<?> createUser(@RequestBody @Valid CreateUserDTO createUserDTO) throws Exception {
-        return userService.createUser(createUserDTO);
+    public ResponseEntity<ResponseDTO> createUser(@RequestBody @Valid RequestUserDTO requestUserDTO) throws Exception {
+        return userService.createUser(requestUserDTO);
     }
 
-    // enviar código verificación
+    // Enviar código de verificación
     @PostMapping("/sendCodeConfirmation/{email}")
-    public ResponseEntity<?> sendCodeConfirmation(@PathVariable String email) throws Exception {
+    public ResponseEntity<ResponseDTO> sendCodeConfirmation(@PathVariable String email) throws Exception {
         return userService.sendCodeConfirmation(email);
     }
 
-    // verificar cuenta
-    @PutMapping("/verifyAccountEmailCode")
-    ResponseEntity<?> verifyAccountEmailCode(@RequestBody @Valid VerifyAccountEmailCodeDTO verifyAccountEmailCodeDto) throws Exception {
-        return userService.verifyAccountEmailCode(verifyAccountEmailCodeDto);
+    // Verificar cuenta con código
+    @PutMapping("/verifyAccountEmailCode/{email}/{code}")
+    public ResponseEntity<ResponseDTO> verifyAccountEmailCode(
+            @PathVariable String email,
+            @PathVariable String code) throws Exception {
+        return userService.verifyAccountEmailCode(email, code);
     }
 }
