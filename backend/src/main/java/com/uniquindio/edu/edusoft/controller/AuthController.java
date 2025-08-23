@@ -1,7 +1,7 @@
 package com.uniquindio.edu.edusoft.controller;
 
 import com.uniquindio.edu.edusoft.model.dto.respose.AuthResponseDTO;
-import com.uniquindio.edu.edusoft.model.dto.LoginRequestDTO;
+import com.uniquindio.edu.edusoft.model.dto.respose.LoginRequestDTO;
 import com.uniquindio.edu.edusoft.config.security.JwtService;
 import com.uniquindio.edu.edusoft.config.security.TokenStoreService;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.uniquindio.edu.edusoft.controller;
 
 import com.uniquindio.edu.edusoft.model.dto.user.CreateUserDTO;
-import com.uniquindio.edu.edusoft.model.dto.VerifyAccountEmailCodeDTO;
+import com.uniquindio.edu.edusoft.model.dto.user.VerifyAccountEmailCodeDTO;
 import com.uniquindio.edu.edusoft.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

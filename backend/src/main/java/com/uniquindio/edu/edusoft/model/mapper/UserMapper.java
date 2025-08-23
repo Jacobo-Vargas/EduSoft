@@ -2,7 +2,7 @@ package com.uniquindio.edu.edusoft.model.mapper;
 
 import com.uniquindio.edu.edusoft.model.dto.user.CreateUserDTO;
 import com.uniquindio.edu.edusoft.model.dto.user.UpdateUserDTO;
-import com.uniquindio.edu.edusoft.model.dto.respose.ResponseUserDto;
+import com.uniquindio.edu.edusoft.model.dto.respose.ResponseUserDTO;
 import com.uniquindio.edu.edusoft.model.entities.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,8 +19,8 @@ public interface UserMapper {
 
     CreateUserDTO toDTO(User user);
 
-    ResponseUserDto toDtoResponseUser(User user);
+    ResponseUserDTO toDtoResponseUser(User user);
 
-    List<ResponseUserDto>toDTOListReponseUser(List<User> users);
+    List<ResponseUserDTO>toDTOListReponseUser(List<User> users);
 
 }

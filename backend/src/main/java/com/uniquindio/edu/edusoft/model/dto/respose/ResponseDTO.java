@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class ResponseDto {
+public class ResponseDTO {
 
     private int codigo;
 

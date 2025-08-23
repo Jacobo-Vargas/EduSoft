@@ -1,7 +1,7 @@
 package com.uniquindio.edu.edusoft.service;
 
 import com.uniquindio.edu.edusoft.model.dto.user.CreateUserDTO;
-import com.uniquindio.edu.edusoft.model.dto.VerifyAccountEmailCodeDTO;
+import com.uniquindio.edu.edusoft.model.dto.user.VerifyAccountEmailCodeDTO;
 import org.springframework.http.ResponseEntity;
 
 public interface UserService {

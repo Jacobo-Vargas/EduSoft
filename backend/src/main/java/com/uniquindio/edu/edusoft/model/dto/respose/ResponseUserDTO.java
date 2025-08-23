@@ -4,7 +4,7 @@ import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 
 import java.time.LocalDate;
 
-public record ResponseUserDto(
+public record ResponseUserDTO(
 
         String documentNumber,
         String name,

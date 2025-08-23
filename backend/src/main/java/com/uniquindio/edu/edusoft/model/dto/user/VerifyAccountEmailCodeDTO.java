@@ -1,4 +1,4 @@
-package com.uniquindio.edu.edusoft.model.dto;
+package com.uniquindio.edu.edusoft.model.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

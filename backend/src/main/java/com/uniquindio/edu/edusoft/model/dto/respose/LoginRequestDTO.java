@@ -1,4 +1,4 @@
-package com.uniquindio.edu.edusoft.model.dto;
+package com.uniquindio.edu.edusoft.model.dto.respose;
 
 import lombok.Data;
 

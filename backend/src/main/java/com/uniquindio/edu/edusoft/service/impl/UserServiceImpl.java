@@ -2,13 +2,13 @@ package com.uniquindio.edu.edusoft.service.impl;
 
 import com.uniquindio.edu.edusoft.model.mapper.UserMapper;
 import com.uniquindio.edu.edusoft.model.dto.user.CreateUserDTO;
-import com.uniquindio.edu.edusoft.model.dto.VerifyAccountEmailCodeDTO;
-import com.uniquindio.edu.edusoft.model.dto.respose.ResponseUserDto;
+import com.uniquindio.edu.edusoft.model.dto.user.VerifyAccountEmailCodeDTO;
+import com.uniquindio.edu.edusoft.model.dto.respose.ResponseUserDTO;
 import com.uniquindio.edu.edusoft.model.entities.User;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.repository.UserRepository;
 import com.uniquindio.edu.edusoft.service.UserService;
-import com.uniquindio.edu.edusoft.model.dto.respose.ResponseDto;
+import com.uniquindio.edu.edusoft.model.dto.respose.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
                     : String.format("La cédula %s ya está registrada", createUserDTO.documentNumber());
 
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ResponseDto(409, message, null));
+                    .body(new ResponseDTO(409, message, null));
         }
 
         // Mapeo DTO -> entidad User
@@ -65,12 +65,12 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(user);
 
         // Construir respuesta
-        ResponseUserDto responseUserDto = userMapper.toDtoResponseUser(savedUser);
+        ResponseUserDTO responseUserDto = userMapper.toDtoResponseUser(savedUser);
 
         emailService.SendMailHome(user.getEmail());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ResponseDto(201, "Usuario creado exitosamente", responseUserDto));
+                .body(new ResponseDTO(201, "Usuario creado exitosamente", responseUserDto));
     }
 
     @Override
