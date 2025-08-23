@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(source = "documentNumber", target = "documentNumber")
+
     User toDocumentCreate(CreateUserDTO userDTO);
 
     User toDocumentUpdate(UpdateUserDTO updateUserDto);
