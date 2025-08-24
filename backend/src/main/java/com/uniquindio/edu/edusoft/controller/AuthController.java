@@ -28,14 +28,14 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.substring(7);
         String jti = jwtService.extractJti(token);
 
         // 1. Eliminar el tokken de Redis
         tokenStoreService.removeToken(jti);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Sesión cerrada exitosamente");
     }
 
 }

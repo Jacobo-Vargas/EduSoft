@@ -1,0 +1,52 @@
+<div class="page-container">
+  <!-- Logo arriba a la derecha -->
+  <img src="../../../../assets/img/logo-uq.png" alt="Logo Universidad del Quindío" class="logo-uq" />
+
+  <!-- Controles de accesibilidad (centrados vertical a la izquierda) -->
+  <div class="accessibility-controls">
+    <button type="button" (click)="setFontSize('normal')">A</button>
+    <button type="button" (click)="setFontSize('large')">A+</button>
+  </div>
+
+  <!-- Contenedor del formulario -->
+  <div class="form-container" [ngClass]="currentSize">
+    <h2>Registro de Usuario</h2>
+
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+
+      <label>Número de documento*</label>
+      <input type="text" formControlName="documentNumber" placeholder="Ingrese su número de documento" />
+
+      <label>Nombre*</label>
+      <input type="text" formControlName="name" placeholder="Ingrese su nombre" />
+
+      <label>Teléfono*</label>
+      <input type="text" formControlName="phone" placeholder="Ingrese su teléfono" />
+
+      <label>Dirección*</label>
+      <input type="text" formControlName="address" placeholder="Ingrese su dirección" />
+
+      <label>Correo electrónico*</label>
+      <input type="email" formControlName="email" placeholder="Ingrese su correo electrónico" />
+
+      <!-- Contenedor del label de contraseña con tooltip -->
+      <div class="password-label-container">
+        <label>Contraseña*</label>
+      </div>
+
+      <!-- Input con ojo -->
+      <div class="password-container">
+        <input 
+          [type]="showPassword ? 'text' : 'password'" 
+          formControlName="password" 
+          placeholder="Ingrese su contraseña" 
+        />
+        <span class="eye-icon" (click)="togglePassword()">
+          {{ showPassword ? '🙈' : '👁️' }}
+        </span>
+      </div>
+
+      <button type="submit">Aceptar</button>
+    </form>
+  </div>
+</div>

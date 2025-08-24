@@ -1,0 +1,24 @@
+<div class="relative w-[340px] h-[410px] rounded-4xl overflow-hidden cursor-pointer">
+    <div class="absolute h-[100%] w-full"  [ngStyle]="{ 'background-color': bgColor }">
+        <img [src]="imageSrc" alt="Imagen de tarjeta">
+    </div>
+    <div class="absolute w-[100%] bottom-0 p-2 flex items-end justify-between">
+        <div class="m-2">
+            <p class="text-xl text-white font-bold">
+                {{ title }}
+            </p>
+            <p class="text-lg text-white font-light">
+                {{ description }}
+            </p>
+            <button class="relative transition-all duration-300 ease-in-out shadow-lg py-3 px-4 bg-[#032a5a] rounded-3xl flex items-center justify-center text-white font-bold gap-[20px] border-2 border-white/30
+                outline-none overflow-hidden text-[11px] cursor-pointer h-[40px] mt-5 hover:scale-105 hover:border-white/60 w-77" (click)="generateAction()">
+                {{ buttonText }}
+                <svg class="w-[24px] h-[24px] transition-all duration-300 ease-in-out" viewBox="0 0 24 24" [attr.fill]="iconColor">
+                    <path fill-rule="evenodd"
+                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>

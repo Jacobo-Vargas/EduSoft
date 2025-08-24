@@ -1,1 +1,18 @@
-<router-outlet></router-outlet>
+<div class="flex flex-col min-h-screen">
+  <!-- Navbar -->
+  <app-navbar></app-navbar>
+
+  <!-- Contenido dinámico -->
+  <main class="flex-1 p-10 bg-gray-100">
+    <router-outlet></router-outlet>
+  </main>
+
+
+<!-- Footer con Bootstrap -->
+<footer class="bg-dark text-white text-center py-3 mt-auto">
+  <div class="container">
+    <span>© 2025 EduSoft - Todos los derechos reservados</span>
+  </div>
+</footer>
+
+</div>

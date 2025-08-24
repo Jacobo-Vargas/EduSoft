@@ -11,6 +11,7 @@ import com.uniquindio.edu.edusoft.config.security.JwtService;
 import com.uniquindio.edu.edusoft.config.security.TokenStoreService;
 import com.uniquindio.edu.edusoft.service.LoginService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,7 @@ public class LoginServiceImpl implements LoginService {
                 return ResponseEntity.ok(new AuthResponseDTO(accessToken));
             }
         }else{
-            throw new IllegalArgumentException("Username debe ser correo o teléfono válido");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username debe ser correo o teléfono válido");
         }
         return null;
     }

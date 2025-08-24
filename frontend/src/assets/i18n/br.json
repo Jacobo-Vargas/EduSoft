@@ -1,0 +1,61 @@
+{
+  "footer": {
+    "aboutUs": "Sobre nós",
+    "companies": "Companhias",
+    "contact": "Contato",
+    "financeWithUs": "Por que financiar conosco?",
+    "investWithUs": "Por que investir conosco?",
+    "investors": "Investidores",
+    "ourHistory": "Nossa História",
+    "requestFinancing": "Solicitar financiamiento",
+    "valuesProposal": "Valores e proposta"
+  },
+  "help": {
+    "contactBody": "Se não encontrou a resposta para sua pergunta na seção “Perguntas frequentes”, deixe sua dúvida aqui. Responderemos a você por e-mail o mais rápido possível.",
+    "contactUs": "Entre em contato conosco em",
+    "mainTitle": "Olá, como podemos ajudá-lo?",
+    "messageTitle": "Título de sua mensagem",
+    "send": "Enviar",
+    "writeMessage": "Escreva sua mensagem aqui"
+  },
+  "menu": {
+    "help": "Ajuda",
+    "home": "Início",
+    "invest": "Investir",
+    "logout": "Fazer logout",
+    "myInvestments": "Meus investimentos",
+    "settings": "Configurações"
+  },
+  "setings": {
+    "update": "Atualização"
+  },
+  "settings": {
+    "accountSettings": "Configurações da conta",
+    "change": "ALTERAR",
+    "changeLanguage": "Alterar idioma",
+    "changePassword": "ALTERAR SENHA",
+    "changePasswordLabel": "Alterar sua senha de acesso",
+    "confirmPassword": "Você deve confirmar sua nova senha.",
+    "containCapitalLetter": "Conter uma letra maiúscula",
+    "currentPassword": "Digite sua senha atual",
+    "currentPasswordRequired": "A senha atual é obrigatória.",
+    "edit": "EDITAR",
+    "enterNewPassword": "Digite a nova senha",
+    "identificationDocument": "Documento de identificação",
+    "includeNumbers": "Incluir pelo menos um número",
+    "language": "Linguagem",
+    "lowercaseLetter": "Conter uma letra minúscula",
+    "minimumCharacters": "Um mínimo de 8 caracteres",
+    "newPassword": "Digite sua nova senha",
+    "newPasswordRequired": "A nova senha é obrigatória.",
+    "password": "Senha",
+    "passwordHints": "Digite sua nova senha. Lembre-se de que ela deve ter:",
+    "passwordsDontMatch": "As senhas não correspondem.",
+    "reenterPassword": "Digite novamente sua senha",
+    "securityRequirements": "A senha não atende aos requisitos de segurança.",
+    "settings": "Configurações",
+    "specialCharacter": "Incluir pelo menos um caractere especial",
+    "updateDocument": "Atualize seu documento de identificação",
+    "updatedPassword": "Alteração de senha"
+  }
+}

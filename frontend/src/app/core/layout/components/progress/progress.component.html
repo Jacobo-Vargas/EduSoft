@@ -1,0 +1,18 @@
+<div class="flex items-center justify-between w-full max-w-lg mx-auto">
+    <div *ngFor="let step of steps; let i = index" class="flex items-center w-full">
+        <div class="w-5 h-5 flex items-center justify-center rounded-full border-2" [ngClass]="{
+          'border-[#14AA95] bg-green-100': i <= currentStep,
+          'border-gray-400 bg-gray-200': i > currentStep
+        }">
+            <div class="w-3 h-3 rounded-full" [ngClass]="{
+            'bg-[#14AA95]': i <= currentStep,
+            'bg-white': i > currentStep
+          }"></div>
+        </div>
+
+        <div *ngIf="i < steps.length - 1" class="flex-grow h-1 border-t-2" [ngClass]="{
+          'border-[#14AA95] border-dashed': i < currentStep,
+          'border-gray-400 border-dashed': i >= currentStep
+        }"></div>
+    </div>
+</div>

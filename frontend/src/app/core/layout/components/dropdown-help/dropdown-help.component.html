@@ -1,0 +1,30 @@
+<div class="w-full lg:hidden mt-8">
+    <!-- Sección 1 -->
+    <div>
+        <button class="w-full flex items-center p-x-3 text-[#032a5a] text-lg font-normal gap-5 ml-5"
+            (click)="toggle(1)">
+            <span [class.rotate-90]="isOpen1" class="transition-transform">▶</span>
+            PREGUNTAS FRECUENTES
+        </button>
+        <hr class="ml-4 mt-5 w-[90%] text-gray-300 border-t-2">
+        <div *ngIf="isOpen1" class="text-[#032a5a]">
+            <div class="pl-2 pr-2 md:pl-4" *ngFor="let accordion of accordions">
+                <app-accordion-info [title]="accordion.title"
+                    [description]="accordion.description"></app-accordion-info>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección 2 -->
+    <div class="mt-7">
+        <button class="w-full flex items-center p-x-3 text-[#032a5a] text-lg font-normal gap-5 ml-5"
+            (click)="toggle(2)">
+            <span [class.rotate-90]="isOpen2" class="transition-transform">▶</span>
+            CONTÁCTANOS
+        </button>
+        <hr class="ml-4 mt-5 w-[90%] text-gray-300 border-t-2">
+        <div *ngIf="isOpen2" class="text-[#032a5a]">
+            <app-contact-form></app-contact-form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+{
+  "footer": {
+    "aboutUs": "Sobre Nosotros",
+    "companies": "Empresas",
+    "contact": "Contacto",
+    "financeWithUs": "¿Por qué financiarte con nosotros?",
+    "investWithUs": "¿Por qué invertir con nosotros?",
+    "investors": "Inversionistas",
+    "ourHistory": "Nuestra Historia",
+    "requestFinancing": "Solicitar financiamiento",
+    "valuesProposal": "Valores y propuesta"
+  },
+  "help": {
+    "contactBody": "Si no encontró la respuesta a su pregunta en la sección \"Preguntas Frecuentes\", por favor         déjenos su consulta aquí. Le responderemos a través de correo electrónico a la brevedad.",
+    "contactUs": "Contáctanos",
+    "mainTitle": "Hola, ¿cómo podemos ayudarte?",
+    "messageTitle": "Título de tu mensaje",
+    "send": "Enviar",
+    "writeMessage": "Escribe tu mensaje aquí"
+  },
+  "menu": {
+    "help": "Ayuda",
+    "home": "Inicio",
+    "invest": "Invertir",
+    "logout": "Cerrar sesión",
+    "myInvestments": "Mis inversiones",
+    "settings": "Configuraciones"
+  },
+  "setings": {
+    "update": "Actualizar"
+  },
+  "settings": {
+    "accountSettings": "Configuraciones de la cuenta",
+    "change": "CAMBIAR",
+    "changeLanguage": "Cambiar Idioma",
+    "changePassword": "CAMBIAR CONTRASEÑA",
+    "changePasswordLabel": "Cambiar tu contraseña de acceso",
+    "confirmPassword": "Debes confirmar tu nueva contraseña.",
+    "containCapitalLetter": "Contener una letra mayúscula",
+    "currentPassword": "Ingrese su contraseña actual",
+    "currentPasswordRequired": "La contraseña actual es obligatoria.",
+    "edit": "EDITAR",
+    "enterNewPassword": "Ingrese la nueva contraseña",
+    "identificationDocument": "Documento de identificación",
+    "includeNumbers": "Incluir al menos un número",
+    "language": "Idioma",
+    "lowercaseLetter": "Contener una letra minúscula",
+    "minimumCharacters": "Un mínimo de 8 caracteres",
+    "newPassword": "Ingresa tu nueva contraseña",
+    "newPasswordRequired": "La nueva contraseña es obligatoria.",
+    "password": "Contraseña",
+    "passwordHints": "Ingresa tu nueva contraseña. Recuerda que debe tener:",
+    "passwordsDontMatch": "Las contraseñas no coinciden.",
+    "reenterPassword": "Ingresa nuevamente tu contraseña",
+    "securityRequirements": "La contraseña no cumple con los requisitos de seguridad.",
+    "settings": "Configuraciones",
+    "specialCharacter": "Incluir al menos un carácter especial",
+    "updateDocument": "Actualiza tu documento de identificación",
+    "updatedPassword": "Cambio de contraseña"
+  }
+}

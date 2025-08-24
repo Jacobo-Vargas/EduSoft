@@ -1,0 +1,63 @@
+<div class="bg-transparent text-white lg:p-3 rounded-lg max-w-md lg:mt-5">
+    <div class="flex flex-col relative lg:pl-5">
+        <div [ngClass]="stageActive ? 'bg-[#14AA95]' : 'bg-gray-400'" class="absolute left-3.5 lg:left-7 top-2 w-[2px] h-full"></div>
+
+        <!-- Paso 1: Activo -->
+        <div class="flex items-start space-x-3 relative">
+            <div class="relative">
+                <div class="w-8 h-8 lg:w-5 lg:h-5 bg-[#14AA95] rounded-full flex items-center justify-center relative z-10">
+                    <div *ngIf="!stageActive" class="w-4 h-4 lg:w-3 lg:h-3 bg-white rounded-full"></div>
+                    <svg *ngIf="stageActive" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-[#14AA95] font-semibold text-lg">Perfil de Impacto</h3>
+                <p [ngClass]="stageActive ? 'text-gray-800' : 'text-gray-500 lg:text-gray-300 lg:text-sm'" class="text-base">
+                    Cuéntanos qué sectores de impacto cultural, social y ambiental te interesan.
+                </p>
+            </div>
+        </div>
+
+        <!-- Paso 2 -->
+        <div class="flex items-start space-x-3 relative mt-6">
+            <div class="relative">
+                <div *ngIf="stageActive" class="w-8 h-8 lg:w-5 lg:h-5 bg-[#14AA95] rounded-full flex items-center justify-center relative z-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                </div>
+                <div *ngIf="!stageActive" class="w-8 h-8 lg:w-5 lg:h-5 border-7 lg:border-2 border-gray-400 rounded-full bg-white lg:bg-[#032a5a]"></div>
+            </div>
+            <div>
+                <h3 [ngClass]="stageActive ? 'text-[#14AA95]' : 'text-gray-500 lg:text-white'" class="text-lg font-semibold">Perfil de Inversionista</h3>
+                <p [ngClass]="stageActive ? 'text-gray-800' : 'text-gray-500 lg:text-gray-300 lg:text-sm'" class="text-base">Sepa qué tipo de inversor es.</p>
+            </div>
+        </div>
+
+        <!-- Paso 3 -->
+        <div class="flex items-start space-x-3 relative mt-6">
+            <div class="relative">
+                <div *ngIf="stageActive" class="w-8 h-8 lg:w-5 lg:h-5 bg-[#14AA95] rounded-full flex items-center justify-center relative z-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                </div>
+                <div *ngIf="!stageActive" class="w-8 h-8 lg:w-5 lg:h-5 border-7 lg:border-2 border-gray-400 rounded-full bg-white lg:bg-[#032a5a]"></div>
+            </div>
+            <div>
+                <h3 [ngClass]="stageActive ? 'text-[#14AA95]' : 'text-gray-500 lg:text-white'" class="text-lg font-semibold">Datos Personales</h3>
+                <p [ngClass]="stageActive ? 'text-gray-800' : 'text-gray-500 lg:text-gray-300 lg:text-sm'" class="text-base">¡Queremos saber un poco más de ti!</p>
+            </div>
+        </div>
+
+        <!-- Paso 4 -->
+        <div class="flex items-start space-x-3 relative mt-6">
+            <div class="relative">
+                <div *ngIf="stageActive" class="w-8 h-8 lg:w-5 lg:h-5 bg-[#14AA95] rounded-full flex items-center justify-center relative z-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                </div>
+                <div *ngIf="!stageActive" class="w-8 h-8 lg:w-5 lg:h-5 border-7 lg:border-2 border-gray-400 rounded-full bg-white lg:bg-[#032a5a]"></div>
+            </div>
+            <div>
+                <h3 [ngClass]="stageActive ? 'text-[#14AA95]' : 'text-gray-500 lg:text-white'" class="text-lg font-semibold">Declaraciones</h3>
+                <p [ngClass]="stageActive ? 'text-gray-800' : 'text-gray-500 lg:text-gray-300 lg:text-sm'" class="text-base">Último paso para poder invertir.</p>
+            </div>
+        </div>
+    </div>
+</div>

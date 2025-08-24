@@ -1,0 +1,13 @@
+<div class="w-[98%] bg-gray-100 md:bg-transparent rounded-lg shadow-md pl-2 pb-2 mb-3 border border-gray-300">
+    <button class="w-full flex justify-between items-center text-[#032a5a] font-semibold text-lg p-2" (click)="toggle()">
+        <span class="pt-2">{{ title }}</span>
+        <svg [class.rotate-180]="isOpen" class="transition-transform w-8 h-8 mt-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#032a5a">
+            <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+        </svg>
+        <!-- <span [class.rotate-180]="isOpen" class="transition-transform">▼</span> -->
+    </button>
+
+    <div *ngIf="isOpen" class="pb-5 pl-3 pr-3 text-[#032a5a]" style="white-space: pre-line;">
+        {{ description }}
+    </div>
+</div>

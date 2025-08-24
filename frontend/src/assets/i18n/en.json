@@ -1,0 +1,61 @@
+{
+  "footer": {
+    "aboutUs": "About Us",
+    "companies": "Companies",
+    "contact": "Contact",
+    "financeWithUs": "Why finance with us?",
+    "investWithUs": "Why invest with us?",
+    "investors": "Investors",
+    "ourHistory": "Our History",
+    "requestFinancing": "Request financing",
+    "valuesProposal": "Values and proposal"
+  },
+  "help": {
+    "contactBody": "If you did not find the answer to your question in the “Frequently Asked Questions” section, please leave your question here. We will respond to you via email as soon as possible.",
+    "contactUs": "Contact us",
+    "mainTitle": "Hi, how can we help you?",
+    "messageTitle": "Message title",
+    "send": "Send",
+    "writeMessage": "Write your message here"
+  },
+  "menu": {
+    "help": "Help",
+    "home": "Home",
+    "invest": "Invest",
+    "logout": "Log out",
+    "myInvestments": "My investments",
+    "settings": "Settings"
+  },
+  "setings": {
+    "update": "Update"
+  },
+  "settings": {
+    "accountSettings": "Account settings",
+    "change": "CHANGE",
+    "changeLanguage": "Change Language",
+    "changePassword": "CHANGE PASSWORD",
+    "changePasswordLabel": "Change your access password",
+    "confirmPassword": "You must confirm your new password.",
+    "containCapitalLetter": "Contain a capital letter",
+    "currentPassword": "Enter your current password",
+    "currentPasswordRequired": "Current password is required.",
+    "edit": "EDIT",
+    "enterNewPassword": "Enter new password",
+    "identificationDocument": "Identification document",
+    "includeNumbers": "Include at least one number",
+    "language": "Language",
+    "lowercaseLetter": "Contain a lowercase letter",
+    "minimumCharacters": "Minimum 8 characters",
+    "newPassword": "Enter your new password",
+    "newPasswordRequired": "The new password is required.",
+    "password": "Password",
+    "passwordHints": "Enter your new password. Remember it must have:",
+    "passwordsDontMatch": "Passwords do not match.",
+    "reenterPassword": "Reenter your password",
+    "securityRequirements": "Password does not meet security requirements.",
+    "settings": "Settings",
+    "specialCharacter": "Include at least one special character",
+    "updateDocument": "Update your ID document",
+    "updatedPassword": "Password change"
+  }
+}
