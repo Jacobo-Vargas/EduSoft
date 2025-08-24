@@ -4,5 +4,6 @@ import { HomeComponent } from './core/modules/home-layout/home/home.component';
 
 export const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
-  { path: '', component: HomeComponent } 
+  { path: '', component: HomeComponent },
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

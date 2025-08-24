@@ -23,8 +23,7 @@ export class NgSelectService {
     if (this.options == null) {
       const token = await this.userInfoService.getToken();
       const headers = {
-        'Authorization': token,
-        'Country': this.userInfoService.country
+        'Authorization': token
       };
 
       const response = await firstValueFrom(this.http.get<any>(environment.apiUrl2 + endpoint, { headers }));

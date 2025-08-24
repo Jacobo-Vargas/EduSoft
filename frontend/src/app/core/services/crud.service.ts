@@ -124,8 +124,7 @@ export class CRUDService {
 
     const headers = {
       'Accept-Language': <string>this.translate.currentLang,
-      Authorization: token,
-      country: this.userInfoService.country,
+      Authorization: token
     };
 
     await this.http
@@ -159,8 +158,7 @@ export class CRUDService {
     const token = await this.userInfoService.getToken();
 
     const headers = {
-      Authorization: token,
-      country: this.userInfoService.country,
+      Authorization: token
     };
 
     try {
@@ -269,8 +267,7 @@ export class CRUDService {
     const token = await this.userInfoService.getToken();
     const headers = {
       'Accept-Language': <string>this.translate.currentLang,
-      Authorization: token,
-      country: this.userInfoService.country,
+      Authorization: token
     };
 
     const url = environment.apiUrl + endPoint + '/' + id;
@@ -305,7 +302,6 @@ export class CRUDService {
     const headers = {
       'Accept-Language': <string>this.translate.currentLang,
       Authorization: token,
-      country: this.userInfoService.country,
       'Content-Type': 'application/json',
     };
 
@@ -368,8 +364,7 @@ export class CRUDService {
     const token = await this.userInfoService.getToken();
     const headers = {
       'Accept-Language': <string>this.translate.currentLang,
-      Authorization: token,
-      country: this.userInfoService.country,
+      Authorization: token
     };
 
     const data = await this.makeFormData(dataForm);
@@ -415,8 +410,7 @@ export class CRUDService {
 
     const headers = {
       //'Accept-Language': <string>this.translate.currentLang,
-      Authorization: token,
-      country: this.userInfoService.country,
+      Authorization: token
     };
 
     await this.http
@@ -446,8 +440,7 @@ export class CRUDService {
     const token = await this.userInfoService.getToken();
     const headers = {
       'Accept-Language': <string>this.translate.currentLang,
-      Authorization: token,
-      country: this.userInfoService.country,
+      Authorization: token
     };
 
     let data = await this.makeFormData(dataForm);
@@ -539,8 +532,7 @@ export class CRUDService {
     const token = await this.userInfoService.getToken();
     const headers = {
       // 'Accept-Language': <string>this.translate.currentLang,
-      Authorization: token,
-      country: this.userInfoService.country,
+      Authorization: token
     };
     const url = environment.apiUrl2 + endPoint + '/' + id;
 
@@ -550,10 +542,6 @@ export class CRUDService {
       );
       if (data) {
         this.projectDetails = Object.assign({}, data);
-        this.dataFormAux.tipoCliente =
-          this.userInfoService.tipoCliente ||
-          this.userInfoService.userInfo?.tipoCliente ||
-          'retail';
       } else {
         console.log('getById - No se recibieron datos del servidor');
       }
@@ -577,8 +565,7 @@ export class CRUDService {
   } | null> {
     const token = await this.userInfoService.getToken();
     const headers = {
-      Authorization: token,
-      country: this.userInfoService.country,
+      Authorization: token
     };
     // Suponiendo que existe un endpoint específico para min/max, por ejemplo: /min-max-amount/{id}
     const url = environment.apiUrl2 + endPoint + '/' + id + '/min-max-amount';
@@ -1188,8 +1175,7 @@ export class CRUDService {
     const token = await this.userInfoService.getToken();
     const headers = {
       'Accept-Language': <string>this.translate.currentLang,
-      Authorization: token,
-      country: this.userInfoService.country,
+      Authorization: token
     };
 
     let data = await this.makeFormData(dataForm);
@@ -1235,7 +1221,6 @@ export class CRUDService {
     const headers = {
       'Accept-Language': <string>this.translate.currentLang,
       Authorization: token,
-      country: this.userInfoService.country,
     };
 
     this.dataForm = item;
@@ -1289,7 +1274,6 @@ export class CRUDService {
     const headers = {
       'Accept-Language': <string>this.translate.currentLang,
       Authorization: token,
-      country: this.userInfoService.country,
     };
 
     let data = await this.makeFormData(dataForm);
@@ -1336,7 +1320,6 @@ export class CRUDService {
     const headers = {
       'Accept-Language': <string>this.translate.currentLang,
       Authorization: token,
-      country: this.userInfoService.country,
       'Content-Type': 'application/json',
     };
 
@@ -1381,42 +1364,6 @@ export class CRUDService {
     }
   }
 
-  /**
-   * Copia los datos del usuario desde UserInfoService a dataForm para los tabs de perfil
-   */
-  public setUserDataFromUserInfo() {
-    const user = this.userInfoService;
-    const userInfo = user.userInfo || {};
-    this.dataForm = {
-      // Datos personales
-      nationality: user.nationality || null,
-      occupation: user.occupation || null,
-      maritalStatusId: user.maritalStatusId || null,
-      firstName: user.firstName || userInfo.given_name || '',
-      lastname: user.lastName || userInfo.family_name || '',
-      userName: user.userName || userInfo.name || '',
-      email: user.email || userInfo.email || '',
-      phoneNumber: user.phone || userInfo.phone || '',
-      country: user.country || userInfo.country || '',
-      documentNumber: user.documentNumber || user.fineractId || userInfo.fineract_id || '',
-      dateOfBirth: userInfo.birthdate || '',
-      countryId: '', // No disponible
-      // Dirección
-      postalCode: userInfo.postalCode || '',
-      street: userInfo.streetAddress || '',
-      number: '', // No disponible
-      commune: userInfo.locality || '',
-      city: userInfo.locality || '',
-      region: userInfo.region || '',
-      // Datos bancarios (no disponible en el JSON, se deja vacío)
-      bankId: '',
-      typeAccountId: '',
-      accountNumber: '',
-      // AGREGADO: Tipo de cliente
-      tipoCliente: user.tipoCliente || userInfo.tipoCliente || '',
-    };
-  }
-
 
   /**
    * Actualiza la información de perfil del usuario usando el endpoint /update-profiling-information
@@ -1437,7 +1384,6 @@ export class CRUDService {
     const headers = {
       'Accept-Language': <string>this.translate.currentLang,
       Authorization: token,
-      country: this.userInfoService.country,
     };
 
     let params = new HttpParams()
@@ -1457,23 +1403,6 @@ export class CRUDService {
       .finally(() => this.alertService.closeAlertLoading());
   }
 
-  get fineractId(): number | null {
-    const fineractId = this.userInfoService.fineractId || localStorage.getItem('fineractId');
-    if (fineractId) {
-      return Number(fineractId);
 
-    } else {
-      return null;
-
-    }
-  }
-
-  // En tu CRUDService
-  public getDataFormAuxWithTipoCliente(): any {
-    return {
-      ...this.dataFormAux,
-      tipoCliente: this.userInfoService.tipoCliente || this.userInfoService.userInfo?.tipoCliente || 'retail'
-    };
-  }
 
 }

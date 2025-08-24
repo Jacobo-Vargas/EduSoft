@@ -20,15 +20,6 @@ export class MenuComponent {
   closeSidebar() {
     this.crudService.sidebarOpen = false;
   }
-  validateRedirectionIfFineractId(route:string) {
-    if (this.crudService.fineractId) {
-      this.crudService.sidebarOpen = false;
-      this.router.navigate([route]);
-    }else{
-      this.alertService.createAlert('Debes registrarte para acceder a tus inversiones', 'info', false);
-
-    }
-
-  }
+  
   
 }
