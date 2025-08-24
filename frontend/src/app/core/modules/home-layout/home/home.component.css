@@ -1,0 +1,17 @@
+#cursoCarousel {
+  position: relative;
+  padding-bottom: 40px; /* espacio para los puntos debajo */
+}
+
+#cursoCarousel .carousel-indicators {
+  bottom: 0; /* fuerza a que estén abajo */
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto; /* ajusta al contenido */
+}
+
+#cursoCarousel .carousel-indicators button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}

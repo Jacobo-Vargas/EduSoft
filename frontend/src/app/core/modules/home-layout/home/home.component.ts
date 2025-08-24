@@ -12,11 +12,9 @@ import { UserInfoService } from '../../../services/user-info.service';
 
 export class HomeComponent implements OnInit {
 
-    cursos: any[] = [
-    { titulo: 'Curso de Angular', descripcion: 'Aprende Angular desde cero.', imagen: '../../../assets/img/angular.png' },
-    { titulo: 'Curso de Spring Boot', descripcion: 'Construye APIs con Spring.', imagen: '../../../assets/img/spring.png' },
-    { titulo: 'Curso de PostgreSQL', descripcion: 'Domina bases de datos relacionales.', imagen: '../../../assets/img/postgres.png' }
-  ];
+  cursos: any[] = [];
+
+  gruposCursos: any[][] = [];
 
 
   constructor(
@@ -27,6 +25,16 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.cursos = [
+      { titulo: 'Curso de Angular', descripcion: 'Aprende Angular desde cero.', imagen: '../../../assets/img/angular.png' },
+      { titulo: 'Curso de Spring Boot', descripcion: 'Construye APIs con Spring.', imagen: '../../../assets/img/spring.png' },
+      { titulo: 'Curso de PostgreSQL', descripcion: 'Domina bases de datos relacionales.', imagen: '../../../assets/img/postgres.png' },
+      { titulo: 'Curso de Angular', descripcion: 'Aprende Angular desde cero.', imagen: '../../../assets/img/angular.png' },
+      { titulo: 'Curso de Spring Boot', descripcion: 'Construye APIs con Spring.', imagen: '../../../assets/img/spring.png' },
+      { titulo: 'Curso de PostgreSQL', descripcion: 'Domina bases de datos relacionales.', imagen: '../../../assets/img/postgres.png' }
+    ]
+    this.crearGruposCursos();
     // Sincroniza dataForm desde userInfoService si no tiene datos cargados
     if (!this.crudService.dataForm?.fineractId) {
       this.crudService.setUserDataFromUserInfo();
@@ -55,5 +63,19 @@ export class HomeComponent implements OnInit {
       this.crudService.setUserDataFromUserInfo();
     }
     return this.crudService.dataForm?.firstName || '';
+  }
+
+  crearGruposCursos() {
+    const temp = [...this.cursos];
+    // Si hay menos de 3, repetir cursos hasta tener al menos 3
+    while (temp.length < 3) {
+      temp.push(...this.cursos);
+    }
+
+    // Crear grupos de 3 cursos
+    this.gruposCursos = [];
+    for (let i = 0; i < temp.length; i += 3) {
+      this.gruposCursos.push(temp.slice(i, i + 3));
+    }
   }
 }
