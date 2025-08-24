@@ -57,5 +57,11 @@
     "specialCharacter": "Include at least one special character",
     "updateDocument": "Update your ID document",
     "updatedPassword": "Password change"
+  },
+  "nav": {
+    "user": "User",
+    "profile": "Profile",
+    "logout": "Logout",
+    "home": "Home"
   }
 }

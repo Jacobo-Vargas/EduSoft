@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AlertService } from '../../../services/alert.service';
 import { CRUDService } from '../../../services/crud.service';
 import { UserInfoService } from '../../../services/user-info.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navbar',
@@ -12,8 +13,11 @@ import { UserInfoService } from '../../../services/user-info.service';
 })
 export class NavbarComponent {
   isOpen = false;
+  currentLang = 'es';
 
-  constructor(public crudService: CRUDService, public userInfo: UserInfoService, private alertService: AlertService, public router: Router) { }
+  constructor(public crudService: CRUDService, public userInfo: UserInfoService, private alertService: AlertService, public router: Router, public translate: TranslateService) { 
+    this.translate.use('es');
+  }
 
   toggleDropdown() {
     this.isOpen = !this.isOpen;
@@ -42,6 +46,11 @@ export class NavbarComponent {
 
   logout() {
     this.userInfo.logout();
+  }
+
+  changeLang(lang: string) {
+    this.currentLang = lang;
+    this.translate.use(lang);
   }
 
 }

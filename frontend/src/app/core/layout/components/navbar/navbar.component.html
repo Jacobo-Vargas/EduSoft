@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <!-- Logo -->
     <a class="navbar-brand" href="">
-      <img src="../../../../../assets/img/EduSoft-logo.png" alt="EduSoft" height="40" >EduSoft
+      <img src="../../../../../assets/img/EduSoft-logo.png" alt="EduSoft" height="40">EduSoft
     </a>
 
     <!-- Botón hamburguesa móvil -->
@@ -15,7 +15,8 @@
     <div class="collapse navbar-collapse" id="navbarEduSoft">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/" routerLinkActive="active" aria-current="page">Inicio</a>
+          <a class="nav-link" routerLink="/" routerLinkActive="active" aria-current="page">{{'nav.home' |
+            translate}}</a>
         </li>
         <li class="nav-item" *ngIf="!(userInfo.loggedIn$ | async)">
           <a class="nav-link" routerLink="/register" routerLinkActive="active" aria-current="page">Registrate</a>
@@ -32,15 +33,25 @@
         <li class="nav-item dropdown" *ngIf="(userInfo.loggedIn$ | async)">
           <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
-            Usuario
+            {{ 'nav.user' | translate}}
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
             <li><a class="dropdown-item" routerLink="/perfil">Perfil</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" (click)="logout()">Cerrar sesión</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item text-danger" (click)="logout()">{{ 'nav.logout' | translate}}</a></li>
           </ul>
         </li>
       </ul>
+
+      <!-- Selector de idioma -->
+      <select class="form-select form-select-sm" style="width: auto;" [ngModel]="currentLang"
+        (ngModelChange)="changeLang($event)">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+      </select>
+
     </div>
   </div>
 </nav>
