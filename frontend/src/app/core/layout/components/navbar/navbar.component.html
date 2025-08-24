@@ -17,7 +17,7 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/" routerLinkActive="active" aria-current="page">Inicio</a>
         </li>
-        <li class="nav-item" *ngIf="!userInfo.loggedIn$">
+        <li class="nav-item" *ngIf="!(userInfo.loggedIn$ | async)">
           <a class="nav-link" routerLink="/register" routerLinkActive="active" aria-current="page">Registrate</a>
         </li>
         <li class="nav-item">
@@ -29,7 +29,7 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/examenes" routerLinkActive="active">Exámenes</a>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" *ngIf="(userInfo.loggedIn$ | async)">
           <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
             Usuario
@@ -37,7 +37,7 @@
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
             <li><a class="dropdown-item" routerLink="/perfil">Perfil</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li *ngIf="userInfo.loggedIn$"><a class="dropdown-item text-danger" (click)="logout()">Cerrar sesión</a></li>
+            <li><a class="dropdown-item text-danger" (click)="logout()">Cerrar sesión</a></li>
           </ul>
         </li>
       </ul>
