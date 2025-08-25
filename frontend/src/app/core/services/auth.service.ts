@@ -27,8 +27,6 @@ export class AuthService {
   /** POST /api/auth/login */
   login(body: LoginRequestDTO): Observable<AuthResponseDTO> {
     return this.http.post<AuthResponseDTO>(`${API}/login`, body).pipe(
-      // Si quieres guardar el token localmente, descomenta:
-      // tap(res => localStorage.setItem('token', res.accessToken))
       map(res => res)
     );
   }

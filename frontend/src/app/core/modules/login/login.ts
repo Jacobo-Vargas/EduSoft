@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth';
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { RecoverPassword } from "../recover-password/recover-password";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.html',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RecoverPassword],
   styleUrls: ['./login.css']
 })
 export class LoginComponent {
@@ -19,6 +20,7 @@ export class LoginComponent {
   formSubmitted = false;
   isLoading = false;
   errorMsg = '';
+  showRecoverPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -49,7 +51,6 @@ export class LoginComponent {
   onSubmit(): void {
     this.formSubmitted = true;
     this.errorMsg = '';
-
     if (this.userForm.invalid) {
       // Marca todos como tocados para mostrar errores
       Object.values(this.userForm.controls).forEach(c => c.markAsTouched());
@@ -82,5 +83,13 @@ export class LoginComponent {
   // (Opcional) si usas modal de términos en el HTML
   openTermsModal() { this.showTermsModal = true; }
   closeTermsModal() { this.showTermsModal = false; }
+
+
+  // Mostrar el formulario de recuperación
+  openRecoverPassword() {
+    this.showRecoverPassword = true;  // Al hacer clic, se muestra el formulario de recuperación
+  }
+
+  
 }
 
