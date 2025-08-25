@@ -30,14 +30,12 @@ public class SecurityConfig {
                 }) // 👈 habilita CORS con configuración por defecto
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api-public/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/users/createUser").permitAll()
                         .requestMatchers("/users/sendCodeConfirmation/**").permitAll()
                         .requestMatchers("/users/verifyAccountEmailCode/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler()))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -46,13 +44,12 @@ public class SecurityConfig {
     @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         var configuration = new org.springframework.web.cors.CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:4200");
+        configuration.addAllowedOrigin("http://localhost:4200"); // tu frontend Angular
         configuration.addAllowedMethod("*"); // GET, POST, PUT, DELETE, OPTIONS
         configuration.addAllowedHeader("*");
         configuration.setAllowedOriginPatterns( List.of(
                 "http://localhost:*",
                 "http://127.0.0.1:*"
-                // Agrega aquí otros orígenes si fuese necesario (p. ej. http://192.168.0.10:4200)
         ));
         configuration.setAllowedHeaders(List.of("*")); // o enumera: "Authorization","Content-Type",...
         configuration.setExposedHeaders(List.of("Authorization"));
@@ -60,12 +57,5 @@ public class SecurityConfig {
         var source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    @Bean
-    public AuthenticationEntryPoint unauthorizedHandler() {
-        return (HttpServletRequest request, HttpServletResponse response, org.springframework.security.core.AuthenticationException authException) -> {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
-        };
     }
 }
