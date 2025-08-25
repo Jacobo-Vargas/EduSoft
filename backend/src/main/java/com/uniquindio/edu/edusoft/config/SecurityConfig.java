@@ -14,6 +14,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -46,8 +48,14 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("http://localhost:4200");
         configuration.addAllowedMethod("*"); // GET, POST, PUT, DELETE, OPTIONS
         configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true);
-
+        configuration.setAllowedOriginPatterns( List.of(
+                "http://localhost:*",
+                "http://127.0.0.1:*"
+                // Agrega aquí otros orígenes si fuese necesario (p. ej. http://192.168.0.10:4200)
+        ));
+        configuration.setAllowedHeaders(List.of("*")); // o enumera: "Authorization","Content-Type",...
+        configuration.setExposedHeaders(List.of("Authorization"));
+        configuration.setAllowCredentials(true);       // si usas cookies o envías credenciales
         var source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

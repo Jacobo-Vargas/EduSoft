@@ -58,7 +58,7 @@
 
       <!-- Olvidé mi contraseña -->
       <div class="forgot-container">
-        <button type="button" class="link-button">¿Olvidaste tu contraseña?</button>
+        <button type="button" class="link-button" (click)="openRecoverPassword()">¿Olvidaste tu contraseña?</button>
       </div>
 
       <!-- Botón -->
@@ -68,23 +68,10 @@
     </form>
   </div>
 
-  <!-- (Opcional) Modal recuperación — si luego lo conectas en TS -->
-  <!--
-  <div class="modal-overlay" *ngIf="showRecover" (click)="closeRecover()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>Recuperar contraseña</h3>
-        <button type="button" class="close-button" (click)="closeRecover()">×</button>
-      </div>
-      <div class="modal-body">
-        <label>Correo institucional o teléfono*</label>
-        <input type="text" [(ngModel)]="recoverUsername" placeholder="usuario@uqvirtual.edu.co o 3XXXXXXXXX" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-secondary" (click)="closeRecover()">Cancelar</button>
-        <button type="button" class="btn-primary" (click)="sendRecoverCode()">Enviar código</button>
-      </div>
-    </div>
-  </div>
-  -->
+  <!-- Formulario de Recuperación de Contraseña (esto solo aparecerá si showRecoverPassword es verdadero) -->
+<div *ngIf="showRecoverPassword" class="recover-password-container">
+  <app-recover-password></app-recover-password>
+</div>
+
+
 </div>

@@ -16,7 +16,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.uniquindio.edu.edusoft.model.entities.User;
-
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -61,8 +60,7 @@ public class LoginServiceImpl implements LoginService {
         String accessToken = jwtService.generateToken(subject);
         String jti = jwtService.extractJti(accessToken);
         // Guardar jti en Redis con TTL (maneja Redis caído con tu @ControllerAdvice)
-      //  tokenStoreService.storeToken(jti, subject);
-
+        //  tokenStoreService.storeToken(jti, subject);
         // Crear cookie HttpOnly
         Cookie accessCookie = new Cookie("accessToken", accessToken);
         accessCookie.setHttpOnly(true);   // protege contra XSS
@@ -70,7 +68,6 @@ public class LoginServiceImpl implements LoginService {
         accessCookie.setPath("/");
         accessCookie.setMaxAge(15 * 60);  // 15 minutos
         response.addCookie(accessCookie);
-
         return BaseResponse.response("Inicio de sesión correcto", "success");
     }
 
@@ -79,20 +76,16 @@ public class LoginServiceImpl implements LoginService {
         if (token == null) {
             return BaseResponse.response(null, "No hay sesión activa", "error", HttpStatus.UNAUTHORIZED);
         }
-
         String jti = jwtService.extractJti(token);
         tokenStoreService.removeToken(jti);
-
         Cookie cookie = new Cookie("accessToken", null);
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
-
         return BaseResponse.response("Se cerró la sesión con éxito", "success");
     }
-
 
     public Boolean validateEmailDomain(String email){
         Predicate<String> domainPredicate = e -> e != null && (e.endsWith("@uqvirtual.edu.co") || e.endsWith("@uniquindio.edu.co"));
