@@ -57,5 +57,11 @@
     "specialCharacter": "Incluir al menos un carácter especial",
     "updateDocument": "Actualiza tu documento de identificación",
     "updatedPassword": "Cambio de contraseña"
+  },
+  "nav": {
+    "user": "Usuario",
+    "profile": "Perfil",
+    "logout": "Cerrar sesión",
+    "home": "Inicio"
   }
 }

@@ -1,89 +1,68 @@
 package com.uniquindio.edu.edusoft.Auth;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uniquindio.edu.edusoft.config.security.JwtService;
-import com.uniquindio.edu.edusoft.config.security.TokenStoreService;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Slf4j
-class AuthIntegrationTest {
+class SecurityIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private TokenStoreService tokenStoreService;
+    private StringRedisTemplate redisTemplate;
 
-    @Autowired
-    private JwtService jwtService;
 
     @Test
-    @SuppressWarnings("unchecked")
     void testLoginAndLogoutFlow() throws Exception {
+        String email = "usuario@correo.com";
+        String password = "123456";
 
-        // 1. Se simula parámetros enviados de login
-        // FIXME -> se deben de recibir encriptados para cumplir con atributos de seguridad e integridad de datos
-        String loginJson = """
-            {
-              "username": "admin",
-              "password": "1234"
-            }
-        """;
-
-        String response = mockMvc.perform(post("/api/auth/login")
+        // 1. Login → debería crear cookie HttpOnly y guardar token en Redis
+        MvcResult loginResult = mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(loginJson))
+                        .content("{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}"))
                 .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+                .andReturn();
 
-        assertThat(response).isNotBlank();
-        log.info("Response: login satisfactorio");
+        String setCookieHeader = loginResult.getResponse().getHeader("Set-Cookie");
+        assertNotNull(setCookieHeader, "El login debe devolver una cookie");
+        assertTrue(setCookieHeader.contains("HttpOnly"), "La cookie debe ser HttpOnly");
 
+        // Extraer token desde Redis usando el email como key
+        String tokenInRedis = redisTemplate.opsForValue().get("session:" + email);
+        assertNotNull(tokenInRedis, "El token debe estar guardado en Redis");
 
-        Map<String, Object> tokenMap = new ObjectMapper().readValue(response, Map.class);
-        String token = tokenMap.get("accessToken").toString();
-        log.info("Token extraido: {}", token);
-
-
-        // 2. Se verifica que el token quedó guardado en Redis
-        String jti = jwtService.extractJti(token);
-        assertThat(tokenStoreService.isTokenValid(jti)).isTrue();
-        log.info("Verificación de token en redis con jti finalizada");
-
-        // 3. Logout se elimina el token, internamente con jti
-        mockMvc.perform(post("/api/auth/logout")
-                        .header("Authorization", "Bearer " + token))
+        // 2. Usar la cookie para acceder a un endpoint protegido
+        mockMvc.perform(get("/api/protegido")
+                        .header("Cookie", setCookieHeader))
                 .andExpect(status().isOk());
 
-        log.info("Simular cierre de sesión eliminando jti de redis exitoso");
+        // 3. Logout → debería borrar cookie y eliminar token de Redis
+        mockMvc.perform(post("/api/auth/logout")
+                        .header("Cookie", setCookieHeader))
+                .andExpect(status().isOk());
 
-        // 4. Token debe estar eliminado
-        assertThat(tokenStoreService.isTokenValid(jti)).isFalse();
-        log.info("Validación de cierre de sesión eliminando de redis exitoso");
+        String tokenAfterLogout = redisTemplate.opsForValue().get("session:" + email);
+        assertNull(tokenAfterLogout, "El token debe eliminarse de Redis tras logout");
 
-        // 5. Intentar acceder con el token eliminado → debería rechazar
-        mockMvc.perform(post("/api/prueba")
-                        .header("Authorization", "Bearer " + token))
-                .andExpect(status().isForbidden());
-
-        log.info("Simular nuevo inicio de sesión con token vencido exitoso");
+        // 4. Intentar acceder de nuevo con la misma cookie → debe fallar
+        mockMvc.perform(get("/api/protegido")
+                        .header("Cookie", setCookieHeader))
+                .andExpect(status().isUnauthorized());
     }
 }

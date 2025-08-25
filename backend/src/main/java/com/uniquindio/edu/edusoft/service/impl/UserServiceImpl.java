@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toEntity(requestUserDTO);
 
         // Asignación de datos predeterminados
-        user.setCreatedAt(LocalDate.now());
+        user.setCreatedAt(new Date());
         user.setPassword(passwordEncoder.encode(requestUserDTO.getPassword()));
         user.setVerification(false);
 

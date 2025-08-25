@@ -35,34 +35,7 @@ export class HomeComponent implements OnInit {
       { titulo: 'Curso de PostgreSQL', descripcion: 'Domina bases de datos relacionales.', imagen: '../../../assets/img/postgres.png' }
     ]
     this.crearGruposCursos();
-    // Sincroniza dataForm desde userInfoService si no tiene datos cargados
-    if (!this.crudService.dataForm?.fineractId) {
-      this.crudService.setUserDataFromUserInfo();
-    }
-
-    // Si aún no hay fineractId, intenta obtenerlo desde localStorage
-    if (!this.crudService.dataForm?.fineractId) {
-      const idFromStorage = localStorage.getItem('fineractId');
-      if (idFromStorage) {
-        this.crudService.dataForm.fineractId = idFromStorage;
-        if (this.userInfoService.userInfo) {
-          this.userInfoService.userInfo.fineractId = idFromStorage;
-        }
-      }
-    }
-    this.userInfoService.fineractId = this.crudService.dataForm?.fineractId || '';
     this.cdRef.detectChanges(); // fuerza render actualizado
-  }
-
-  get country(): string {
-    return this.crudService.dataForm?.countryId ?? '';
-  }
-
-  get userName(): string {
-    if (!this.crudService.dataForm?.firstName) {
-      this.crudService.setUserDataFromUserInfo();
-    }
-    return this.crudService.dataForm?.firstName || '';
   }
 
   crearGruposCursos() {
