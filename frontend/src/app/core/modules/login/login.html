@@ -1,0 +1,90 @@
+<div class="page-container">
+  <!-- Logo -->
+  <img src="assets/logo-uq.png" alt="Logo Universidad del Quindío" class="logo-uq" />
+
+  <!-- Controles de accesibilidad -->
+  <div class="accessibility-controls">
+    <button type="button" (click)="setFontSize('normal')" data-tooltip="Tamaño normal">A-</button>
+    <button type="button" (click)="setFontSize('large')"  data-tooltip="Aumentar tamaño">A+</button>
+  </div>
+
+  <!-- Caja formulario -->
+  <div class="form-container" [ngClass]="currentSize">
+    <h2>Iniciar sesión</h2>
+
+    <!-- Mensaje de éxito -->
+    <div *ngIf="showSuccessMessage" class="success-message">
+      ✅ Inicio de sesión exitoso
+    </div>
+
+    <!-- Mensaje de error del backend -->
+    <div *ngIf="errorMsg" class="error-message" style="text-align:center; margin-bottom:10px;">
+      {{ errorMsg }}
+    </div>
+
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <!-- Usuario -->
+      <label>Correo institucional o teléfono*</label>
+      <input
+        type="text"
+        formControlName="username"
+        placeholder="usuario@uqvirtual.edu.co o 3XXXXXXXXX" />
+      <div
+        class="error-message"
+        *ngIf="f['username']?.touched && f['username']?.invalid">
+        El usuario es obligatorio
+      </div>
+
+      <!-- Password -->
+      <div class="password-label-container">
+        <label>Contraseña*</label>
+      </div>
+
+      <div class="password-container">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Ingrese su contraseña" />
+        <span class="eye-icon" (click)="togglePassword()">
+          {{ showPassword ? '🙈' : '👁️' }}
+        </span>
+      </div>
+      <div
+        class="error-message"
+        *ngIf="f['password']?.touched && f['password']?.invalid">
+        <span *ngIf="f['password']?.errors?.['required']">La contraseña es obligatoria</span>
+        <span *ngIf="f['password']?.errors?.['minlength']">La contraseña debe tener al menos 8 caracteres</span>
+      </div>
+
+      <!-- Olvidé mi contraseña -->
+      <div class="forgot-container">
+        <button type="button" class="link-button">¿Olvidaste tu contraseña?</button>
+      </div>
+
+      <!-- Botón -->
+      <button type="submit" [disabled]="userForm.invalid || isLoading">
+        {{ isLoading ? 'Ingresando…' : 'Ingresar' }}
+      </button>
+    </form>
+  </div>
+
+  <!-- (Opcional) Modal recuperación — si luego lo conectas en TS -->
+  <!--
+  <div class="modal-overlay" *ngIf="showRecover" (click)="closeRecover()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Recuperar contraseña</h3>
+        <button type="button" class="close-button" (click)="closeRecover()">×</button>
+      </div>
+      <div class="modal-body">
+        <label>Correo institucional o teléfono*</label>
+        <input type="text" [(ngModel)]="recoverUsername" placeholder="usuario@uqvirtual.edu.co o 3XXXXXXXXX" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="closeRecover()">Cancelar</button>
+        <button type="button" class="btn-primary" (click)="sendRecoverCode()">Enviar código</button>
+      </div>
+    </div>
+  </div>
+  -->
+</div>

@@ -61,7 +61,7 @@ public class LoginServiceImpl implements LoginService {
         String accessToken = jwtService.generateToken(subject);
         String jti = jwtService.extractJti(accessToken);
         // Guardar jti en Redis con TTL (maneja Redis caído con tu @ControllerAdvice)
-        tokenStoreService.storeToken(jti, subject);
+      //  tokenStoreService.storeToken(jti, subject);
 
         // Crear cookie HttpOnly
         Cookie accessCookie = new Cookie("accessToken", accessToken);
