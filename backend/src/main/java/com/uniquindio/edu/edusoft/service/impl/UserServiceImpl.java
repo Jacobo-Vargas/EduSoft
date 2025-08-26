@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +51,7 @@ public class UserServiceImpl implements UserService {
         user.setCreatedAt(new Date());
         user.setPassword(passwordEncoder.encode(requestUserDTO.getPassword()));
         user.setVerification(false);
+        user.setVerificationToken(UUID.randomUUID().toString());
 
         // Determinar tipo de usuario según el dominio del correo
         String email = requestUserDTO.getEmail().toLowerCase();
@@ -71,12 +73,13 @@ public class UserServiceImpl implements UserService {
         // Construir respuesta
         ResponseUserDTO responseUserDto = userMapper.toResponseDTO(savedUser);
 
-        // Enviar correo de bienvenida
-        emailService.SendMailHome(user.getEmail());
+        // Enviar correo de bienvenida con botón de verificación
+        emailService.SendMailHome(user.getEmail(), user.getVerificationToken());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseDTO(201, "Usuario creado exitosamente", responseUserDto));
     }
+
 
     @Override
     public ResponseEntity<ResponseDTO> sendCodeConfirmation(String email) throws Exception {
@@ -88,4 +91,22 @@ public class UserServiceImpl implements UserService {
 
         return ResponseEntity.ok(new ResponseDTO(200, "Cuenta verificada correctamente", null));
     }
+
+    @Override
+    public ResponseEntity<ResponseDTO> verifyUserByToken(String token) {
+        Optional<User> userOpt = userRepository.findByVerificationToken(token);
+
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseDTO(400, "Token inválido o expirado", null));
+        }
+
+        User user = userOpt.get();
+        user.setVerification(true);
+        user.setVerificationToken(null); // lo eliminamos para que no se use otra vez
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new ResponseDTO(200, "Cuenta verificada correctamente ✅", null));
+    }
+
 }

@@ -15,4 +15,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     // Buscar usuario por email o documento (para validaciones)
     Optional<User> findByEmailOrDocumentNumber(String email, String documentNumber);
+
+    // Buscar usuario por token de verificación
+    Optional<User> findByVerificationToken(String verificationToken);
 }

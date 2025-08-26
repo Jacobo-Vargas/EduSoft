@@ -65,14 +65,18 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void SendMailHome(String email) throws Exception {
+    public void SendMailHome(String email, String token) throws Exception {
         String subject = "¡Bienvenido a EduSoft - Universidad del Quindío!";
+        String verifyLink = "http://localhost:8080/users/verify?token=" + token;
         String content = """
-                    <p>Hola 👋,</p>
-                    <p>Gracias por registrarte en <b>EduSoft</b>, la plataforma académica de la <b>Universidad del Quindío</b>. 
-                    Estamos muy felices de tenerte con nosotros.</p>
-                    <p>Con EduSoft podrás acceder a herramientas diseñadas para apoyar tu aprendizaje y mantenerte conectado con la comunidad universitaria.</p>
-                """;
+                <p>Hola 👋,</p>
+                <p>Gracias por registrarte en <b>EduSoft</b>, la plataforma académica de la <b>Universidad del Quindío</b>. 
+                Estamos muy felices de tenerte con nosotros.</p>
+                <p>Con EduSoft podrás acceder a herramientas diseñadas para apoyar tu aprendizaje y mantenerte conectado con la comunidad universitaria.</p>
+                <p style="text-align: center;">
+                    <a href="%s" class="button">Verificar cuenta</a>
+                </p>
+            """.formatted(verifyLink);
 
         sendHtmlMail(email, subject, buildTemplate("Bienvenido a EduSoft", content));
     }

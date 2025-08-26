@@ -45,6 +45,10 @@ public class User extends BaseEntity {
     @Column(name = "verification")
     private boolean verification;
 
+    @Column(name = "verification_token")
+    private String verificationToken;
+
+
     public boolean isVerification() {
         return verification;
     }

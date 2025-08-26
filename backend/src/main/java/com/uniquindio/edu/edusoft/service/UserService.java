@@ -12,4 +12,6 @@ public interface UserService {
 
     ResponseEntity<ResponseDTO> verifyAccountEmailCode(String email, String code) throws Exception;
 
+    ResponseEntity<ResponseDTO> verifyUserByToken(String token) throws Exception;
+
 }
