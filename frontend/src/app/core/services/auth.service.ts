@@ -26,34 +26,29 @@ export class AuthService {
 
   /** POST /api/auth/login */
   login(body: LoginRequestDTO): Observable<AuthResponseDTO> {
-    return this.http.post<AuthResponseDTO>(`${API}/login`, body).pipe(
+    return this.http.post<AuthResponseDTO>(`${API}/login`, body, { withCredentials: true }).pipe(
       map(res => res)
     );
   }
 
-  /**
-   * Enviar código para recuperar contraseña.
-   * Ajusta el path a lo que tengas en el backend:
-   * - Recomendado: POST /api/auth/search-user
-   * - Si dejaste el antiguo: POST /api/auth/searchUser
-   */
-  startReset(body: { username: string }): Observable<any> {
-    return this.http.post(`${API}/search-user`, body);
-    // return this.http.post(`${API}/searchUser`, body); // <- usa este si tu endpoint es camello
-  }
+startReset(body: { username: string }): Observable<any> {
+  return this.http.post(`${API}/sendCodeEmail`, body, { withCredentials: true }).pipe(
+    map(response => {
+      console.log('Código enviado:', response);  // Ver el código aquí
+      return response;
+    })
+  );
+}
 
   /**
    * Confirmar cambio de contraseña con código.
-   * Ajusta el path:
-   * - Recomendado: POST /api/auth/recover-password
-   * - Antiguo: POST /api/auth/recoverPassword
    */
   confirmReset(body: { username: string; code: string; password: string }): Observable<any> {
-    return this.http.post(`${API}/recover-password`, body);
-    // return this.http.post(`${API}/recoverPassword`, body); // <- usa este si tu endpoint es camello
+    return this.http.post(`${API}/recover-password`, body, { withCredentials: true });
   }
 
   // --- Helpers opcionales ---
   // get token(): string | null { return localStorage.getItem('token'); }
   // logout(): void { localStorage.removeItem('token'); }
+
 }

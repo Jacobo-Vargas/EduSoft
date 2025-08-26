@@ -13,5 +13,7 @@ public interface EmailService {
     void sendMailAuditor(String email, String nameCourse, String information) throws Exception;
 
     void sendMailAuditorOK(String email, String nameCourse) throws Exception;
+
+    void sendCodeVerifactionPassword(String email, String code) throws Exception;
 }
 

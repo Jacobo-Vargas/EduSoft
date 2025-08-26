@@ -7,6 +7,7 @@ import com.uniquindio.edu.edusoft.model.dto.respose.LoginRequestDTO;
 import com.uniquindio.edu.edusoft.repository.LoginRepository;
 import com.uniquindio.edu.edusoft.service.LoginService;
 import com.uniquindio.edu.edusoft.utils.BaseResponse;
+import com.uniquindio.edu.edusoft.utils.CodeGenerator;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class LoginServiceImpl implements LoginService {
     private final JwtService jwtService;
     private final TokenStoreService tokenStoreService;
     private final PasswordEncoder passwordEncoder;
+    private final EmailServiceImpl emailService;
 
     @Override
     public ResponseEntity<?> login(LoginRequestDTO loginRequest, HttpServletResponse response) {
@@ -36,7 +38,7 @@ public class LoginServiceImpl implements LoginService {
         if (userInput.isEmpty() || rawPassword == null || rawPassword.isBlank()) {
             throw new IllegalArgumentException("Username y password son obligatorios");
         }
-        // 1) Buscar por email o por teléfono
+        // Buscar por email o por teléfono
         User user;
         if (validateEmailDomain(userInput)) {
             user = loginRepository.findByEmail(userInput.toLowerCase())
@@ -60,7 +62,7 @@ public class LoginServiceImpl implements LoginService {
         String accessToken = jwtService.generateToken(subject);
         String jti = jwtService.extractJti(accessToken);
         // Guardar jti en Redis con TTL (maneja Redis caído con tu @ControllerAdvice)
-        //  tokenStoreService.storeToken(jti, subject);
+       // tokenStoreService.storeToken(jti, subject);
         // Crear cookie HttpOnly
         Cookie accessCookie = new Cookie("accessToken", accessToken);
         accessCookie.setHttpOnly(true);   // protege contra XSS
@@ -70,6 +72,43 @@ public class LoginServiceImpl implements LoginService {
         response.addCookie(accessCookie);
         return BaseResponse.response("Inicio de sesión correcto", "success");
     }
+
+    @Override
+    public ResponseEntity<?> sendCodeEmail(LoginRequestDTO loginRequest, HttpServletResponse response) throws Exception {
+        // Validar que el username no sea nulo ni vacío
+        String userInput = loginRequest.getUsername() == null ? "" : loginRequest.getUsername().trim();
+        if (userInput.isEmpty()) {
+            throw new IllegalArgumentException("El campo 'Username' es obligatorio");
+        }
+        // Validar si el username es un correo electrónico
+        User user = null;
+        if (validateEmailDomain(userInput)) {
+            // Buscar el usuario por su correo electrónico en la base de datos
+            user = loginRepository.findByEmail(userInput.toLowerCase())
+                    .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
+
+            // Si el usuario es encontrado, podemos proceder a enviar el código de verificación
+            String verificationCode = CodeGenerator.generateCode(); // Generamos el código de verificación
+            emailService.sendCodeVerifactionPassword(user.getEmail(), verificationCode); // Enviamos el correo
+
+            return ResponseEntity.ok("Código de verificación enviado con éxito");
+        }
+        else if (validateCellPhoneNumber(userInput)) {
+                // Buscar el usuario por su correo electrónico en la base de datos
+                user = loginRepository.findByPhone(userInput.toLowerCase())
+                        .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
+
+                // Si el usuario es encontrado, podemos proceder a enviar el código de verificación
+                String verificationCode = CodeGenerator.generateCode(); // Generamos el código de verificación
+                emailService.sendCodeVerifactionPassword(user.getEmail(), verificationCode); // Enviamos el correo
+
+                return ResponseEntity.ok(verificationCode);
+        } else {
+            // Si el dominio del email no es válido, lanzar una excepción o retornar un mensaje adecuado
+            throw new IllegalArgumentException("Dominio de correo no válido");
+        }
+    }
+
 
     @Override
     public ResponseEntity<?> logout(String token, HttpServletResponse response) throws Exception {

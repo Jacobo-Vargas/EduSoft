@@ -27,5 +27,15 @@ public class AuthController {
         return this.loginService.logout(token, response);
     }
 
+    @PostMapping("/sendCodeEmail")
+    public ResponseEntity<?> sendCodeEmail(@RequestBody LoginRequestDTO loginRequestdto,HttpServletResponse response) throws Exception {
+        return this.loginService.sendCodeEmail(loginRequestdto,response);
+    }
+
+    @PostMapping("/updatePassword")
+    public ResponseEntity<?> updatePassword(@RequestBody LoginRequestDTO loginRequestdto,HttpServletResponse response) throws Exception {
+        return this.loginService.sendCodeEmail(loginRequestdto,response);
+    }
+
 
 }

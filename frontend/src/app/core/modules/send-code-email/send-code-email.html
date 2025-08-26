@@ -1,0 +1,51 @@
+<div class="page-container">
+    <!-- Logo -->
+    <img src="assets/logo-uq.png" alt="Logo Universidad del Quindío" class="logo-uq" />
+
+    <!-- Controles de accesibilidad -->
+    <div class="accessibility-controls">
+        <button type="button" (click)="setFontSize('normal')" data-tooltip="Tamaño normal">A-</button>
+        <button type="button" (click)="setFontSize('large')" data-tooltip="Aumentar tamaño">A+</button>
+    </div>
+
+    <!-- Caja formulario -->
+    <div class="form-container">
+        <h2>Recuperar Contraseña</h2>
+
+        <!-- Mensaje de éxito -->
+        <div *ngIf="showSuccessMessage" class="success-message">
+            ✅ El correo se ha enviado exitosamente
+        </div>
+
+        <!-- Mensaje de error -->
+        <div *ngIf="errorMsg" class="error-message" style="text-align:center; margin-bottom:10px;">
+            {{ errorMsg }}
+        </div>
+
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+            <!-- Usuario -->
+            <label *ngIf="!isCodeSent" >Correo institucional o teléfono*</label>
+            <input *ngIf="!isCodeSent" type="text" formControlName="username" placeholder="usuario@uqvirtual.edu.co o 3XXXXXXXXX" 
+                   [readonly]="isCodeSent" /> <!-- Solo editable si el código no ha sido enviado -->
+            
+            <!-- Si el código fue enviado, mostrar el campo 'code' -->
+            <div *ngIf="isCodeSent">
+                <label>Código de verificación*</label>
+                <input type="text" formControlName="code" placeholder="Introduce el código" />
+            </div>
+
+            <div class="error-message" *ngIf="f['username']?.touched && f['username']?.invalid">
+                El usuario es obligatorio
+            </div>
+
+            <div class="error-message" *ngIf="f['code']?.touched && f['code']?.invalid">
+                El código es obligatorio
+            </div>
+
+            <!-- Botón -->
+            <button type="submit" [disabled]="userForm.invalid || isLoading">
+                {{ isLoading ? 'Procesando…' : isCodeSent ? 'Verificar Código' : 'Enviar Código' }}
+            </button>
+        </form>
+    </div>
+</div>

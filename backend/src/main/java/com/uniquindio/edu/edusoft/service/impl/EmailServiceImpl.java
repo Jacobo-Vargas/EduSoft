@@ -150,4 +150,16 @@ public class EmailServiceImpl implements EmailService {
 
         mailSender.send(message);
     }
+
+    @Override
+    public void sendCodeVerifactionPassword(String email, String code) throws Exception {
+        String subject = "Código de verificación EduSoft";
+        String content = """
+                    <p>Hola 👋,</p>
+                    <p>Para completar tu cambio de contraseña en <b>EduSoft</b>, utiliza el siguiente código:</p>
+                    <div class="highlight">%s</div>
+                """.formatted(code);
+
+        sendHtmlMail(email, subject, buildTemplate("Verificación de cuenta", content));
+    }
 }
