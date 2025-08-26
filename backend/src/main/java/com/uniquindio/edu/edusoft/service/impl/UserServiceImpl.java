@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,32 +29,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<ResponseDTO> createUser(RequestUserDTO requestUserDTO) throws Exception {
-        // Verificar duplicados por email o documento
         Optional<User> existingUser = userRepository.findByEmailOrDocumentNumber(
-                requestUserDTO.getEmail(), requestUserDTO.getDocumentNumber()
+                requestUserDTO.getEmail(),
+                requestUserDTO.getDocumentNumber()
         );
 
         if (existingUser.isPresent()) {
-            String message = existingUser.get().getEmail().equals(requestUserDTO.getEmail())
-                    ? String.format("El email %s ya está registrado", requestUserDTO.getEmail())
-                    : String.format("La cédula %s ya está registrada", requestUserDTO.getDocumentNumber());
-
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ResponseDTO(409, "La cédula o el email ya están registrados", null));
+                    .body(new ResponseDTO(409, "El email o la cédula ya están registrados", null));
         }
 
-        // Mapeo DTO -> entidad User
         User user = userMapper.toEntity(requestUserDTO);
-
-        // Asignación de datos predeterminados
         user.setCreatedAt(new Date());
         user.setPassword(passwordEncoder.encode(requestUserDTO.getPassword()));
         user.setVerification(false);
         user.setVerificationToken(UUID.randomUUID().toString());
 
-        // Determinar tipo de usuario según el dominio del correo
         String email = requestUserDTO.getEmail().toLowerCase();
-
         if (email.endsWith("@uqvirtual.edu.co")) {
             user.setUserType(EnumUserType.ESTUDIANTE);
         } else if (email.endsWith("@uniquindio.edu.co")) {
@@ -67,19 +57,14 @@ public class UserServiceImpl implements UserService {
                     .body(new ResponseDTO(400, "El dominio del correo no es válido", null));
         }
 
-        // Guardar en PostgreSQL
         User savedUser = userRepository.save(user);
-
-        // Construir respuesta
         ResponseUserDTO responseUserDto = userMapper.toResponseDTO(savedUser);
 
-        // Enviar correo de bienvenida con botón de verificación
         emailService.SendMailHome(user.getEmail(), user.getVerificationToken());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseDTO(201, "Usuario creado exitosamente", responseUserDto));
     }
-
 
     @Override
     public ResponseEntity<ResponseDTO> sendCodeConfirmation(String email) throws Exception {
@@ -88,7 +73,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<ResponseDTO> verifyAccountEmailCode(String email, String code) throws Exception {
-
         return ResponseEntity.ok(new ResponseDTO(200, "Cuenta verificada correctamente", null));
     }
 
@@ -102,11 +86,21 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userOpt.get();
+
+        if (user.isVerification()) {
+            return ResponseEntity.ok(new ResponseDTO(200, "La cuenta ya había sido verificada anteriormente", null));
+        }
+
         user.setVerification(true);
-        user.setVerificationToken(null); // lo eliminamos para que no se use otra vez
+        user.setVerificationToken(null);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new ResponseDTO(200, "Cuenta verificada correctamente ✅", null));
-    }
+        try {
+            emailService.sendVerificationConfirmation(user.getEmail());
+        } catch (Exception e) {
+            System.err.println("Error enviando correo de confirmación: " + e.getMessage());
+        }
 
+        return ResponseEntity.ok(new ResponseDTO(200, "¡Cuenta verificada exitosamente! Revisa tu correo.", null));
+    }
 }
