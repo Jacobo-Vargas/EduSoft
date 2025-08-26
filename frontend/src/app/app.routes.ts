@@ -10,6 +10,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'recover-password', component: RecoverPassword }, 
   { path: 'send-code-email', component: SendEmail }, 
+  { path: 'recover-paassword', component: SendEmail }, 
   { path: '', component: HomeComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

@@ -10,4 +10,6 @@ public interface LoginService {
     ResponseEntity<?> sendCodeEmail(LoginRequestDTO loginRequest, HttpServletResponse response) throws Exception;
 
     ResponseEntity<?>logout(String token, HttpServletResponse response) throws Exception;
+
+    ResponseEntity<?>updatePassword(LoginRequestDTO loginRequestDTO) throws  Exception;
 }

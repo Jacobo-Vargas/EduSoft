@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-send-email',
@@ -24,11 +24,12 @@ export class SendEmail {
   isCodeSent = false;  // Nueva variable para gestionar el cambio de campos
   // Almacenamos el código enviado en el frontend para verificarlo
   generatedCode: string = '';
+    // Inyecta el Router
 
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-   
+    private router: Router 
   ) {
     // Construcción del formulario
     this.userForm = this.fb.group({
@@ -67,6 +68,8 @@ export class SendEmail {
 
   if (this.isCodeSent) {
     console.log('Verificando código:', formData.code , 'contra', this.generatedCode);
+    // Guardar el username en el localStorage
+      localStorage.setItem('username', formData.username);
     // El código ya ha sido enviado, ahora lo verificamos
      if (String(formData.code) === String(this.generatedCode)) {
       // Si el código ingresado es correcto
@@ -74,6 +77,7 @@ export class SendEmail {
       this.isLoading = false;
       this.userForm.reset();
       console.log('Código verificado correctamente');
+        this.router.navigate(['/recover-password']);  // Navega al componente 'RecoverPassword'
       setTimeout(() => this.showSuccessMessage = false, 5000);  // Mensaje de éxito temporal
     } else {
       // Si el código es incorrecto
@@ -91,6 +95,7 @@ export class SendEmail {
         this.generatedCode = response,// Guardamos el código recibido del backend
         this.userForm.addControl('code', this.fb.control('', [Validators.required]));  // Añadimos el control 'code' al formulario
         this.isLoading = false;
+         // **Navegar al componente RecoverPassword**
         setTimeout(() => this.showSuccessMessage = false, 5000);  // Mensaje de éxito temporal
       },
       error: (err) => {

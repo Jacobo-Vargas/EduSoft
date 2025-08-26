@@ -34,7 +34,7 @@ public class AuthController {
 
     @PostMapping("/updatePassword")
     public ResponseEntity<?> updatePassword(@RequestBody LoginRequestDTO loginRequestdto,HttpServletResponse response) throws Exception {
-        return this.loginService.sendCodeEmail(loginRequestdto,response);
+        return this.loginService.updatePassword(loginRequestdto);
     }
 
 

@@ -40,6 +40,15 @@ startReset(body: { username: string }): Observable<any> {
   );
 }
 
+ // Método para actualizar la contraseña
+  updatePassword(body: { username: string; password: string }): Observable<any> {
+
+  console.log('Datos enviados al backend:', body);  // Verifica los datos enviados
+  return this.http.post(`${API}/updatePassword`, body);
+}
+
+  
+
   /**
    * Confirmar cambio de contraseña con código.
    */
