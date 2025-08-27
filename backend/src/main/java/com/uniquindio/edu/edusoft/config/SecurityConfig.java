@@ -34,6 +34,12 @@ public class SecurityConfig {
                         .requestMatchers("/users/createUser").permitAll()
                         .requestMatchers("/users/sendCodeConfirmation/**").permitAll()
                         .requestMatchers("/users/sendCodeEmail/**").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs.yaml",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler()))
