@@ -58,8 +58,9 @@
 
       <!-- Olvidé mi contraseña -->
       <div class="forgot-container">
-        <button type="button" class="link-button" (click)="openRecoverPassword()">¿Olvidaste tu contraseña?</button>
+    <a class="nav-link" routerLink="/send-code-email" routerLinkActive="active" aria-current="page">¿Olvidaste tu contraseña?</a>
       </div>
+      
 
       <!-- Botón -->
       <button type="submit" [disabled]="userForm.invalid || isLoading">
@@ -67,11 +68,10 @@
       </button>
     </form>
   </div>
-
-  <!-- Formulario de Recuperación de Contraseña (esto solo aparecerá si showRecoverPassword es verdadero) -->
-<div *ngIf="showRecoverPassword" class="recover-password-container">
+<!-- <div *ngIf="showRecoverPassword" class="recover-password-container">
   <app-recover-password></app-recover-password>
 </div>
+-->
 
 
 </div>

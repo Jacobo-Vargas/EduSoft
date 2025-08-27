@@ -5,8 +5,11 @@ import com.uniquindio.edu.edusoft.config.security.TokenStoreService;
 import com.uniquindio.edu.edusoft.model.mapper.LoginMapper;
 import com.uniquindio.edu.edusoft.model.dto.respose.LoginRequestDTO;
 import com.uniquindio.edu.edusoft.repository.LoginRepository;
+import com.uniquindio.edu.edusoft.service.EmailService;
 import com.uniquindio.edu.edusoft.service.LoginService;
 import com.uniquindio.edu.edusoft.utils.BaseResponse;
+import com.uniquindio.edu.edusoft.utils.CodeGenerator;
+import com.uniquindio.edu.edusoft.utils.ResponseData;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.uniquindio.edu.edusoft.model.entities.User;
+
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -25,6 +29,7 @@ public class LoginServiceImpl implements LoginService {
 
     private final LoginRepository loginRepository;
     private final LoginMapper loginMapper;
+    private final EmailServiceImpl emailService;
     private final JwtService jwtService;
     private final TokenStoreService tokenStoreService;
     private final PasswordEncoder passwordEncoder;
@@ -60,7 +65,7 @@ public class LoginServiceImpl implements LoginService {
         String accessToken = jwtService.generateToken(subject);
         String jti = jwtService.extractJti(accessToken);
         // Guardar jti en Redis con TTL (maneja Redis caído con tu @ControllerAdvice)
-        //  tokenStoreService.storeToken(jti, subject);
+        tokenStoreService.storeToken(jti, subject);
         // Crear cookie HttpOnly
         Cookie accessCookie = new Cookie("accessToken", accessToken);
         accessCookie.setHttpOnly(true);   // protege contra XSS
@@ -68,23 +73,98 @@ public class LoginServiceImpl implements LoginService {
         accessCookie.setPath("/");
         accessCookie.setMaxAge(15 * 60);  // 15 minutos
         response.addCookie(accessCookie);
+
         return BaseResponse.response("Inicio de sesión correcto", "success");
     }
+
+    @Override
+    public ResponseEntity<?> sendCodeEmail(LoginRequestDTO loginRequest, HttpServletResponse response) throws Exception {
+        // Validar que el username no sea nulo ni vacío
+        String userInput = loginRequest.getUsername() == null ? "" : loginRequest.getUsername().trim();
+        if (userInput.isEmpty()) {
+            throw new IllegalArgumentException("El campo 'Username' es obligatorio");
+        }
+        // Validar si el username es un correo electrónico
+        User user = null;
+        if (validateEmailDomain(userInput)) {
+            // Buscar el usuario por su correo electrónico en la base de datos
+            user = loginRepository.findByEmail(userInput.toLowerCase())
+                    .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
+
+            // Si el usuario es encontrado, podemos proceder a enviar el código de verificación
+            String verificationCode = CodeGenerator.generateCode(); // Generamos el código de verificación
+            emailService.sendCodeVerifactionPassword(user.getEmail(), verificationCode); // Enviamos el correo
+
+            return ResponseEntity.ok("Código de verificación enviado con éxito");
+        }
+        else if (validateCellPhoneNumber(userInput)) {
+                // Buscar el usuario por su correo electrónico en la base de datos
+                user = loginRepository.findByPhone(userInput.toLowerCase())
+                        .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
+
+                // Si el usuario es encontrado, podemos proceder a enviar el código de verificación
+                String verificationCode = CodeGenerator.generateCode(); // Generamos el código de verificación
+                emailService.sendCodeVerifactionPassword(user.getEmail(), verificationCode); // Enviamos el correo
+
+                return ResponseEntity.ok(verificationCode);
+        } else {
+            // Si el dominio del email no es válido, lanzar una excepción o retornar un mensaje adecuado
+            throw new IllegalArgumentException("Dominio de correo no válido");
+        }
+    }
+
+
+
 
     @Override
     public ResponseEntity<?> logout(String token, HttpServletResponse response) throws Exception {
         if (token == null) {
             return BaseResponse.response(null, "No hay sesión activa", "error", HttpStatus.UNAUTHORIZED);
         }
+
         String jti = jwtService.extractJti(token);
         tokenStoreService.removeToken(jti);
+
         Cookie cookie = new Cookie("accessToken", null);
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+
         return BaseResponse.response("Se cerró la sesión con éxito", "success");
+    }
+
+    @Override
+    public ResponseEntity<?> updatePassword(LoginRequestDTO loginRequest) throws Exception {
+        // Validar que el username no sea nulo ni vacío
+        String userInput = loginRequest.getUsername() == null ? "" : loginRequest.getUsername().trim();
+        if (userInput.isEmpty()) {
+            throw new IllegalArgumentException("El campo 'Username' es obligatorio");
+        }
+        // Validar si el username es un correo electrónico
+        User user = null;
+        if (validateEmailDomain(userInput)) {
+            // Buscar el usuario por su correo electrónico en la base de datos
+            user = loginRepository.findByEmail(userInput.toLowerCase())
+                    .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
+            user.setPassword(passwordEncoder.encode(loginRequest.getPassword()));
+            loginRepository.save(user);
+            ResponseData<String> response = new ResponseData<>(null, "Se ha cambiado correctamente la contraseña", "success");
+            return ResponseEntity.ok(response);
+        }
+        else if (validateCellPhoneNumber(userInput)) {
+            // Buscar el usuario por su correo electrónico en la base de datos
+            user = loginRepository.findByPhone(userInput.toLowerCase())
+                    .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
+            user.setPassword(passwordEncoder.encode(loginRequest.getPassword()));
+            loginRepository.save(user);
+            ResponseData<String> response = new ResponseData<>(null, "Se ha cambiado correctamente la contraseña", "success");
+            return ResponseEntity.ok(response);
+        } else {
+            // Si el dominio del email no es válido, lanzar una excepción o retornar un mensaje adecuado
+            throw new IllegalArgumentException("Dominio de correo o formato de numero celular no válido");
+        }
     }
 
     public Boolean validateEmailDomain(String email){

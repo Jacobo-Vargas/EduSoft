@@ -3,11 +3,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RecoverPassword } from "../recover-password/recover-password";
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.html',
-  imports: [ReactiveFormsModule, CommonModule, RecoverPassword],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   styleUrls: ['./login.css']
 })
 export class LoginComponent {
@@ -85,10 +86,6 @@ export class LoginComponent {
   closeTermsModal() { this.showTermsModal = false; }
 
 
-  // Mostrar el formulario de recuperación
-  openRecoverPassword() {
-    this.showRecoverPassword = true;  // Al hacer clic, se muestra el formulario de recuperación
-  }
 
   
 }
