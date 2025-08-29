@@ -2,7 +2,7 @@ package com.uniquindio.edu.edusoft.service.impl;
 
 import com.uniquindio.edu.edusoft.model.dto.respose.ResponseDTO;
 import com.uniquindio.edu.edusoft.model.dto.user.RequestUserDTO;
-import com.uniquindio.edu.edusoft.model.dto.respose.ResponseUserDTO;
+import com.uniquindio.edu.edusoft.model.dto.user.ResponseUserDTO;
 import com.uniquindio.edu.edusoft.model.entities.User;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.model.mapper.UserMapper;

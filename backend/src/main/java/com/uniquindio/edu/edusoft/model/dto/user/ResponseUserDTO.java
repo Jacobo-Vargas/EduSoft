@@ -1,4 +1,4 @@
-package com.uniquindio.edu.edusoft.model.dto.respose;
+package com.uniquindio.edu.edusoft.model.dto.user;
 
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import lombok.AllArgsConstructor;
