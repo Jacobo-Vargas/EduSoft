@@ -90,22 +90,18 @@ public class LoginServiceImpl implements LoginService {
             // Buscar el usuario por su correo electrónico en la base de datos
             user = loginRepository.findByEmail(userInput.toLowerCase())
                     .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
-
             // Si el usuario es encontrado, podemos proceder a enviar el código de verificación
             String verificationCode = CodeGenerator.generateCode(); // Generamos el código de verificación
             emailService.sendCodeVerifactionPassword(user.getEmail(), verificationCode); // Enviamos el correo
-
-            return ResponseEntity.ok("Código de verificación enviado con éxito");
+            return ResponseEntity.ok(verificationCode);
         }
         else if (validateCellPhoneNumber(userInput)) {
                 // Buscar el usuario por su correo electrónico en la base de datos
                 user = loginRepository.findByPhone(userInput.toLowerCase())
                         .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
-
                 // Si el usuario es encontrado, podemos proceder a enviar el código de verificación
                 String verificationCode = CodeGenerator.generateCode(); // Generamos el código de verificación
                 emailService.sendCodeVerifactionPassword(user.getEmail(), verificationCode); // Enviamos el correo
-
                 return ResponseEntity.ok(verificationCode);
         } else {
             // Si el dominio del email no es válido, lanzar una excepción o retornar un mensaje adecuado

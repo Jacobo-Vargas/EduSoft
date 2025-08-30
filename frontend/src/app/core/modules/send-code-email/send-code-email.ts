@@ -65,7 +65,7 @@ export class SendEmail {
 
   const formData = this.userForm.value;  // Obtiene los datos del formulario
   this.isLoading = true;
-
+  console.log('Formulario ' , this.isCodeSent);
   if (this.isCodeSent) {
     console.log('Verificando código:', formData.code , 'contra', this.generatedCode);
     // Guardar el username en el localStorage
@@ -102,6 +102,9 @@ export class SendEmail {
         // Manejo de error
         this.errorMsg = err?.error?.message || 'Error inesperado';
         this.isLoading = false;
+        
+    // Útil para depurar sin romper la UI
+    console.error('[HTTP ERROR]', err);
       }
     });
     }
