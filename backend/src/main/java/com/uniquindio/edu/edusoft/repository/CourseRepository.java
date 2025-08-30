@@ -8,12 +8,5 @@ import java.util.List;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
-    // Buscar cursos por título
-    List<Course> findByTitleContainingIgnoreCase(String title);
 
-    // Buscar cursos por estado
-    List<Course> findByStatus(EnumLifecycleStatus status); // mejor usar enum directamente
-
-    // Buscar cursos por autor
-    List<Course> findByAuthor_Id(Long authorId);
 }
