@@ -5,10 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface LessonRepository extends JpaRepository<Lesson, Integer> {
+public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
-    // Buscar lecciones por curso
-    List<Lesson> findByCourse_IdCourse(Integer idCourse);
+    // Buscar lecciones por curso (via módulo → curso)
+    List<Lesson> findByModule_Course_Id(Long courseId);
+
+    // Buscar lecciones por módulo
+    List<Lesson> findByModule_Id(Long moduleId);
 
     // Buscar lecciones por título
     List<Lesson> findByTitleContainingIgnoreCase(String title);

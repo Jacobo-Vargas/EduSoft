@@ -2,7 +2,6 @@ package com.uniquindio.edu.edusoft.model.dto.course;
 
 import com.uniquindio.edu.edusoft.model.enums.EnumCourseCategoty;
 import com.uniquindio.edu.edusoft.model.enums.EnumCourseLevel;
-import com.uniquindio.edu.edusoft.model.enums.EnumCourseType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,6 @@ public class ResponseCourseDTO {
 
     private EnumCourseCategoty category;
     private EnumCourseLevel level;
-    private EnumCourseType status;
 
     private int estimatedDurationMinutes;
     private String imageUrl;

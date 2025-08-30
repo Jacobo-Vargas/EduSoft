@@ -4,16 +4,6 @@ import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Proxy;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.Where;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDate;
-import java.util.Date;
 
 @SuppressWarnings("ALL")
 @Data

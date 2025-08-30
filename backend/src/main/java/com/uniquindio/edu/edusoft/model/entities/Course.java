@@ -2,7 +2,7 @@ package com.uniquindio.edu.edusoft.model.entities;
 
 import com.uniquindio.edu.edusoft.model.enums.EnumCourseCategoty;
 import com.uniquindio.edu.edusoft.model.enums.EnumCourseLevel;
-import com.uniquindio.edu.edusoft.model.enums.EnumCourseType;
+import com.uniquindio.edu.edusoft.model.enums.EnumLifecycleStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +15,7 @@ import java.util.List;
 @Table(name = "courses")
 public class Course extends BaseEntity {
 
+    @Column(length = 120, nullable = false)
     private String title;
 
     @Column(length = 1000)
@@ -26,7 +27,9 @@ public class Course extends BaseEntity {
     private String imageUrl;
 
     @Enumerated(EnumType.STRING)
-    private EnumCourseType status = EnumCourseType.BORRADOR;
+    private EnumLifecycleStatus status = EnumLifecycleStatus.BORRADOR;
+
+    private boolean visible = true;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
@@ -42,4 +45,10 @@ public class Course extends BaseEntity {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Module> modules;
+
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @Column(name = "updated_by")
+    private String updatedBy;
 }

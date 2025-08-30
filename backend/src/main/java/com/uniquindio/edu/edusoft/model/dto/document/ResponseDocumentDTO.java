@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseDocumentDTO {
-
     private Long id;
     private String name;
     private String url;
-
+    private int orderNumber;
     private Long lessonId;
     private String lessonTitle;
 }
+

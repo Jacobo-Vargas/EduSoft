@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseModuleDTO {
-
     private Long id;
     private String title;
     private String description;
     private int orderNumber;
-
+    private boolean visible;
+    private String status;
     private Long courseId;
     private String courseTitle;
 }

@@ -9,12 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestDocumentDTO {
-
     @NotBlank(message = "El nombre del documento es obligatorio")
     private String name;
-
     @NotBlank(message = "La URL del documento es obligatoria")
     private String url;
-
-    private Long lessonId; // referencia a la lección
+    private int orderNumber;
+    private Long lessonId;
 }
+

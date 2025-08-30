@@ -1,6 +1,6 @@
 package com.uniquindio.edu.edusoft.model.enums;
 
-public enum EnumCourseType {
+public enum EnumLifecycleStatus {
     BORRADOR,
     PUBLICADO,
     ELIMINADO

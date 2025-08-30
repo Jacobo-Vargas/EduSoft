@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestModuleDTO {
-
     @NotBlank(message = "El título del módulo es obligatorio")
     private String title;
-
     private String description;
     private int orderNumber;
-
-    private Long courseId; // referencia al curso
+    private boolean visible;
+    private Long courseId;
 }

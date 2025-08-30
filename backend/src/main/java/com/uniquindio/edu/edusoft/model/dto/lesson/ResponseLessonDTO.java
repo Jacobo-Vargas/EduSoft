@@ -8,12 +8,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseLessonDTO {
-
     private Long id;
     private String title;
-    private String content;
+    private String description;
     private int orderNumber;
     private int durationMinutes;
+    private boolean visible;
+    private String status;
     private Long moduleId;
     private String moduleTitle;
 }
+

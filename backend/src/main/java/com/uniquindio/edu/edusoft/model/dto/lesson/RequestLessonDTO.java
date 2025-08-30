@@ -9,15 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestLessonDTO {
-
     @NotBlank(message = "El título de la lección es obligatorio")
     private String title;
-
-    @NotBlank(message = "El contenido de la lección es obligatorio")
-    private String content;
-
+    private String description;
     private int orderNumber;
     private int durationMinutes;
-
-    private Long moduleId; // referencia al módulo al que pertenece
+    private boolean visible;
+    private Long moduleId;
 }
