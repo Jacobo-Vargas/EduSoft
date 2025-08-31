@@ -1,0 +1,99 @@
+<div class="container mt-5 form-container-bg form-container ">
+  <div class="row align-items-center">
+    <!-- Logo a la derecha -->
+    <div class="col-12 text-end mb-4">
+      <img src="assets/logo-uq.png" alt="Logo Universidad del Quindío" class="logo-uq" />
+    </div>
+
+    <!-- Título centrado -->
+    <div class="col-12 text-center mb-4">
+      <h2 class="text-white">Registrar Curso</h2> <!-- Texto blanco -->
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Caja formulario con imagen de fondo en ambos lados -->
+    <div class="col-md-12">
+      <div class="row">
+        <!-- Formulario de la primera columna -->
+        <div class="col-md-6">
+          <div>
+            <!-- Mensaje de éxito -->
+            <div *ngIf="showSuccessMessage" class="alert alert-success">
+              ✅ Curso registrado exitosamente
+            </div>
+            <form [formGroup]="courseForm">
+              <div class="mb-3">
+                <label for="title" class="form-label text-white">Título del curso*</label> <!-- Texto blanco -->
+                <input type="text" id="title" formControlName="title" class="form-control" placeholder="Ej: Curso de Java desde Cero" />
+                <div class="text-danger" *ngIf="f['title']?.touched && f['title']?.invalid">
+                  El título es obligatorio
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="description" class="form-label text-white">Descripción*</label> <!-- Texto blanco -->
+                <input type="text" id="description" formControlName="description" class="form-control" placeholder="Descripción del curso" />
+                <div class="text-danger" *ngIf="f['description']?.touched && f['description']?.invalid">
+                  La descripción es obligatoria
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="price" class="form-label text-white">Precio (USD)*</label> <!-- Texto blanco -->
+                <input type="number" id="price" formControlName="price" class="form-control" placeholder="Ej: 120.50" min="0" step="0.01" />
+                <div class="text-danger" *ngIf="f['price']?.touched && f['price']?.invalid">
+                  El precio es obligatorio y debe ser mayor o igual a 0
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Formulario de la segunda columna -->
+        <div class="col-md-6">
+          <form [formGroup]="courseForm">
+            <div class="mb-3">
+              <label for="coverUrl" class="form-label text-white">URL de portada*</label> <!-- Texto blanco -->
+              <input type="text" id="coverUrl" formControlName="coverUrl" class="form-control" placeholder="https://res.cloudinary.com/edusoft/portadas/java_basico.png" />
+              <div class="text-danger" *ngIf="f['coverUrl']?.touched && f['coverUrl']?.invalid">
+                La URL de portada es obligatoria
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="semester" class="form-label text-white">Semestre*</label> <!-- Texto blanco -->
+              <input type="number" id="semester" formControlName="semester" class="form-control" placeholder="Ej: 1" min="0" />
+              <div class="text-danger" *ngIf="f['semester']?.touched && f['semester']?.invalid">
+                El semestre es obligatorio y debe ser mayor o igual a 0
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="priorKnowledge" class="form-label text-white">Conocimientos previos*</label> <!-- Texto blanco -->
+              <input type="text" id="priorKnowledge" formControlName="priorKnowledge" class="form-control" placeholder="Ej: Conocimientos básicos de lógica de programación" />
+              <div class="text-danger" *ngIf="f['priorKnowledge']?.touched && f['priorKnowledge']?.invalid">
+                Este campo es obligatorio
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="estimatedDurationMinutes" class="form-label text-white">Duración estimada (minutos)*</label> <!-- Texto blanco -->
+              <input type="number" id="estimatedDurationMinutes" formControlName="estimatedDurationMinutes" class="form-control" placeholder="Ej: 480" min="1" />
+              <div class="text-danger" *ngIf="f['estimatedDurationMinutes']?.touched && f['estimatedDurationMinutes']?.invalid">
+                La duración es obligatoria y debe ser mayor a 0
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Botón centrado -->
+      <div class="col-12 text-center mb-4">
+        <button type="submit" [disabled]="courseForm.invalid" class="btn btn-success w-50">
+          Registrar Curso
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
