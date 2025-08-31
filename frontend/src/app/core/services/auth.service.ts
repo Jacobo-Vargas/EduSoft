@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 // Ajusta esto a tu environment/proxy:
-const API = 'http://localhost:8080/api/auth';
+const API = environment.urlServer;
 
 
 export interface AuthResponseDTO {
@@ -26,13 +27,13 @@ export class AuthService {
 
   /** POST /api/auth/login */
   login(body: LoginRequestDTO): Observable<AuthResponseDTO> {
-    return this.http.post<AuthResponseDTO>(`${API}/login`, body, { withCredentials: true }).pipe(
+    return this.http.post<AuthResponseDTO>(`${API}/auth/login`, body, { withCredentials: true }).pipe(
       map(res => res)
     );
   }
 
 startReset(body: { username: string }): Observable<any> {
-  return this.http.post(`${API}/sendCodeEmail`, body, { withCredentials: true }).pipe(
+  return this.http.post(`${API}/auth/sendCodeEmail`, body, { withCredentials: true }).pipe(
     map(response => {
       console.log('Código enviado:', response);  // Ver el código aquí
       return response;
@@ -43,7 +44,7 @@ startReset(body: { username: string }): Observable<any> {
  // Método para actualizar la contraseña
   updatePassword(body: { username: string; password: string }): Observable<any> {
   console.log('Datos enviados al backend:', body);  // Verifica los datos enviados
-  return this.http.post(`${API}/updatePassword`, body);
+  return this.http.post(`${API}/auth/updatePassword`, body);
 }
 
   
@@ -52,7 +53,7 @@ startReset(body: { username: string }): Observable<any> {
    * Confirmar cambio de contraseña con código.
    */
   confirmReset(body: { username: string; code: string; password: string }): Observable<any> {
-    return this.http.post(`${API}/recover-password`, body, { withCredentials: true });
+    return this.http.post(`${API}/auth/recover-password`, body, { withCredentials: true });
   }
 
   // --- Helpers opcionales ---

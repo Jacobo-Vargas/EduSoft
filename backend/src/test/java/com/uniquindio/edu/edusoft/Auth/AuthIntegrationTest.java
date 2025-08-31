@@ -31,6 +31,7 @@ class SecurityIntegrationTest {
     void testLoginAndLogoutFlow() throws Exception {
         String email = "usuario@correo.com";
         String password = "123456";
+        
 
         // 1. Login → debería crear cookie HttpOnly y guardar token en Redis
         MvcResult loginResult = mockMvc.perform(post("/api/auth/login")
