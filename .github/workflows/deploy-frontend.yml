@@ -1,0 +1,47 @@
+name: Deploy Frontend to AWS ECR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1   # cambia a tu región
+
+      # 3. Login a ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 4. Build & Push Docker image
+      - name: Build, tag, and push image to ECR
+        run: |
+          IMAGE_REPO_NAME=frontend
+          IMAGE_TAG=latest
+          ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          ECR_REGISTRY=$ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com
+          
+          echo "Building Docker image..."
+          docker build -t $IMAGE_REPO_NAME ./frontend
+
+          echo "Tagging image..."
+          docker tag $IMAGE_REPO_NAME:latest $ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG
+          docker tag $IMAGE_REPO_NAME:latest $ECR_REGISTRY/$IMAGE_REPO_NAME:${GITHUB_SHA::7}
+
+          echo "Pushing image..."
+          docker push $ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$IMAGE_REPO_NAME:${GITHUB_SHA::7}
