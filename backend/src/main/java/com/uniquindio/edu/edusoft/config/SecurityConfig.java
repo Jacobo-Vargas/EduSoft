@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/users/sendCodeEmail/**").permitAll()
                         .requestMatchers("/api/course/**").permitAll()
                         .requestMatchers("/api/categories/**").permitAll()
+                        .requestMatchers("/api/currentStatuses/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
