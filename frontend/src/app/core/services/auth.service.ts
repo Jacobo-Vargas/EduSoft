@@ -3,14 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-// Ajusta esto a tu environment/proxy:
 const API = environment.urlServer;
-
-
 export interface AuthResponseDTO {
   accessToken: string;
 }
-
 
 export interface LoginRequestDTO {
   username: string;
@@ -27,15 +23,14 @@ export class AuthService {
 
   /** POST /api/auth/login */
   login(body: LoginRequestDTO): Observable<AuthResponseDTO> {
-    return this.http.post<AuthResponseDTO>(`${API}/auth/login`, body, { withCredentials: true }).pipe(
+    return this.http.post<AuthResponseDTO>(`${API}${environment.urlLogin}`, body, { withCredentials: true }).pipe(
       map(res => res)
     );
   }
 
 startReset(body: { username: string }): Observable<any> {
-  return this.http.post(`${API}/auth/sendCodeEmail`, body, { withCredentials: true }).pipe(
+  return this.http.post(`${API}${environment.urlSendCodeEmail}`, body, { withCredentials: true }).pipe(
     map(response => {
-      console.log('Código enviado:', response);  // Ver el código aquí
       return response;
     })
   );
@@ -43,17 +38,20 @@ startReset(body: { username: string }): Observable<any> {
 
  // Método para actualizar la contraseña
   updatePassword(body: { username: string; password: string }): Observable<any> {
-  console.log('Datos enviados al backend:', body);  // Verifica los datos enviados
-  return this.http.post(`${API}/auth/updatePassword`, body);
+  return this.http.post(`${API}${environment.urlUpdatePassword}`, body);
 }
-
-  
-
   /**
    * Confirmar cambio de contraseña con código.
    */
   confirmReset(body: { username: string; code: string; password: string }): Observable<any> {
-    return this.http.post(`${API}/auth/recover-password`, body, { withCredentials: true });
+    return this.http.post(`${API}${environment.urlRecoverPassword}`, body, { withCredentials: true });
+  }
+  /**
+   * Verificar código de cambio de contraseña.
+   */
+  verifyCode(code: string, body: LoginRequestDTO): Observable<any> {
+    // Aquí se realiza la solicitud con el código como parámetro en la URL
+    return this.http.post(`${API}/auth/verifyCode/${code}`, body, { withCredentials: true });
   }
 
   // --- Helpers opcionales ---

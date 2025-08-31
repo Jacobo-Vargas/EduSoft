@@ -2,10 +2,11 @@ package com.uniquindio.edu.edusoft.service.impl;
 
 import com.uniquindio.edu.edusoft.config.security.JwtService;
 import com.uniquindio.edu.edusoft.config.security.TokenStoreService;
+import com.uniquindio.edu.edusoft.model.entities.CodeChangePassword;
 import com.uniquindio.edu.edusoft.model.mapper.LoginMapper;
 import com.uniquindio.edu.edusoft.model.dto.respose.LoginRequestDTO;
+import com.uniquindio.edu.edusoft.repository.CodeChangePasswordRepository;
 import com.uniquindio.edu.edusoft.repository.LoginRepository;
-import com.uniquindio.edu.edusoft.service.EmailService;
 import com.uniquindio.edu.edusoft.service.LoginService;
 import com.uniquindio.edu.edusoft.utils.BaseResponse;
 import com.uniquindio.edu.edusoft.utils.CodeGenerator;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.uniquindio.edu.edusoft.model.entities.User;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 @Service
@@ -33,6 +35,7 @@ public class LoginServiceImpl implements LoginService {
     private final JwtService jwtService;
     private final TokenStoreService tokenStoreService;
     private final PasswordEncoder passwordEncoder;
+    private final CodeChangePasswordRepository codeChangePasswordRepository;
 
     @Override
     public ResponseEntity<?> login(LoginRequestDTO loginRequest, HttpServletResponse response) {
@@ -93,6 +96,22 @@ public class LoginServiceImpl implements LoginService {
             // Si el usuario es encontrado, podemos proceder a enviar el código de verificación
             String verificationCode = CodeGenerator.generateCode(); // Generamos el código de verificación
             emailService.sendCodeVerifactionPassword(user.getEmail(), verificationCode); // Enviamos el correo
+            // Buscar si el usuario ya tiene un código de cambio de contraseña
+            Optional<CodeChangePassword> existingCode = codeChangePasswordRepository.findByUser(user);
+            // Si ya existe un código, lo actualizamos
+            if (existingCode.isPresent()) {
+                CodeChangePassword codeChangePassword = existingCode.get();
+                codeChangePassword.setCode(verificationCode);
+                codeChangePassword.setExpirationTime(System.currentTimeMillis() + 10 * 60 * 100); // Expira en 10 minutos
+                codeChangePasswordRepository.save(codeChangePassword);
+            } else {
+                // Si no existe, creamos un nuevo código de cambio de contraseña
+                CodeChangePassword codeChangePassword = new CodeChangePassword();
+                codeChangePassword.setCode(verificationCode);
+                codeChangePassword.setUser(user);
+                codeChangePassword.setExpirationTime(System.currentTimeMillis() + 10 * 60 * 100); // Expira en 10 minutos
+                codeChangePasswordRepository.save(codeChangePassword);
+            }
             return ResponseEntity.ok(verificationCode);
         }
         else if (validateCellPhoneNumber(userInput)) {
@@ -101,7 +120,22 @@ public class LoginServiceImpl implements LoginService {
                         .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
                 // Si el usuario es encontrado, podemos proceder a enviar el código de verificación
                 String verificationCode = CodeGenerator.generateCode(); // Generamos el código de verificación
-                emailService.sendCodeVerifactionPassword(user.getEmail(), verificationCode); // Enviamos el correo
+                emailService.sendCodeVerifactionPassword(user.getEmail(), verificationCode);
+            // Buscar si el usuario ya tiene un código de cambio de contraseña
+            Optional<CodeChangePassword> existingCode = codeChangePasswordRepository.findByUser(user);// Enviamos el correo
+            if (existingCode.isPresent()) {
+                CodeChangePassword codeChangePassword = existingCode.get();
+                codeChangePassword.setCode(verificationCode);
+                codeChangePassword.setExpirationTime(System.currentTimeMillis() + 10 * 60 * 100); // Expira en 10 minutos
+                codeChangePasswordRepository.save(codeChangePassword);
+            } else {
+                // Si no existe, creamos un nuevo código de cambio de contraseña
+                CodeChangePassword codeChangePassword = new CodeChangePassword();
+                codeChangePassword.setCode(verificationCode);
+                codeChangePassword.setUser(user);
+                codeChangePassword.setExpirationTime(System.currentTimeMillis() + 10 * 60 * 100); // Expira en 10 minutos
+                codeChangePasswordRepository.save(codeChangePassword);
+            }
                 return ResponseEntity.ok(verificationCode);
         } else {
             // Si el dominio del email no es válido, lanzar una excepción o retornar un mensaje adecuado
@@ -162,6 +196,43 @@ public class LoginServiceImpl implements LoginService {
             throw new IllegalArgumentException("Dominio de correo o formato de numero celular no válido");
         }
     }
+
+    @Override
+    public ResponseEntity<?> verifyCode(String code, LoginRequestDTO loginRequest) throws Exception {
+        // Validar que el username no sea nulo ni vacío
+        String userInput = loginRequest.getUsername() == null ? "" : loginRequest.getUsername().trim();
+        if (userInput.isEmpty()) {
+            throw new IllegalArgumentException("El campo 'Username' es obligatorio");
+        }
+        // Buscar el usuario por su correo electrónico o teléfono
+        User user = null;
+        if (validateEmailDomain(userInput)) {
+            // Buscar el usuario por correo electrónico
+            user = loginRepository.findByEmail(userInput.toLowerCase())
+                    .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
+        } else if (validateCellPhoneNumber(userInput)) {
+            // Buscar el usuario por teléfono
+            user = loginRepository.findByPhone(userInput.toLowerCase())
+                    .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
+        } else {
+            throw new IllegalArgumentException("Dominio de correo no válido");
+        }
+        // Buscar el código de cambio de contraseña asociado al usuario
+        Optional<CodeChangePassword> existingCodeOpt = codeChangePasswordRepository.findByUser(user);
+        // Verificar si el usuario tiene un código de cambio de contraseña
+        if (existingCodeOpt.isPresent()) {
+            CodeChangePassword existingCode = existingCodeOpt.get();
+            // Verificar si el código enviado desde el frontend coincide con el guardado
+            if (!existingCode.getCode().equals(code)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El código no es válido.");
+            }
+            ResponseData<String> response = new ResponseData<>(null, "Código de validación correcto.", "success");
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se encontró un código de validación para este usuario.");
+        }
+    }
+
 
     public Boolean validateEmailDomain(String email){
         Predicate<String> domainPredicate = e -> e != null && (e.endsWith("@uqvirtual.edu.co") || e.endsWith("@uniquindio.edu.co"));
