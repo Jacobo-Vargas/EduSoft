@@ -1,0 +1,26 @@
+name: Test SSH Connection to EC2
+
+# Permitir ejecutar manualmente desde la pestaña Actions
+on:
+  workflow_dispatch:
+
+jobs:
+  ssh-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up SSH access
+        run: |
+          # Crear carpeta para llaves
+          mkdir -p ~/.ssh
+
+          # Guardar la clave privada desde GitHub Secrets
+          printf "%s\n" "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          # Añadir el host a known_hosts para evitar prompt de autenticación
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection and run 'hostname'
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "hostname && uptime"

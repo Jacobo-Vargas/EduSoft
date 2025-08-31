@@ -17,7 +17,7 @@ export class RecaptchaComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     if (typeof grecaptcha !== 'undefined') {
       this.widgetId = grecaptcha.render('recaptcha-container', {
-        sitekey: '6LeQDLIrAAAAAA9hFtH2WoatCxCYEqhmraFeuGly', // <-- Reemplaza con tu Site Key de Google
+        sitekey: '6Lff4LgrAAAAAKVFhq1YtlwOImtIeE23mMD9e6ZL',
         callback: (response: string) => {
           this.tokenGenerated.emit(response);
         }
