@@ -6,8 +6,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@Data
 @Entity
 @Table(name = "currentStatus")
 @EqualsAndHashCode(callSuper = true)
@@ -15,7 +17,7 @@ public class CurrentStatus extends BaseEntity {
 
     @NotBlank
     @Size(max = 120)
-    @Column(name = "nome", length = 120, nullable = false)
+    @Column(name = "name", length = 120, nullable = false)
     private String name;
 
     @Size(max = 500)
