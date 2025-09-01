@@ -7,6 +7,7 @@ import { SendEmail } from './core/modules/send-code-email/send-code-email';
 import { CreateCourses } from './core/modules/create-courses/create-courses';
 import { CreateCategories } from './core/modules/create-categories/create-categories';
 import { CreateStatusCourse } from './core/modules/create-status-course/create-status-course';
+import { CreateAuditStatus } from './core/modules/create-audit-status/create-audit-status';
 
 export const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'app-create-courses', component: CreateCourses },  
   { path: 'app-create-categories', component: CreateCategories },  
   { path: 'createStatusCourse', component: CreateStatusCourse },  
+  { path: 'createAuditStatus', component:CreateAuditStatus },
   { path: '', component: HomeComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

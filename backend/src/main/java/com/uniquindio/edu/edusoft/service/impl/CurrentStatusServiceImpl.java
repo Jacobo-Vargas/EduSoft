@@ -7,6 +7,7 @@ import com.uniquindio.edu.edusoft.model.mapper.CurrentStatusMapper;
 import com.uniquindio.edu.edusoft.repository.CurrentStatusRepository;
 import com.uniquindio.edu.edusoft.service.CurrentStatusService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -19,6 +20,9 @@ public class CurrentStatusServiceImpl implements CurrentStatusService {
     // Crear un nuevo estado
     public CurrentStatusResponseDto createCurrentStatus(CurrentStatusRequestDto dto) {
         CurrentStatus currentStatus = currentStatusMapper.toEntity(dto);
+        if(currentStatusRepository.existsByNameIgnoreCase(dto.getName())){
+            return  null;
+        }
         CurrentStatus saved = currentStatusRepository.save(currentStatus);
         return currentStatusMapper.toResponseDto(saved);
     }

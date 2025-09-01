@@ -1,8 +1,8 @@
 package com.uniquindio.edu.edusoft.repository;
 
-import com.uniquindio.edu.edusoft.model.entities.CurrentStatus;
+import com.uniquindio.edu.edusoft.model.entities.AuditStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CurrentStatusRepository extends JpaRepository<CurrentStatus, Long> {
+public interface AuditStatusRepository extends JpaRepository<AuditStatus, Long> {
     boolean existsByNameIgnoreCase(String name);
 }

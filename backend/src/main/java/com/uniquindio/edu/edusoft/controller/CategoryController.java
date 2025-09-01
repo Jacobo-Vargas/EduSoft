@@ -21,12 +21,11 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryRequestDto dto) {
         CategoryResponseDto result = categoryService.createCategory(dto);
-
         if (result == null) {
             // 400 con un JSON { "message": "..." }
             return ResponseEntity
                     .badRequest()
-                    .body(Map.of("message", "Ya existe una categoría con ese nombre"));
+                    .body(Map.of("message", "Ya existe un estado  con ese nombre"));
         }
 
         return ResponseEntity.ok(result);
