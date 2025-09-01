@@ -5,6 +5,7 @@ import { LoginComponent } from './core/modules/login/login';
 import { RecoverPassword } from './core/modules/recover-password/recover-password';
 import { SendEmail } from './core/modules/send-code-email/send-code-email';
 import { CreateCourses } from './core/modules/create-courses/create-courses';
+import { CreateCategories } from './core/modules/create-categories/create-categories';
 
 export const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
@@ -13,6 +14,7 @@ export const routes: Routes = [
   { path: 'send-code-email', component: SendEmail }, 
   { path: 'recover-paassword', component: SendEmail },
   { path: 'app-create-courses', component: CreateCourses },  
+  { path: 'app-create-categories', component: CreateCategories },  
   { path: '', component: HomeComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

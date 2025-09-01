@@ -1,0 +1,41 @@
+<div class="fondo">
+<div class="container mt-5">
+  <div class="shadowbox">
+    <!-- Título y explicación -->
+    <h1 class="text-center mb-3">Registrar Categoría</h1>
+    <p class="text-center mb-4 text-muted">
+      En este formulario podrás registrar categorías para clasificar los cursos de los profesores. 
+      Las categorías permiten organizar y gestionar mejor los contenidos educativos.
+    </p>
+
+    <!-- Formulario -->
+    <form class="row g-3" [formGroup]="categorieForm" (ngSubmit)="onSubmit()">
+      <!-- Nombre de la categoría -->
+      <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Nombre</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Nombre de la categoría" required>
+          <div class="text-danger mt-1" *ngIf="f['title']?.touched && f['title']?.invalid">
+            El nombre de la categoría es obligatorio.
+          </div>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Descripción</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Descripción breve de la categoría" required>
+          <div class="text-danger mt-1" *ngIf="f['description']?.touched && f['description']?.invalid">
+            La descripción es obligatoria.
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón centrado -->
+      <div class="col-12 text-center mb-4">
+        <button type="submit" class="btn btn-outline-success" style="width: auto;">Registrar Categoría</button>
+      </div>
+    </form>
+  </div>
+</div>
