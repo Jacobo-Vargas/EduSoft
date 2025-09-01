@@ -11,14 +11,25 @@ export interface CategorieRequestDTO {
   name: string;
   description?: string;
 }
+export interface currentStatusRequestDTO {
+  name: string;
+  description?: string;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
     constructor(private http: HttpClient) {}  
-  createCategorie(body: CategorieRequestDTO): Observable<AuthResponseDTO> {
+  
+  
+    createCategorie(body: CategorieRequestDTO): Observable<AuthResponseDTO> {
     return this.http.post<AuthResponseDTO>(`${API}/categories`, body, { withCredentials: true }).pipe(
     map(res => res)
     );
- }
+     }
+    createStatusCourse(body: currentStatusRequestDTO): Observable<AuthResponseDTO> {
+    return this.http.post<AuthResponseDTO>(`${API}/currentStatuses`, body, { withCredentials: true }).pipe(
+    map(res => res)
+    );
+     }
 }

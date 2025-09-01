@@ -7,6 +7,7 @@ import com.uniquindio.edu.edusoft.model.mapper.CategoryMapper;
 import com.uniquindio.edu.edusoft.repository.CategoryRepository;
 import com.uniquindio.edu.edusoft.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     public CategoryResponseDto createCategory(CategoryRequestDto dto) {
         Category category = categoryMapper.toEntity(dto);
+        if(categoryRepository.existsByNameIgnoreCase(category.getName())){
+            return null;
+        }
         Category saved = categoryRepository.save(category);
         return categoryMapper.toResponseDto(saved);
     }
