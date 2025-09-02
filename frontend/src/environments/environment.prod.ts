@@ -8,5 +8,3 @@ export const environment = {
     admin: 'ROLE_ADMIN'
   }
 }
-
-
