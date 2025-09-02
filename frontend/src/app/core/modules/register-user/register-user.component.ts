@@ -65,43 +65,25 @@ export class RegisterUserComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
-  onSubmit(): void {
-
-    // Validaciones
-    if (this.isSubmitting) {
-      console.warn('Ya se está procesando un envío');
-      return;
-    }
-
-    if (!this.captchaToken) {
-      alert('Por favor completa la verificación reCAPTCHA');
-      return;
-    }
-
-    if (!this.userForm.valid) {
-      console.warn('Formulario inválido');
-      this.markFormGroupTouched();
-      return;
-    }
-
-    // Proceder con el envío
+  onSubmit() {
+  if (this.userForm.valid && this.captchaToken) {
     this.isSubmitting = true;
-    const formData = {
+
+    const userData = {
       ...this.userForm.value,
-      captcha: this.captchaToken
+      captchaToken: this.captchaToken
     };
 
-
-    this.usuarioService.createUser(formData).subscribe({
+    this.usuarioService.createUser(userData).subscribe({
       next: (response) => {
-        console.log('✅ Usuario registrado con éxito:', response);
-        this.showSuccessMessage = true;
-        this.resetForm();
+        console.log('✅ Usuario registrado exitosamente:', response);
+        alert('Usuario registrado exitosamente');
+        this.userForm.reset();
+        this.resetRecaptcha();
       },
       error: (error) => {
         console.error('❌ Error al registrar usuario:', error);
-        
-        // Mostrar mensaje de error más específico
+
         let errorMessage = 'Error al registrar usuario. ';
         if (error.status === 400) {
           errorMessage += 'Datos inválidos o reCAPTCHA inválido.';
@@ -110,15 +92,23 @@ export class RegisterUserComponent implements OnInit {
         } else {
           errorMessage += 'Problema de conexión.';
         }
-        
+
         alert(errorMessage);
         this.resetRecaptcha();
+
+        // 🔥 Rehabilitar el botón si falla
+        this.isSubmitting = false;
       },
       complete: () => {
+        // 🔥 También se asegura aquí en caso de éxito
         this.isSubmitting = false;
       }
     });
+  } else {
+    console.warn('❌ Formulario inválido o reCAPTCHA no completado');
+    alert('Por favor completa todos los campos requeridos y el reCAPTCHA.');
   }
+}
 
   private resetForm(): void {
     this.userForm.reset();

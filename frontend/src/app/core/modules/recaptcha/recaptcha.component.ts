@@ -33,6 +33,8 @@ export class RecaptchaComponent implements AfterViewInit {
   reset(): void {
     if (this.widgetId !== undefined && window.grecaptcha) {
       window.grecaptcha.reset(this.widgetId);
+
+
     }
   }
 }
