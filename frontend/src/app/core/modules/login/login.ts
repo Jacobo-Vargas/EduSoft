@@ -61,8 +61,10 @@ export class LoginComponent {
     const formData = this.userForm.value; // { username, password }
     this.isLoading = true;
 
+    console.log("esta intentando entrar")
     this.auth.login(formData).subscribe({
       next: () => {
+        console.log("entro")
         this.showSuccessMessage = true;
         this.userForm.reset();
         this.formSubmitted = false;

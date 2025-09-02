@@ -16,7 +16,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void SendMailHome(String email, String token) throws Exception {
         String subject = "¡Bienvenido a EduSoft - Universidad del Quindío!";
-        String verifyLink = "http://localhost:8080/users/verify?token=" + token;
+        String verifyLink = "https://localhost:8443/api/users/verify?token=" + token;
 
         String content = """
             <p>Hola,</p>
