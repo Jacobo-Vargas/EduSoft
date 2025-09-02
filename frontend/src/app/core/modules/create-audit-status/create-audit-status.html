@@ -1,0 +1,75 @@
+<div class="fondo">
+  <div class="container py-5">
+    <div class="shadowbox mx-auto">
+      <h1 class="text-center mb-2">Registrar un estado de audioria</h1>
+      <p class="text-center mb-4 text-muted">
+        Crea estados que los auditoros pueden asignarle a los cursos.
+      </p>
+
+      <!-- Alertas -->
+      <div *ngIf="errorMsg" class="alert alert-danger mb-3">{{ errorMsg }}</div>
+      <div *ngIf="showSuccessMessage" class="alert alert-success mb-3">
+        ✅ Estado registrado correctamente
+      </div>
+
+      <form class="row g-3" [formGroup]="auditStatusForm" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
+        <!-- Nombre -->
+        <div class="mb-2 row align-items-center">
+          <label for="name" class="col-sm-3 col-form-label">Nombre</label>
+          <div class="col-sm-9">
+            <input
+              id="name"
+              type="text"
+              class="form-control"
+              formControlName="name"
+              placeholder="Nombre del estado"
+              [class.is-invalid]="f['name']?.touched && f['name']?.invalid"
+            />
+            <div class="invalid-feedback" *ngIf="f['name']?.errors?.['required']">El nombre es obligatorio.</div>
+            <div class="invalid-feedback" *ngIf="f['name']?.errors?.['minlength']">Mínimo 3 caracteres.</div>
+            <div class="invalid-feedback" *ngIf="f['name']?.errors?.['maxlength']">Máximo 60 caracteres.</div>
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="mb-2 row align-items-center">
+          <label for="description" class="col-sm-3 col-form-label">Descripción</label>
+          <div class="col-sm-9">
+            <textarea
+              id="description"
+              rows="3"
+              class="form-control"
+              formControlName="description"
+              placeholder="Breve descripción del estado"
+              [class.is-invalid]="f['description']?.touched && f['description']?.invalid"
+            ></textarea>
+            <div class="invalid-feedback" *ngIf="f['description']?.errors?.['required']">La descripción es obligatoria.</div>
+            <div class="invalid-feedback" *ngIf="f['description']?.errors?.['minlength']">Mínimo 10 caracteres.</div>
+            <div class="invalid-feedback" *ngIf="f['description']?.errors?.['maxlength']">Máximo 200 caracteres.</div>
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="col-12 text-center mt-3">
+          <button
+            type="button"
+            class="btn btn-outline-secondary me-2"
+            (click)="onReset()"
+            [disabled]="isLoading"
+          >
+            Limpiar
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="isLoading || auditStatusForm.invalid"
+          >
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Registrar Estado
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

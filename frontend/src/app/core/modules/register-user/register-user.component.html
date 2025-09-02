@@ -1,6 +1,6 @@
 <div class="page-container">
   <!-- Logo arriba a la derecha -->
-  <img src="assets/logo-uq.png" alt="Logo Universidad del Quindío" class="logo-uq" />
+  <img src="assets/img/logo-uq.png" alt="Logo Universidad del Quindío" class="logo-uq" />
 
   <!-- Controles de accesibilidad (centrados vertical a la izquierda) -->
   <div class="accessibility-controls">
@@ -74,7 +74,12 @@
 
       <app-recaptcha (tokenGenerated)="onToken($event)"></app-recaptcha>
       
-      <button type="submit" [disabled]="userForm.invalid">Aceptar</button>
+      <button 
+      type="submit" 
+      [disabled]="isSubmitDisabled()"
+      [class.loading]="isSubmitting">
+      {{ isSubmitting ? 'Registrando...' : 'Aceptar' }}
+      </button>
     </form>
   </div>
 </div>

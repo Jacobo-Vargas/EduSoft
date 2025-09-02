@@ -12,4 +12,6 @@ public interface LoginService {
     ResponseEntity<?>logout(String token, HttpServletResponse response) throws Exception;
 
     ResponseEntity<?>updatePassword(LoginRequestDTO loginRequestDTO) throws  Exception;
+
+    ResponseEntity<?> verifyCode(String code,LoginRequestDTO loginRequestdto) throws Exception;
 }

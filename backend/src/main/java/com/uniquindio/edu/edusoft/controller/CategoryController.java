@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -18,8 +19,16 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<CategoryResponseDto> createCategory(@Valid @RequestBody CategoryRequestDto dto) {
-        return ResponseEntity.ok(categoryService.createCategory(dto));
+    public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryRequestDto dto) {
+        CategoryResponseDto result = categoryService.createCategory(dto);
+        if (result == null) {
+            // 400 con un JSON { "message": "..." }
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("message", "Ya existe un estado  con ese nombre"));
+        }
+
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping

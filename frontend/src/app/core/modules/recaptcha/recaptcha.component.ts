@@ -1,37 +1,38 @@
-// src/app/components/recaptcha/recaptcha.component.ts
-import { Component, EventEmitter, Output, AfterViewInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
 
-declare const grecaptcha: any;
+declare global {
+  interface Window {
+    grecaptcha: any;
+  }
+}
 
 @Component({
   selector: 'app-recaptcha',
-  standalone: true,
-  imports: [CommonModule],
-  template: `<div id="recaptcha-container"></div>`,
+  template: `<div [id]="containerId"></div>`,
 })
-export class RecaptchaComponent implements AfterViewInit, OnDestroy {
+export class RecaptchaComponent implements AfterViewInit {
   @Output() tokenGenerated = new EventEmitter<string>();
-  private widgetId: number | null = null;
+  private widgetId?: number;
+  containerId = 'recaptcha-container-' + Math.random().toString(36).substring(2, 9);
 
   ngAfterViewInit(): void {
-    if (typeof grecaptcha !== 'undefined') {
-      this.widgetId = grecaptcha.render('recaptcha-container', {
-        sitekey: '6Lff4LgrAAAAAKVFhq1YtlwOImtIeE23mMD9e6ZL',
-        callback: (response: string) => {
-          this.tokenGenerated.emit(response);
-        }
-      });
-    }
+    const interval = setInterval(() => {
+      if (window.grecaptcha) {
+        clearInterval(interval);
+
+        this.widgetId = window.grecaptcha.render(this.containerId, {
+          sitekey: '6LcyD7srAAAAAFmDouQsxOqPXlbgA_jrbe7sXEEB',
+          callback: (response: string) => this.tokenGenerated.emit(response),
+          'expired-callback': () => this.tokenGenerated.emit(''),
+          'error-callback': () => this.tokenGenerated.emit('')
+        });
+      }
+    }, 300);
   }
 
   reset(): void {
-    if (this.widgetId !== null) {
-      grecaptcha.reset(this.widgetId);
+    if (this.widgetId !== undefined && window.grecaptcha) {
+      window.grecaptcha.reset(this.widgetId);
     }
-  }
-
-  ngOnDestroy(): void {
-    this.reset();
   }
 }

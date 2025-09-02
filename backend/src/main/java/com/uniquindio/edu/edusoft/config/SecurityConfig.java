@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api-public/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/users/createUser").permitAll()
+                        .requestMatchers("/api/users/createUser").permitAll()
                         .requestMatchers("/users/sendCodeConfirmation/**").permitAll()
                         .requestMatchers("/users/verifyAccountEmailCode/**").permitAll()
                         .requestMatchers("/users/verify/**").permitAll()

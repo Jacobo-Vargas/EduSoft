@@ -1,0 +1,93 @@
+/* Contenedor general con la imagen de fondo */
+.fondo {
+  background-image: url('../../../../assets/img/fondo-cafe.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh; /* Ocupa toda la altura de la ventana */
+  width: 100vw;      /* Ocupa todo el ancho de la ventana */
+  position: fixed;   /* Fija el fondo en la ventana */
+  
+}
+.container {
+  max-width: 600px; /* Limita el ancho del formulario */
+  margin: 0 auto; /* Centra el formulario */
+
+}
+
+/* Estilo para la shadowbox */
+.shadowbox {
+  background-color: white; /* Fondo blanco para el formulario */
+  padding: 30px;  /* Añade espacio alrededor del formulario */
+  border-radius: 12px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave alrededor de la caja */
+  margin-top: 20px; /* Separación superior */
+  margin-bottom: 20px; /* Separación inferior */
+}
+
+/* Centrado del título */
+h1.text-center {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2rem; /* Aumenta el tamaño de la fuente */
+  font-weight: bold; /* Hace el título más prominente */
+}
+
+/* Estilo para el párrafo de explicación */
+p.text-center {
+  font-size: 1rem; /* Ajusta el tamaño de fuente */
+  color: #6c757d; /* Color gris suave para la explicación */
+  line-height: 1.5; /* Espaciado entre líneas para mejor legibilidad */
+  margin-bottom: 30px;
+}
+
+/* Ajuste del botón */
+.btn-outline-success {
+  padding: 12px 25px; /* Ajusta el tamaño del botón */
+  font-size: 16px; /* Aumenta el tamaño de la fuente del botón */
+  border-radius: 8px; /* Bordes redondeados para el botón */
+  transition: background-color 0.3s, border-color 0.3s; /* Efecto de transición */
+  margin-top: 20px;
+}
+
+.btn-outline-success:hover {
+  background-color: #28a745; /* Color de fondo verde cuando se pasa el mouse */
+  border-color: #28a745; /* Cambio del borde al verde */
+  color: white; /* Color del texto en blanco */
+}
+
+/* Campos de formulario con un buen espaciado */
+.form-control {
+  padding: 12px 15px; /* Aumenta el padding para mayor comodidad */
+  font-size: 16px; /* Ajusta el tamaño de fuente para una mejor visualización */
+  border-radius: 8px; /* Bordes redondeados para los campos */
+  transition: border 0.3s; /* Efecto de transición para los campos */
+}
+
+.form-control:focus {
+  border-color: #28a745; /* Cambia el color del borde al verde cuando el campo está enfocado */
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Añade una sombra suave */
+}
+
+/* Espaciado entre campos */
+.g-3 .col-sm-9 {
+  margin-bottom: 15px;
+}
+
+.text-danger {
+  color: red; /* Asegura que los errores se muestren en color rojo */
+  font-size: 0.875rem; /* Reduce el tamaño de la fuente para los mensajes de error */
+  margin-top: 5px;
+}
+
+/* Contenedor para el logo a la derecha */
+.logo-container {
+  text-align: right; /* Alinea el logo a la derecha */
+  margin-top: 20px; /* Ajusta el margen superior */
+}
+
+/* Estilo para el logo */
+.logo-uq {
+  width: 150px; /* Establece un tamaño pequeño para el logo */
+}
+

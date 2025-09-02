@@ -2,6 +2,7 @@ package com.uniquindio.edu.edusoft.controller;
 
 import com.uniquindio.edu.edusoft.model.dto.CurrentStatus.CurrentStatusRequestDto;
 import com.uniquindio.edu.edusoft.model.dto.CurrentStatus.CurrentStatusResponseDto;
+import com.uniquindio.edu.edusoft.model.dto.category.CategoryResponseDto;
 import com.uniquindio.edu.edusoft.service.CurrentStatusService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/currentStatuses")
@@ -18,9 +20,16 @@ public class CurrentStatusController {
 
     // Crear un nuevo estado
     @PostMapping
-    public ResponseEntity<CurrentStatusResponseDto> createCurrentStatus(
+    public ResponseEntity<?> createCurrentStatus(
             @Valid @RequestBody CurrentStatusRequestDto dto) {
-        return ResponseEntity.ok(currentStatusService.createCurrentStatus(dto));
+       CurrentStatusResponseDto result = currentStatusService.createCurrentStatus(dto);
+        if (result == null) {
+            // 400 con un JSON { "message": "..." }
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("message", "Ya existe una categoría con ese nombre"));
+        }
+        return ResponseEntity.ok(result);
     }
 
     // Obtener todos los estados

@@ -1,11 +1,6 @@
 package com.uniquindio.edu.edusoft.model.dto.course;
 
-import com.uniquindio.edu.edusoft.model.entities.AuditStatus;
-import com.uniquindio.edu.edusoft.model.entities.Category;
-import com.uniquindio.edu.edusoft.model.entities.CurrentStatus;
-import com.uniquindio.edu.edusoft.model.entities.User;
 import lombok.Data;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

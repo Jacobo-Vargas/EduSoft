@@ -2,8 +2,6 @@ package com.uniquindio.edu.edusoft.model.mapper;
 
 import com.uniquindio.edu.edusoft.model.dto.course.CourseRequestDto;
 import com.uniquindio.edu.edusoft.model.dto.course.CourseResponseDto;
-import com.uniquindio.edu.edusoft.model.dto.course.RequestCourseDTO;
-import com.uniquindio.edu.edusoft.model.dto.course.ResponseCourseDTO;
 import com.uniquindio.edu.edusoft.model.entities.Course;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
