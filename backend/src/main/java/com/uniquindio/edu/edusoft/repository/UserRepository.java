@@ -3,6 +3,7 @@ package com.uniquindio.edu.edusoft.repository;
 import com.uniquindio.edu.edusoft.model.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Date;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, String> {
@@ -18,4 +19,8 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     // Buscar usuario por token de verificación
     Optional<User> findByVerificationToken(String verificationToken);
+
+
+    void deleteAllByVerificationFalseAndCreatedAtBefore(Date date);
+
 }
