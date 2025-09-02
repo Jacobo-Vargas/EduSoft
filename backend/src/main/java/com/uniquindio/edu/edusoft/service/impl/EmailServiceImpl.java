@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 @RequiredArgsConstructor
@@ -13,10 +14,13 @@ public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;
 
+    @Value("${app.url.base}")
+    private String appBaseUrl;
+
     @Override
     public void SendMailHome(String email, String token) throws Exception {
         String subject = "¡Bienvenido a EduSoft - Universidad del Quindío!";
-        String verifyLink = "https://localhost:8443/api/users/verify?token=" + token;
+        String verifyLink = appBaseUrl + "/api/users/verify?token=" + token;
 
         String content = """
             <p>Hola,</p>
