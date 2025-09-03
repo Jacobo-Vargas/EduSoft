@@ -71,7 +71,7 @@ public class LoginServiceImpl implements LoginService {
             throw new BadCredentialsException("Credenciales inválidas");
         }
         // Generar token (sug.: usa ID como 'sub' para unificar email/phone)
-        String subject = String.valueOf(user.getEmail()); // o user.getEmail()
+        String subject = String.valueOf(user); // o user.getEmail()
         String accessToken = jwtService.generateToken(subject);
         String jti = jwtService.extractJti(accessToken);
         // Guardar jti en Redis con TTL (maneja Redis caído con tu @ControllerAdvice)

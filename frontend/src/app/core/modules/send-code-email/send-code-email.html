@@ -24,10 +24,11 @@
 
         <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
             <!-- Usuario -->
-            <label *ngIf="!isCodeSent" >Correo institucional o teléfono*</label>
-            <input *ngIf="!isCodeSent" type="text" formControlName="username" placeholder="usuario@uqvirtual.edu.co o 3XXXXXXXXX" 
-                   [readonly]="isCodeSent" /> <!-- Solo editable si el código no ha sido enviado -->
-            
+            <label *ngIf="!isCodeSent">Correo institucional o teléfono*</label>
+            <input *ngIf="!isCodeSent" type="text" formControlName="username"
+                placeholder="usuario@uqvirtual.edu.co o 3XXXXXXXXX" [readonly]="isCodeSent" />
+            <!-- Solo editable si el código no ha sido enviado -->
+
             <!-- Si el código fue enviado, mostrar el campo 'code' -->
             <div *ngIf="isCodeSent">
                 <label>Código de verificación*</label>

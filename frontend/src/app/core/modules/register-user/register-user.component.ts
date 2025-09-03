@@ -6,8 +6,7 @@ import { RecaptchaComponent } from '../recaptcha/recaptcha.component';
 
 @Component({
   selector: 'app-register-user',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RecaptchaComponent],
+  standalone: false,
   templateUrl: './register-user.component.html',
   styleUrls: ['./register-user.component.css']
 })
