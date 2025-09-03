@@ -8,6 +8,7 @@ import { CreateCourses } from './core/modules/create-courses/create-courses';
 import { CreateCategories } from './core/modules/create-categories/create-categories';
 import { CreateStatusCourse } from './core/modules/create-status-course/create-status-course';
 import { CreateAuditStatus } from './core/modules/create-audit-status/create-audit-status';
+import { TeacherComponent } from './core/modules/teacher/teacher';
 
 export const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
@@ -19,6 +20,7 @@ export const routes: Routes = [
   { path: 'app-create-categories', component: CreateCategories },  
   { path: 'createStatusCourse', component: CreateStatusCourse },  
   { path: 'createAuditStatus', component:CreateAuditStatus },
+  { path: 'teacher', component:TeacherComponent },
   { path: '', component: HomeComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

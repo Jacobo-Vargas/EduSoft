@@ -7,4 +7,5 @@ public interface CourseService {
 
     // CRUD curso
     ResponseEntity<?> createCourse(CourseRequestDto courseRequestDto) throws Exception;
+    ResponseEntity<?> getCoursesByUser(Long userId) throws Exception;
 }

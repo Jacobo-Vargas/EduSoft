@@ -4,10 +4,7 @@ import com.uniquindio.edu.edusoft.model.dto.course.CourseRequestDto;
 import com.uniquindio.edu.edusoft.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/course")
@@ -20,4 +17,10 @@ public class CourseController {
     public ResponseEntity<?> createCourse(@RequestBody CourseRequestDto courseRequestDto) throws Exception {
         return courseService.createCourse(courseRequestDto);
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getCoursesByUser(@PathVariable Long userId) throws Exception {
+        return courseService.getCoursesByUser(userId);
+    }
+
 }

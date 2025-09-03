@@ -1,0 +1,60 @@
+.teacher-container {
+  display: flex;
+  height: 100vh;
+  background: #f4f6f9;
+  padding: 20px;
+  gap: 20px;
+}
+
+.courses-list {
+  flex: 2; /* más ancho */
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow-y: auto;
+}
+
+.courses-list h2 {
+  margin-bottom: 15px;
+  color: #004b23;
+}
+
+.courses-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.courses-list li {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.courses-list li:hover {
+  background: #f0f0f0;
+}
+
+.actions {
+  flex: 1; /* más angosto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actions button {
+  padding: 14px 24px;
+  background: #006400;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.actions button:hover {
+  background: #228B22;
+}

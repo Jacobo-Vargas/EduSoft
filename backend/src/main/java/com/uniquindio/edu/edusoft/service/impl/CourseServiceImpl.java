@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -64,6 +65,17 @@ public class CourseServiceImpl implements CourseService {
         // Retornar respuesta con DTO enriquecido
         return ResponseEntity.ok(courseMapper.toResponseDto(saved));
     }
+
+    @Override
+    public ResponseEntity<?> getCoursesByUser(Long userId) {
+        List<Course> courses = courseRepository.findByUserId(userId);
+        return ResponseEntity.ok(
+                courses.stream()
+                        .map(courseMapper::toResponseDto)
+                        .toList()
+        );
+    }
+
 
     public String validateFilds(CourseRequestDto courseRequestDto){
         StringBuilder message = new StringBuilder();

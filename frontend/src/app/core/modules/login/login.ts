@@ -4,6 +4,8 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RecoverPassword } from "../recover-password/recover-password";
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
@@ -25,7 +27,8 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService
+    private auth: AuthService,
+    private router: Router
   ) {
     // Construcción del formulario
     this.userForm = this.fb.group({
@@ -65,6 +68,7 @@ export class LoginComponent {
         this.userForm.reset();
         this.formSubmitted = false;
         this.isLoading = false;
+        this.router.navigate(['/teacher']);
         setTimeout(() => this.showSuccessMessage = false, 5000);
       },
       error: (err) => {

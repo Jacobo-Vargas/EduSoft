@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CourseService } from '../../services/course-service';
+import { Router } from '@angular/router';
 
 export interface CategorieResponseDTO {
   id: number;
@@ -20,7 +21,7 @@ export interface courseRequestDTO {
   priorKnowledge: String;
   estimatedDurationMinutes: number;
   categoryId: number;
-  userId: number;
+  userId: string;
 }
 @Component({
   selector: 'app-create-courses',
@@ -34,7 +35,10 @@ export class CreateCourses implements OnInit {
   showSuccessMessage: any;
   categories: CategorieResponseDTO[] = [];
 
-  constructor(public fb: FormBuilder, public courseService: CourseService) { }
+  constructor(
+    public fb: FormBuilder, 
+    public courseService: CourseService,
+    private router: Router) { }
 
   ngOnInit(): void {
 
@@ -97,12 +101,15 @@ export class CreateCourses implements OnInit {
       next: () => {
         this.showSuccessMessage = true;
         this.courseForm.reset();
-        setTimeout(() => this.showSuccessMessage = false, 5000);
+        setTimeout(() => {
+          this.router.navigate(['/teacher']);
+        }, 2000);
       },
       error: (err) => {
         console.error('Error al crear el curso:', err);
       }
     });
+
 
 
     // Si el formulario es válido, puedes manejar los datos aquí

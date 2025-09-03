@@ -87,7 +87,6 @@ export class CourseService {
     );
   }
 
-
-
-}
-
+  getCoursesByUser(userId: number): Observable<courseResponseDTO[]> {
+  return this.http.get<courseResponseDTO[]>(`${API}/course/user/${userId}`, { withCredentials: true });
+}}
