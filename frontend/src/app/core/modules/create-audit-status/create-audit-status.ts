@@ -1,18 +1,16 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CourseService } from '../../services/course-service';
 import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-create-audit-status',
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  standalone: false,
   templateUrl: './create-audit-status.html',
-  styleUrl: './create-audit-status.css'
+  styleUrls: ['./create-audit-status.css'] 
 })
 export class CreateAuditStatus {
- auditStatusForm!: FormGroup;
+  auditStatusForm!: FormGroup;
   showSuccessMessage = false;
   formSubmitted = false;
   errorMsg = '';
@@ -39,6 +37,7 @@ export class CreateAuditStatus {
   }
 
   onSubmit(): void {
+   console.log("Submit disparado", this.auditStatusForm.value);
     this.formSubmitted = true;
     this.errorMsg = '';
 

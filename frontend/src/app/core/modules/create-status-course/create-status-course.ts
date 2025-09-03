@@ -7,7 +7,7 @@ import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-create-status-course',
-   imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  standalone: false,
   templateUrl: './create-status-course.html',
   styleUrl: './create-status-course.css'
 })

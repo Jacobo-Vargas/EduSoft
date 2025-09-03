@@ -7,8 +7,7 @@ import { CourseService } from '../../services/course-service';
 
 @Component({
   selector: 'app-create-categories',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  standalone: false,
   templateUrl: './create-categories.html',
   styleUrl: './create-categories.css'
 })

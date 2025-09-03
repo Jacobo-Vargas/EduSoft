@@ -1,9 +1,7 @@
 package com.uniquindio.edu.edusoft.service.impl;
 
 import com.uniquindio.edu.edusoft.model.dto.course.CourseRequestDto;
-import com.uniquindio.edu.edusoft.model.entities.Category;
-import com.uniquindio.edu.edusoft.model.entities.Course;
-import com.uniquindio.edu.edusoft.model.entities.User;
+import com.uniquindio.edu.edusoft.model.entities.*;
 import com.uniquindio.edu.edusoft.model.mapper.CourseMapper;
 import com.uniquindio.edu.edusoft.repository.*;
 import com.uniquindio.edu.edusoft.service.CourseService;
@@ -11,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +19,8 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMapper courseMapper;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final AuditStatusRepository auditStatusRepository;
+    private final CurrentStatusRepository currentStatusRepository;
 
     @Override
     public ResponseEntity<?> createCourse(CourseRequestDto courseRequestDto) throws Exception {
@@ -38,21 +39,26 @@ public class CourseServiceImpl implements CourseService {
         User profesor = userRepository.findById(courseRequestDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("Profesor no encontrado"));
         course.setUser(profesor);
-        /*
-        // Estados iniciales por defecto
-        if (course.getAuditStatus() == null) {
-            // Busca el estado "DRAFT" en la tabla audit_status
-            AuditStatus draft = new AuditStatus();
-            draft.setId(1L); //  puedes usar un Enum o un repositorio para cargarlo
-            course.setAuditStatus(draft);
+       Optional<CurrentStatus> existCurrentStatus = currentStatusRepository.findByName("borrador");
+        if(existCurrentStatus.isPresent()){
+            course.setCurrentStatus(existCurrentStatus.get());
+        }else {
+            CurrentStatus currentStatus = new CurrentStatus();
+            currentStatus.setName("borrador");
+            currentStatus.setDescription("Estado  en el cual los cursos se encontran si no han sido publicados");
+            currentStatusRepository.save(currentStatus);
+            course.setCurrentStatus(currentStatus);
         }
-        if (course.getCurrentStatus() == null) {
-            // Busca el estado "ACTIVE" o el que quieras por defecto
-            CurrentStatus active = new CurrentStatus();
-            active.setId(1L);
-            course.setCurrentStatus(active);
+        Optional<AuditStatus> existAudiStatus = auditStatusRepository.findByName("sin-revision");
+        if(existAudiStatus.isPresent()){
+            course.setAuditStatus(existAudiStatus.get());
+        }else {
+            AuditStatus auditStatus = new AuditStatus();
+            auditStatus.setName("sin-revision");
+            auditStatus.setDescription("Estado  en el cual los cursos se encontran si no han sido revisados por auditoria");
+            auditStatusRepository.save(auditStatus);
+            course.setAuditStatus(auditStatus);
         }
-         */
         // Guardar curso
         Course saved = courseRepository.save(course);
         // Retornar respuesta con DTO enriquecido

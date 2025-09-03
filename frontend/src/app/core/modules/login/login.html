@@ -1,11 +1,11 @@
 <div class="page-container">
   <!-- Logo -->
-  <img src="assets/logo-uq.png" alt="Logo Universidad del Quindío" class="logo-uq" />
+  <img src="../../../../assets/img/logo-uq.png" alt="Logo Universidad del Quindío" class="logo-uq" />
 
   <!-- Controles de accesibilidad -->
   <div class="accessibility-controls">
     <button type="button" (click)="setFontSize('normal')" data-tooltip="Tamaño normal">A-</button>
-    <button type="button" (click)="setFontSize('large')"  data-tooltip="Aumentar tamaño">A+</button>
+    <button type="button" (click)="setFontSize('large')" data-tooltip="Aumentar tamaño">A+</button>
   </div>
 
   <!-- Caja formulario -->
@@ -25,13 +25,8 @@
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <!-- Usuario -->
       <label>Correo institucional o teléfono*</label>
-      <input
-        type="text"
-        formControlName="username"
-        placeholder="usuario@uqvirtual.edu.co o 3XXXXXXXXX" />
-      <div
-        class="error-message"
-        *ngIf="f['username']?.touched && f['username']?.invalid">
+      <input type="text" formControlName="username" placeholder="usuario@uqvirtual.edu.co o 3XXXXXXXXX" />
+      <div class="error-message" *ngIf="f['username']?.touched && f['username']?.invalid">
         El usuario es obligatorio
       </div>
 
@@ -41,26 +36,23 @@
       </div>
 
       <div class="password-container">
-        <input
-          [type]="showPassword ? 'text' : 'password'"
-          formControlName="password"
+        <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
           placeholder="Ingrese su contraseña" />
         <span class="eye-icon" (click)="togglePassword()">
           {{ showPassword ? '🙈' : '👁️' }}
         </span>
       </div>
-      <div
-        class="error-message"
-        *ngIf="f['password']?.touched && f['password']?.invalid">
+      <div class="error-message" *ngIf="f['password']?.touched && f['password']?.invalid">
         <span *ngIf="f['password']?.errors?.['required']">La contraseña es obligatoria</span>
         <span *ngIf="f['password']?.errors?.['minlength']">La contraseña debe tener al menos 8 caracteres</span>
       </div>
 
       <!-- Olvidé mi contraseña -->
       <div class="forgot-container">
-    <a class="nav-link" routerLink="/send-code-email" routerLinkActive="active" aria-current="page">¿Olvidaste tu contraseña?</a>
+        <a class="nav-link" routerLink="/send-code-email" routerLinkActive="active" aria-current="page">¿Olvidaste tu
+          contraseña?</a>
       </div>
-      
+
 
       <!-- Botón -->
       <button type="submit" [disabled]="userForm.invalid || isLoading">
@@ -68,7 +60,7 @@
       </button>
     </form>
   </div>
-<!-- <div *ngIf="showRecoverPassword" class="recover-password-container">
+  <!-- <div *ngIf="showRecoverPassword" class="recover-password-container">
   <app-recover-password></app-recover-password>
 </div>
 -->
