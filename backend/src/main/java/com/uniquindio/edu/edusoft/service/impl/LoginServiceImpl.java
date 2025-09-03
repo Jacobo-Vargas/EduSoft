@@ -89,6 +89,7 @@ public class LoginServiceImpl implements LoginService {
         response.addCookie(accessCookie);
 
         Map<String, Object> userData = new HashMap<>();
+        userData.put("id", user.getId());
         userData.put("userType", user.getUserType().toString());
         userData.put("email", user.getEmail());
         userData.put("name", user.getName());

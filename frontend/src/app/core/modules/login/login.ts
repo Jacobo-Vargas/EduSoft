@@ -71,6 +71,7 @@ export class LoginComponent implements OnDestroy {
 
     const loginSub = this.auth.login(formData).subscribe({
       next: (response) => {
+        console.log("✅ Respuesta cruda del backend:", response);
         this.showSuccessMessage = true;
         this.userForm.reset();
         this.formSubmitted = false;
@@ -78,9 +79,9 @@ export class LoginComponent implements OnDestroy {
 
         // Ahora obtenemos los datos directamente del servicio
         const userData = this.auth.getCurrentUserData();
-
+        console.log("📌 UserData guardado en AuthService:", userData);
         const userRole = this.auth.getCurrentUserRole();
-
+        console.log("📌 Rol detectado en frontend:", userRole);
         // Redirigir según el rol
         this.redirectUserByRole(userRole, userData);
 

@@ -68,14 +68,14 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public ResponseEntity<?> getCoursesByUser(Long userId) {
-        List<Course> courses = courseRepository.findByUserId(userId);
+        List<Course> courses = courseRepository.findByUserIdWithRelations(userId);
+
         return ResponseEntity.ok(
                 courses.stream()
                         .map(courseMapper::toResponseDto)
                         .toList()
         );
     }
-
 
     public String validateFilds(CourseRequestDto courseRequestDto){
         StringBuilder message = new StringBuilder();

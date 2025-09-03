@@ -6,15 +6,19 @@ import { environment } from '../../../environments/environment';
 const API = environment.urlServer;
 
 export interface AuthResponseDTO {
-  accessToken?: string;
+  success: boolean;
   message: string;
-  status: string;
+  type_message: string;
+  additionalData?: any;
   data: {
+    id: number;
     userType: string;
     email: string;
     name: string;
   };
 }
+
+
 
 export interface LoginRequestDTO {
   username: string;
@@ -23,10 +27,13 @@ export interface LoginRequestDTO {
 }
 
 export interface UserData {
+  id: number;
   userType: string;
   email: string;
   name: string;
 }
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -44,19 +51,27 @@ export class AuthService {
 
   /** POST /api/auth/login */
   login(body: LoginRequestDTO): Observable<AuthResponseDTO> {
-    return this.http.post<AuthResponseDTO>(`${API}/auth/login`, body, {
-      withCredentials: true
-    }).pipe(
-      map(res => {
-        // En lugar de localStorage, actualizamos el BehaviorSubject
-        if (res.data) {
-          this.setUserData(res.data);
-          this.setAuthenticated(true);
-        }
-        return res;
-      })
-    );
-  }
+  return this.http.post<AuthResponseDTO>(`${API}/auth/login`, body, {
+    withCredentials: true
+  }).pipe(
+    map(res => {
+      if (res.success && res.data) {
+  const userData: UserData = {
+    id: res.data.id,
+    userType: res.data.userType,
+    email: res.data.email,
+    name: res.data.name
+  };
+  this.setUserData(userData);
+  this.setAuthenticated(true);
+}
+
+
+      return res;
+    })
+  );
+}
+
 
   // Método para establecer datos del usuario
   private setUserData(userData: UserData): void {
@@ -146,4 +161,10 @@ export class AuthService {
   getAuthStatus(): Observable<boolean> {
     return this.isAuthenticated$;
   }
+
+  getCurrentUserId(): number | null {
+  return this.getCurrentUserData()?.id || null;
+}
+
+
 }

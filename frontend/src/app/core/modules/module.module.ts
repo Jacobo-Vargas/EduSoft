@@ -14,6 +14,7 @@ import { RecaptchaComponent } from './recaptcha/recaptcha.component';
 import { RecoverPassword } from './recover-password/recover-password';
 import { RegisterUserComponent } from './register-user/register-user.component';
 import { SendEmail } from './send-code-email/send-code-email';
+import { TeacherComponent } from './teacher/teacher';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { SendEmail } from './send-code-email/send-code-email';
     RecaptchaComponent,
     RecoverPassword,
     RegisterUserComponent,
-    SendEmail
+    SendEmail,
+    TeacherComponent
 
   ], schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
@@ -44,7 +46,8 @@ import { SendEmail } from './send-code-email/send-code-email';
     RecaptchaComponent,
     RecoverPassword,
     RegisterUserComponent,
-    SendEmail
+    SendEmail,
+    TeacherComponent
   ]
 })
 export class MooduleModule { }
