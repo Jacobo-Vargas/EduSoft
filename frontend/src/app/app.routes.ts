@@ -12,7 +12,7 @@ import { TeacherComponent } from './core/modules/teacher/teacher';
 
 export const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'home', component: HomeComponent },
   { path: 'recover-password', component: RecoverPassword }, 
   { path: 'send-code-email', component: SendEmail }, 
   { path: 'recover-paassword', component: SendEmail },
@@ -21,6 +21,6 @@ export const routes: Routes = [
   { path: 'createStatusCourse', component: CreateStatusCourse },  
   { path: 'createAuditStatus', component:CreateAuditStatus },
   { path: 'teacher', component:TeacherComponent },
-  { path: '', component: HomeComponent },
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  { path: '', component: LoginComponent },
+  { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];

@@ -1,13 +1,9 @@
 <div class="fondo">
     <div class="container py-5">
         <div class="shadowbox mx-auto">
-           <button 
-  type="button" 
-  class="btn btn-custom-outline-sm me-2" 
-  (click)="goBack()"
->
-  <i class="bi bi-arrow-left"></i>
-</button>
+            <button type="button" class="btn btn-custom-outline-sm me-2" (click)="goBack()">
+                <i class="bi bi-arrow-left"></i>
+            </button>
 
             <h1 class="text-center mb-2" *ngIf="!isCodeSent">Recuperar contraseña</h1>
 

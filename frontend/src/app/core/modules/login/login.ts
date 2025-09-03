@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RecoverPassword } from "../recover-password/recover-password";
 import { RouterModule } from '@angular/router';
+import { AlertService } from '../../services/alert.service';
 import { Router } from '@angular/router';
 
 
@@ -28,7 +29,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService
   ) {
     // Construcción del formulario
     this.userForm = this.fb.group({
@@ -79,6 +81,7 @@ export class LoginComponent {
         else if (status === 503) this.errorMsg = 'Servicio no disponible. Inténtalo más tarde.';
         else this.errorMsg = msg;
         this.isLoading = false;
+        this.alertService.createAlert(this.errorMsg, "error", false);
       }
     });
   }

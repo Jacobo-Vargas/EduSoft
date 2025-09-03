@@ -1,85 +1,134 @@
-<div class="page-container">
-  <!-- Logo arriba a la derecha -->
-  <img src="assets/img/logo-uq.png" alt="Logo Universidad del Quindío" class="logo-uq" />
+<section class="vh-100 image-background">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-10 col-lg-8">
+        <div class="card shadow" style="border-radius: 1rem;">
+          <div class="card-body p-4 p-lg-5 text-black">
 
-  <!-- Controles de accesibilidad (centrados vertical a la izquierda) -->
-  <div class="accessibility-controls">
-    <button type="button" (click)="setFontSize('normal')" data-tooltip="Disminuir tamaño">A-</button>
-    <button type="button" (click)="setFontSize('large')" data-tooltip="Aumentar tamaño">A+</button>
-  </div>
+            <button type="button" class="person me-2" (click)="goBack()">
+              <i class="bi bi-arrow-left"></i>
+            </button>
 
-  <!-- Contenedor del formulario -->
-  <div class="form-container" [ngClass]="currentSize">
-    <h2>Registro de Usuario</h2>
+            <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="w-100">
 
-    <!-- Mensaje de éxito -->
-    <div *ngIf="showSuccessMessage" class="success-message">
-      ✅ Usuario registrado con éxito
+              <!-- Título -->
+              <div class="text-center mb-4">
+                <span class="h1 fw-bold">Registro en EduSoft</span>
+                <h5 class="fw-normal mt-2" style="letter-spacing: 1px;">Crea tu cuenta</h5>
+              </div>
+
+              <!-- Dos columnas -->
+              <div class="row">
+
+                <!-- Documento -->
+                <div class="col-md-6 mb-3">
+                  <input type="number" class="form-control form-control-lg" formControlName="documentNumber"
+                    placeholder="Número de documento *"
+                    [ngClass]="{'is-invalid': userForm.get('documentNumber')?.invalid && userForm.get('documentNumber')?.touched}" />
+                  <div class="invalid-feedback">
+                    El número de documento es obligatorio.
+                  </div>
+                </div>
+
+                <!-- Nombre -->
+                <div class="col-md-6 mb-3">
+                  <input type="text" class="form-control form-control-lg" formControlName="name"
+                    placeholder="Nombre completo *"
+                    [ngClass]="{'is-invalid': userForm.get('name')?.invalid && userForm.get('name')?.touched}" />
+                  <div class="invalid-feedback">
+                    El nombre es obligatorio.
+                  </div>
+                </div>
+
+                <!-- Teléfono -->
+                <div class="col-md-6 mb-3">
+                  <input type="text" class="form-control form-control-lg" formControlName="phone"
+                    placeholder="Teléfono *"
+                    [ngClass]="{'is-invalid': userForm.get('phone')?.invalid && userForm.get('phone')?.touched}" />
+                  <div class="invalid-feedback">
+                    El teléfono es obligatorio.
+                  </div>
+                </div>
+
+                <!-- Dirección -->
+                <div class="col-md-6 mb-3">
+                  <input type="text" class="form-control form-control-lg" formControlName="address"
+                    placeholder="Dirección *"
+                    [ngClass]="{'is-invalid': userForm.get('address')?.invalid && userForm.get('address')?.touched}" />
+                  <div class="invalid-feedback">
+                    La dirección es obligatoria.
+                  </div>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6 mb-3">
+                  <input type="email" class="form-control form-control-lg" formControlName="email"
+                    placeholder="Correo electrónico *"
+                    [ngClass]="{'is-invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}" />
+                  <div *ngIf="userForm.get('email')?.touched && userForm.get('email')?.errors">
+                    <div class="invalid-feedback d-block" *ngIf="userForm.get('email')?.errors?.['required']">
+                      El correo es obligatorio.
+                    </div>
+                    <div class="invalid-feedback d-block" *ngIf="userForm.get('email')?.errors?.['email']">
+                      Ingresa un correo válido.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="col-md-6 mb-3">
+                  <div class="position-relative">
+                    <input class="form-control form-control-lg pe-5" [type]="showPassword ? 'text' : 'password'"
+                      formControlName="password" placeholder="Contraseña *"
+                      [ngClass]="{'is-invalid': userForm.get('password')?.invalid && userForm.get('password')?.touched}" />
+                    <span class="eye-icon position-absolute top-50 end-0 translate-middle-y me-3"
+                      (click)="togglePassword()" style="cursor:pointer;">
+                      {{ showPassword ? '🙈' : '👁️' }}
+                    </span>
+                  </div>
+
+                  <!-- Errores de contraseña -->
+                  <div *ngIf="userForm.get('password')?.touched && userForm.get('password')?.errors">
+                    <div class="invalid-feedback d-block" *ngIf="userForm.get('password')?.errors?.['required']">
+                      La contraseña es obligatoria.
+                    </div>
+                    <div class="invalid-feedback d-block" *ngIf="userForm.get('password')?.errors?.['minlength']">
+                      Debe tener al menos 8 caracteres.
+                    </div>
+                    <div class="invalid-feedback d-block"
+                      *ngIf="userForm.get('password')?.errors?.['passwordStrength']">
+                      Debe incluir mayúscula, minúscula, número y caracter especial.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- reCAPTCHA -->
+              <div class="pt-2 mb-3 d-flex justify-content-center">
+                <app-recaptcha (tokenGenerated)="onToken($event)"></app-recaptcha>
+              </div>
+
+              <!-- Botón -->
+              <div class="pt-1 mb-2 d-flex justify-content-center">
+                <button class="btn btn-dark btn-lg w-50" type="submit" [disabled]="isSubmitDisabled()"
+                  [class.loading]="isSubmitting">
+                  {{ isSubmitting ? 'Registrando...' : 'Aceptar' }}
+                </button>
+              </div>
+
+              <!-- Enlace login -->
+              <p class="text-center mb-3" style="color: #393f81;">
+                ¿Ya tienes una cuenta?
+                <a class="small text-muted" routerLink="" routerLinkActive="active" aria-current="page">
+                  Inicia sesión aquí
+                </a>
+              </p>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
     </div>
-
-    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-
-      <label>Número de documento*</label>
-      <input type="text" formControlName="documentNumber" placeholder="Ingrese su número de documento" />
-      <div *ngIf="userForm.get('documentNumber')?.invalid && userForm.get('documentNumber')?.touched" class="error-message">
-        El número de documento es obligatorio
-      </div>
-
-      <label>Nombre*</label>
-      <input type="text" formControlName="name" placeholder="Ingrese su nombre" />
-      <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched" class="error-message">
-        El nombre es obligatorio
-      </div>
-
-      <label>Teléfono*</label>
-      <input type="text" formControlName="phone" placeholder="Ingrese su teléfono" />
-      <div *ngIf="userForm.get('phone')?.invalid && userForm.get('phone')?.touched" class="error-message">
-        El teléfono es obligatorio
-      </div>
-
-      <label>Dirección*</label>
-      <input type="text" formControlName="address" placeholder="Ingrese su dirección" />
-      <div *ngIf="userForm.get('address')?.invalid && userForm.get('address')?.touched" class="error-message">
-        La dirección es obligatoria
-      </div>
-
-      <label>Correo electrónico*</label>
-      <input type="email" formControlName="email" placeholder="Ingrese su correo electrónico" />
-      <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="error-message">
-        <span *ngIf="userForm.get('email')?.errors?.['required']">El correo electrónico es obligatorio</span>
-        <span *ngIf="userForm.get('email')?.errors?.['email']">El formato del correo electrónico no es válido</span>
-      </div>
-
-      <!-- Contenedor del label de contraseña -->
-      <div class="password-label-container">
-        <label>Contraseña*</label>
-      </div>
-
-      <!-- Input con ojo -->
-      <div class="password-container">
-        <input 
-          [type]="showPassword ? 'text' : 'password'" 
-          formControlName="password" 
-          placeholder="Ingrese su contraseña" 
-        />
-        <span class="eye-icon" (click)="togglePassword()">
-          {{ showPassword ? '🙈' : '👁️' }}
-        </span>
-      </div>
-      <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="error-message">
-        <span *ngIf="userForm.get('password')?.errors?.['required']">La contraseña es obligatoria</span>
-        <span *ngIf="userForm.get('password')?.errors?.['minlength']">La contraseña debe tener al menos 8 caracteres</span>
-        <span *ngIf="userForm.get('password')?.errors?.['passwordStrength']">La contraseña debe tener mayúscula, minúscula, número y carácter especial</span>
-      </div>
-
-      <app-recaptcha (tokenGenerated)="onToken($event)"></app-recaptcha>
-      
-      <button 
-      type="submit" 
-      [disabled]="isSubmitDisabled()"
-      [class.loading]="isSubmitting">
-      {{ isSubmitting ? 'Registrando...' : 'Aceptar' }}
-      </button>
-    </form>
   </div>
-</div>
+</section>

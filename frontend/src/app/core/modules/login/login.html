@@ -1,69 +1,99 @@
-<div class="page-container">
-  <!-- Logo -->
-  <img src="../../../../assets/img/logo-uq.png" alt="Logo Universidad del Quindío" class="logo-uq" />
+<section class="vh-100 image-background">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <div class="card" style="border-radius: 1rem;">
+          <div class="row g-0">
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
+                alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+            </div>
+            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+              <div class="card-body p-4 p-lg-5 text-black">
 
-  <!-- Controles de accesibilidad -->
-  <div class="accessibility-controls">
-    <button type="button" (click)="setFontSize('normal')" data-tooltip="Tamaño normal">A-</button>
-    <button type="button" (click)="setFontSize('large')" data-tooltip="Aumentar tamaño">A+</button>
-  </div>
+                <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
 
-  <!-- Caja formulario -->
-  <div class="form-container" [ngClass]="currentSize">
-    <h2>Iniciar sesión</h2>
+                  <div class="d-flex align-items-center mb-3 pb-1">
+                    <!-- <img src="../../../../assets/img/Logo-Edusoft.png" alt="Logo Universidad del Quindío" class="logo-uq" /> -->
+                    <span class="h1 fw-bold mb-0">Bienvenido a EduSoft</span>
+                  </div>
 
-    <!-- Mensaje de éxito -->
-    <div *ngIf="showSuccessMessage" class="success-message">
-      ✅ Inicio de sesión exitoso
+                  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Ingresa con tu cuenta</h5>
+
+                  <div data-mdb-input-init class="form-outline mb-4">
+                    <input type="text" class="form-control form-control-lg" formControlName="username"
+                      placeholder="usuario@uqvirtual.edu.co o 3XXXXXXXXX" />
+                  </div>
+                  <div data-mdb-input-init class="form-outline mb-4 relative">
+                    <input class="form-control form-control-lg pr-10" [type]="showPassword ? 'text' : 'password'"
+                      formControlName="password" placeholder="Ingrese su contraseña" />
+                    <span class="eye-icon" (click)="togglePassword()">
+                      {{ showPassword ? '🙈' : '👁️' }}
+                    </span>
+                  </div>
+
+                  <div class="pt-1 mb-4">
+                    <button data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-lg btn-block"
+                      type="submit" [disabled]="userForm.invalid || isLoading">
+                      {{ isLoading ? 'Cargando...' : 'Ingresar' }}
+                    </button>
+                  </div>
+
+                  <a class="small text-muted" routerLink="/send-code-email" routerLinkActive="active"
+                    aria-current="page">Olvidaste tu contraseña?</a>
+                  <p class="mb-5 pb-lg-2" style="color: #393f81;">No tienes una cuenta ?
+                    <a class="small text-muted" routerLink="/register" routerLinkActive="active"
+                      aria-current="page">Registrate aqui!</a>
+                  </p>
+
+                  
+                  <a href="#" class="small text-muted" data-bs-toggle="modal" data-bs-target="#termsModal">
+                    Términos y condiciones.
+                  </a>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <!-- Mensaje de error del backend -->
-    <div *ngIf="errorMsg" class="error-message" style="text-align:center; margin-bottom:10px;">
-      {{ errorMsg }}
-    </div>
-
-    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-      <!-- Usuario -->
-      <label>Correo institucional o teléfono*</label>
-      <input type="text" formControlName="username" placeholder="usuario@uqvirtual.edu.co o 3XXXXXXXXX" />
-      <div class="error-message" *ngIf="f['username']?.touched && f['username']?.invalid">
-        El usuario es obligatorio
-      </div>
-
-      <!-- Password -->
-      <div class="password-label-container">
-        <label>Contraseña*</label>
-      </div>
-
-      <div class="password-container">
-        <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
-          placeholder="Ingrese su contraseña" />
-        <span class="eye-icon" (click)="togglePassword()">
-          {{ showPassword ? '🙈' : '👁️' }}
-        </span>
-      </div>
-      <div class="error-message" *ngIf="f['password']?.touched && f['password']?.invalid">
-        <span *ngIf="f['password']?.errors?.['required']">La contraseña es obligatoria</span>
-        <span *ngIf="f['password']?.errors?.['minlength']">La contraseña debe tener al menos 8 caracteres</span>
-      </div>
-
-      <!-- Olvidé mi contraseña -->
-      <div class="forgot-container">
-        <a class="nav-link" routerLink="/send-code-email" routerLinkActive="active" aria-current="page">¿Olvidaste tu
-          contraseña?</a>
-      </div>
-
-
-      <!-- Botón -->
-      <button type="submit" [disabled]="userForm.invalid || isLoading">
-        {{ isLoading ? 'Ingresando…' : 'Ingresar' }}
-      </button>
-    </form>
   </div>
-  <!-- <div *ngIf="showRecoverPassword" class="recover-password-container">
-  <app-recover-password></app-recover-password>
-</div>
--->
+</section>
 
 
+<!-- 🔹 Modal Bootstrap -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="termsModalLabel">Términos y Condiciones</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body">
+        <p><strong>Protección de datos personales</strong></p>
+        <p>EduSoft respeta la privacidad de sus usuarios y se compromete a proteger la información personal que nos sea proporcionada. Los datos recolectados serán tratados de acuerdo con la legislación vigente en materia de protección de datos.</p>
+        
+        <p><strong>Uso de la información</strong></p>
+        <p>La información proporcionada por los usuarios será utilizada únicamente con fines académicos, administrativos y de mejora de la plataforma. En ningún caso se venderán o divulgarán datos personales sin autorización expresa del titular.</p>
+
+        <p><strong>Confidencialidad</strong></p>
+        <p>Los datos serán almacenados en entornos seguros y protegidos contra accesos no autorizados. Solo el personal autorizado tendrá acceso a dicha información.</p>
+
+        <p><strong>Derechos del usuario</strong></p>
+        <p>El usuario podrá acceder, actualizar, rectificar o solicitar la eliminación de sus datos en cualquier momento, de acuerdo con la normativa vigente.</p>
+
+        <p><strong>Divulgación de datos</strong></p>
+        <p>Solo en casos de requerimiento legal por parte de autoridades competentes, EduSoft podrá compartir datos personales con terceros.</p>
+
+        <p class="mt-3"><em>Al registrarse y hacer uso de esta plataforma, el usuario acepta los términos aquí descritos.</em></p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
 </div>

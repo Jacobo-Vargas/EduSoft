@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../services/usuario.service';
 import { RecaptchaComponent } from '../recaptcha/recaptcha.component';
+import { AlertService } from '../../services/alert.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-user',
@@ -20,7 +22,7 @@ export class RegisterUserComponent implements OnInit {
   showSuccessMessage: boolean = false;
   isSubmitting: boolean = false; // Para evitar envíos múltiples
 
-  constructor(private fb: FormBuilder, private usuarioService: UsuarioService) {
+  constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private alertService: AlertService, private router: Router) {
     this.userForm = this.fb.group({
       documentNumber: ['', Validators.required],
       name: ['', Validators.required],
@@ -92,7 +94,7 @@ export class RegisterUserComponent implements OnInit {
           errorMessage += 'Problema de conexión.';
         }
 
-        alert(errorMessage);
+        this.alertService.createAlert(errorMessage, "error", false);
         this.resetRecaptcha();
 
         // 🔥 Rehabilitar el botón si falla
@@ -136,5 +138,9 @@ export class RegisterUserComponent implements OnInit {
   // Método para verificar si el botón debe estar deshabilitado
   isSubmitDisabled(): boolean {
     return this.userForm.invalid || !this.captchaToken || this.isSubmitting;
+  }
+
+  goBack(): void {
+   this.router.navigate(['']);
   }
 }
