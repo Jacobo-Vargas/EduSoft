@@ -47,4 +47,4 @@ import { SendEmail } from './send-code-email/send-code-email';
     SendEmail
   ]
 })
-export class MooduleModule { }
+export class ModuleModule { }
