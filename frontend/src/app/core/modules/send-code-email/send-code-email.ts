@@ -11,106 +11,110 @@ import { Router, RouterModule } from '@angular/router';
   standalone: false,
 })
 export class SendEmail {
-
-  userForm!: FormGroup;
-  currentSize: 'small' | 'normal' | 'large' = 'normal';
-  showPassword = false;
-  showSuccessMessage = false;
-  showTermsModal = false;   // por si lo usas en el HTML
-  formSubmitted = false;
+  fontSize = 16; // tamaño base en px
+ userForm!: FormGroup;
   isLoading = false;
   errorMsg = '';
-  showRecoverPassword = false;
-  isCodeSent = false;  
-  generatedCode: string = '';
+  isCodeSent = false;
+  formSubmitted = false;
+  showSuccessMessage = false;
+  generatedCode = '';
+  savedUsername = ''; 
 
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router 
+    private router: Router
   ) {
-    // Construcción del formulario
+    // Primera fase: solo username
     this.userForm = this.fb.group({
-      username: ['', [Validators.required]],
-       code: ['']  // Campo para el código de verificación
+      username: ['', [Validators.required]]
     });
   }
 
-  // Acceso rápido a los controles en el template
   get f() { return this.userForm.controls; }
 
-  // Accesibilidad (A-/A+)
-  setFontSize(size: 'small' | 'normal' | 'large') {
-    this.currentSize = size;
+  onSubmit(): void {
+    this.formSubmitted = true;
+    this.errorMsg = '';
+
+    if (this.userForm.invalid) {
+      Object.values(this.userForm.controls).forEach(c => c.markAsTouched());
+      return;
+    }
+
+    this.isLoading = true;
+
+    // Si ya se envió el código → verificar
+    if (this.isCodeSent) {
+      const code =
+        this.userForm.value.code1 +
+        this.userForm.value.code2 +
+        this.userForm.value.code3 +
+        this.userForm.value.code4;
+
+      console.log('Verificando código:', code);
+
+      this.auth.verifyCode(code, { username: this.savedUsername }).subscribe({
+        next: () => {
+          this.showSuccessMessage = true;
+          this.isLoading = false;
+          this.userForm.reset();
+          this.router.navigate(['/recover-password'], { state: { username: this.savedUsername } });
+          setTimeout(() => this.showSuccessMessage = false, 5000);
+        },
+        error: (err) => {
+          this.errorMsg = err?.error?.message || 'El código ingresado es incorrecto';
+          this.isLoading = false;
+          console.error('[HTTP ERROR]', err);
+        }
+      });
+
+    } else {
+      // Guardamos username antes de limpiar
+      this.savedUsername = this.userForm.value.username;
+
+      this.auth.startReset({ username: this.savedUsername }).subscribe({
+        next: (response) => {
+          this.showSuccessMessage = true;
+          this.isCodeSent = true;
+          this.generatedCode = response;
+          this.isLoading = false;
+
+          this.userForm = this.fb.group({
+            code1: ['', [Validators.required, Validators.pattern('[0-9]')]],
+            code2: ['', [Validators.required, Validators.pattern('[0-9]')]],
+            code3: ['', [Validators.required, Validators.pattern('[0-9]')]],
+            code4: ['', [Validators.required, Validators.pattern('[0-9]')]],
+          });
+
+          setTimeout(() => this.showSuccessMessage = false, 5000);
+        },
+        error: (err) => {
+          this.errorMsg = err?.error?.message || 'Error inesperado';
+          this.isLoading = false;
+          console.error('[HTTP ERROR]', err);
+        }
+      });
+    }
   }
 
-  // Ojo de la contraseña
-  togglePassword() {
-    this.showPassword = !this.showPassword;
+  autoFocusNext(event: Event, index: number) {
+    const input = event.target as HTMLInputElement;
+    if (input.value && index < 4) {
+      const nextInput = input.parentElement?.children[index] as HTMLInputElement;
+      nextInput?.focus();
+    }
   }
 
-  
-  
-onSubmit(): void {
-  this.formSubmitted = true;
-  this.errorMsg = '';
-
-  if (this.userForm.invalid) {
-    // Marca todos los controles como tocados para mostrar errores
-    Object.values(this.userForm.controls).forEach(c => c.markAsTouched());
-    return;
+  onReset(): void {
+    this.userForm.reset();
+    this.formSubmitted = false;
+    this.errorMsg = '';
+    this.showSuccessMessage = false;
   }
-
-  const formData = this.userForm.value;  // Obtiene los datos del formulario
-  this.isLoading = true;
-
-  // Verificar si el código ya ha sido enviado
-  if (this.isCodeSent) {
-    // Guardar el username en el localStorage
-    localStorage.setItem('username', formData.username);
-    // Si el código ingresado es correcto
-    this.auth.verifyCode(formData.code, { username: formData.username }).subscribe({
-      next: (response) => {
-        console.log('Código verificado correctamente');
-        // Si la verificación es exitosa
-        this.showSuccessMessage = true;
-        this.isLoading = false;
-        this.userForm.reset();
-        this.router.navigate(['/recover-password']);  // Navega al componente 'RecoverPassword'
-        setTimeout(() => this.showSuccessMessage = false, 5000);  // Mensaje de éxito temporal
-      },
-      error: (err) => {
-        // Si el código es incorrecto o hay algún error
-        this.errorMsg = err?.error?.message || 'El código ingresado es incorrecto';
-        this.isLoading = false;
-        console.error('[HTTP ERROR]', err);  // Para depuración
-      }
-    });
-  } else {
-    // Si el código no ha sido enviado, enviamos una solicitud para obtener el código
-    const requestData = { username: formData.username };
-    this.auth.startReset(requestData).subscribe({
-      next: (response) => {
-        // Si el código fue enviado con éxito
-        this.showSuccessMessage = true;
-        this.isCodeSent = true;  // Marcamos que el código fue enviado
-        this.generatedCode = response;  // Guardamos el código recibido del backend
-        this.userForm.addControl('code', this.fb.control('', [Validators.required]));  // Añadimos el control 'code' al formulario
-        this.isLoading = false;
-        // **Navegar al componente RecoverPassword**
-        setTimeout(() => this.showSuccessMessage = false, 5000);  // Mensaje de éxito temporal
-      },
-      error: (err) => {
-        // Manejo de error
-        this.errorMsg = err?.error?.message || 'Error inesperado';
-        this.isLoading = false;
-        // Útil para depurar sin romper la UI
-        console.error('[HTTP ERROR]', err);
-      }
-    });
-  }
+  goBack(): void {
+   this.router.navigate(['']);
 }
-  // (Opcional) si usas modal de términos en el HTML
-  openTermsModal() { this.showTermsModal = true; }
-  closeTermsModal() { this.showTermsModal = false; }
+
 }

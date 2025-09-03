@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-recover-password',
@@ -10,28 +10,62 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './recover-password.html',
   styleUrl: './recover-password.css'
 })
-export class RecoverPassword {
+export class RecoverPassword implements OnInit {
   userForm!: FormGroup;
   currentSize: 'small' | 'normal' | 'large' = 'normal';
   showPassword = false;
   showSuccessMessage = false;
-  showTermsModal = false;  
+  showTermsModal = false;
   formSubmitted = false;
   isLoading = false;
   errorMsg = '';
   showRecoverPassword = false;
+  username!: string;
 
   constructor(
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router
   ) {
+    const navigation = this.router.getCurrentNavigation();
+    this.username = navigation?.extras.state?.['username'] || '';
     // Construcción del formulario
-    this.userForm = this.fb.group({
-      Password1: ['', [Validators.required]],
-      Password2: ['', [Validators.required, Validators.minLength(8)]],
-    });
+    this.buildForm();
   }
+  private buildForm(): void {
+    this.userForm = this.fb.group(
+      {
+        Password1: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/)
+            // minúscula, mayúscula, número y caracter especial
+          ],
+        ],
+        Password2: ['', [Validators.required]],
+      },
+      { validators: this.passwordsMatchValidator } // validador cruzado
+    );
+  }
+  ngOnInit(): void {
+
+    if (!this.username) { this.router.navigate(['']); return; }
+    console.log('Username recibido:', this.username);
+
+  }
+
+  passwordsMatchValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
+    const pass1 = group.get('Password1')?.value;
+    const pass2 = group.get('Password2')?.value;
+    if (pass1 && pass2 && pass1 !== pass2) {
+      group.get('Password2')?.setErrors({ mismatch: true });
+      return { mismatch: true };
+    }
+    return null;
+  };
 
   // Acceso rápido a los controles en el template
   get f() { return this.userForm.controls; }
@@ -46,41 +80,52 @@ export class RecoverPassword {
     this.showPassword = !this.showPassword;
   }
   onSubmit(): void {
-    // Verificamos si las contraseñas coinciden
+    if (this.userForm.invalid) return;
+
     const formData = this.userForm.value;
-    if (formData.Password1 !== formData.Password2) {
-      this.errorMsg = 'Las contraseñas no coinciden.';
+    if (!this.username) {
+      this.errorMsg = 'No se encontró el nombre de usuario en el sistema';
       return;
     }
 
-    // Recuperamos el 'username' desde localStorage
-    const username = localStorage.getItem('username');
-    if (!username) {
-      this.errorMsg = 'No se encontró el nombre de usuario en el localStorage';
-      return;
-    }
     this.isLoading = true;
-    // Creamos el objeto que enviaremos al backend
-    const requestData = { username, password: formData.Password1 };
-    // Enviamos la solicitud al backend para actualizar la contraseña
-    console.log('Enviando datos de recuperación:', requestData);
+    const requestData = { username: this.username, password: formData.Password1 };
+
     this.auth.updatePassword(requestData).subscribe({
-      next: (response) => {
+      next: () => {
         this.showSuccessMessage = true;
-        setTimeout(() => this.showSuccessMessage = false, 5000);
         this.userForm.reset();
         this.isLoading = false;
-        this.router.navigate(['/login']);  // Redirige a la página de login
+        setTimeout(() => this.showSuccessMessage = false, 5000);
+        this.router.navigate(['/login']);
       },
       error: (err) => {
-        console.error('Error desde el backend:', err);
         this.errorMsg = err?.error?.message || 'Error inesperado';
         this.isLoading = false;
-      }
+      },
     });
+    localStorage.removeItem('username');
   }
+
   // (Opcional) si usas modal de términos en el HTML
   openTermsModal() { this.showTermsModal = true; }
   closeTermsModal() { this.showTermsModal = false; }
+  onReset(): void {
+    this.userForm.reset();
+    this.formSubmitted = false;
+    this.errorMsg = '';
+    this.showSuccessMessage = false;
+  }
+  // Variables para controlar el estado de los ojitos
+showPassword1 = false;
+showPassword2 = false;
+
+togglePassword1(): void {
+  this.showPassword1 = !this.showPassword1;
+}
+
+togglePassword2(): void {
+  this.showPassword2 = !this.showPassword2;
+}
 
 }

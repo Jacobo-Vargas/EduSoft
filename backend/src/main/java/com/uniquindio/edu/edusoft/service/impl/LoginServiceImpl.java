@@ -86,7 +86,6 @@ public class LoginServiceImpl implements LoginService {
 
         return BaseResponse.response("Inicio de sesión correcto", "success");
     }
-
     @Override
     public ResponseEntity<?> sendCodeEmail(LoginRequestDTO loginRequest, HttpServletResponse response) throws Exception {
         // Validar que el username no sea nulo ni vacío
