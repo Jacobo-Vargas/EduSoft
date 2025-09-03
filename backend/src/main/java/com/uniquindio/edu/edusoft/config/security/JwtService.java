@@ -9,8 +9,10 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
+import java.util.function.Function;
 
 @Service
 public class JwtService {
@@ -22,6 +24,8 @@ public class JwtService {
         return Jwts.builder()
                 .id(UUID.randomUUID().toString())
                 .subject(subject)
+                .claim("roles", new ArrayList<>())
+                .claim("id", "servicio")
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 3600_000))
                 .signWith(key)
@@ -58,6 +62,19 @@ public class JwtService {
                 .build()
                 .parseSignedClaims(token);
         return jws.getPayload().getId();
+    }
+
+    public Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
     }
 }
 

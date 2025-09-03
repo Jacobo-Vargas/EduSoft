@@ -11,16 +11,23 @@ import com.uniquindio.edu.edusoft.service.LoginService;
 import com.uniquindio.edu.edusoft.utils.BaseResponse;
 import com.uniquindio.edu.edusoft.utils.CodeGenerator;
 import com.uniquindio.edu.edusoft.utils.ResponseData;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.uniquindio.edu.edusoft.model.entities.User;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -152,6 +159,7 @@ public class LoginServiceImpl implements LoginService {
             return BaseResponse.response(null, "No hay sesión activa", "error", HttpStatus.UNAUTHORIZED);
         }
 
+        Claims claims = jwtService.extractAllClaims(token);
         String jti = jwtService.extractJti(token);
         tokenStoreService.removeToken(jti);
 
