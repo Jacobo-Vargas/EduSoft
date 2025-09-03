@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.html',
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  standalone: false,
   styleUrls: ['./login.css']
 })
 export class LoginComponent {
@@ -31,7 +31,6 @@ export class LoginComponent {
     this.userForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      // code: [''] // si luego usas recuperación, déjalo opcional
     });
   }
 
@@ -60,7 +59,6 @@ export class LoginComponent {
 
     const formData = this.userForm.value; // { username, password }
     this.isLoading = true;
-
     console.log("esta intentando entrar")
     this.auth.login(formData).subscribe({
       next: () => {
@@ -89,6 +87,6 @@ export class LoginComponent {
 
 
 
-  
+
 }
 

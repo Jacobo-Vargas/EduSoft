@@ -9,7 +9,10 @@ export const environment = {
   urlUpdatePassword: '/auth/updatePassword',
   urlLogin: '/auth/login',
 
+
   roles: {
     admin: 'ROLE_ADMIN'
   }
 }
+
+

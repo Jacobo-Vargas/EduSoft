@@ -25,6 +25,32 @@ export interface CategorieResponseDTO {
   description?: string;
   createdAt: string;
 }
+export interface courseRequestDTO{
+  id: number;
+  title: string;
+  description: String;
+  price: number;
+  coverUrl: String;
+  semester: number;
+  priorKnowledge: String;
+  estimatedDurationMinutes: number;
+  categoryId: number;
+  userId: number;
+} 
+
+export interface courseResponseDTO{
+  id: number;
+  title: string;
+  description: String;
+  price: number;
+  coverUrl: String;
+  semester: number;
+  priorKnowledge: String;
+  estimatedDurationMinutes: number;
+  categoryId: number;
+  userId: number;
+} 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -54,5 +80,14 @@ export class CourseService {
       getCategories(): Observable<CategorieResponseDTO[]> {
     return this.http.get<CategorieResponseDTO[]>(`${API}/categories`, { withCredentials: true });
   }
+
+  createCourse(body: courseRequestDTO):Observable<AuthResponseDTO> {
+    return this.http.post<AuthResponseDTO>(`${API}/course/save`, body, { withCredentials: true }).pipe(
+    map(res => res)
+    );
+  }
+
+
+
 }
 

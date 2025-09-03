@@ -45,7 +45,7 @@ jobs:
           
           echo "Pushing image..."
           docker push $ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG
-
+       
        # 5. Deploy en EC2 vía SSH
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.2.2

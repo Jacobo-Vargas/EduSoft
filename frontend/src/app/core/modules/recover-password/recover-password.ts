@@ -6,16 +6,16 @@ import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-recover-password',
-   imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  standalone: false,
   templateUrl: './recover-password.html',
   styleUrl: './recover-password.css'
 })
 export class RecoverPassword {
-    userForm!: FormGroup;
+  userForm!: FormGroup;
   currentSize: 'small' | 'normal' | 'large' = 'normal';
   showPassword = false;
   showSuccessMessage = false;
-  showTermsModal = false;   // por si lo usas en el HTML
+  showTermsModal = false;  
   formSubmitted = false;
   isLoading = false;
   errorMsg = '';
@@ -30,7 +30,6 @@ export class RecoverPassword {
     this.userForm = this.fb.group({
       Password1: ['', [Validators.required]],
       Password2: ['', [Validators.required, Validators.minLength(8)]],
-      // code: [''] // si luego usas recuperación, déjalo opcional
     });
   }
 
@@ -47,7 +46,7 @@ export class RecoverPassword {
     this.showPassword = !this.showPassword;
   }
   onSubmit(): void {
-     // Verificamos si las contraseñas coinciden
+    // Verificamos si las contraseñas coinciden
     const formData = this.userForm.value;
     if (formData.Password1 !== formData.Password2) {
       this.errorMsg = 'Las contraseñas no coinciden.';
@@ -60,31 +59,26 @@ export class RecoverPassword {
       this.errorMsg = 'No se encontró el nombre de usuario en el localStorage';
       return;
     }
-
     this.isLoading = true;
-
     // Creamos el objeto que enviaremos al backend
     const requestData = { username, password: formData.Password1 };
-
     // Enviamos la solicitud al backend para actualizar la contraseña
-
     console.log('Enviando datos de recuperación:', requestData);
     this.auth.updatePassword(requestData).subscribe({
       next: (response) => {
         this.showSuccessMessage = true;
-        setTimeout(() => this.showSuccessMessage = false, 5000);  // Mensaje de éxito temporal
+        setTimeout(() => this.showSuccessMessage = false, 5000);
         this.userForm.reset();
         this.isLoading = false;
         this.router.navigate(['/login']);  // Redirige a la página de login
       },
       error: (err) => {
-        console.error('Error desde el backend:', err);  
+        console.error('Error desde el backend:', err);
         this.errorMsg = err?.error?.message || 'Error inesperado';
         this.isLoading = false;
       }
     });
   }
-
   // (Opcional) si usas modal de términos en el HTML
   openTermsModal() { this.showTermsModal = true; }
   closeTermsModal() { this.showTermsModal = false; }

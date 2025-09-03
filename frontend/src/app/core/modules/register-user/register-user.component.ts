@@ -6,8 +6,7 @@ import { RecaptchaComponent } from '../recaptcha/recaptcha.component';
 
 @Component({
   selector: 'app-register-user',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RecaptchaComponent],
+  standalone: false,
   templateUrl: './register-user.component.html',
   styleUrls: ['./register-user.component.css']
 })
@@ -31,6 +30,7 @@ export class RegisterUserComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(8), this.passwordStrengthValidator]],
     });
   }
+
 
   ngOnInit() {}
 
@@ -65,6 +65,7 @@ export class RegisterUserComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
+  
   onSubmit() {
   if (this.userForm.valid && this.captchaToken) {
     this.isSubmitting = true;

@@ -17,11 +17,7 @@
         <!-- Formulario de la primera columna -->
         <div class="col-md-6">
           <div>
-            <!-- Mensaje de éxito -->
-            <div *ngIf="showSuccessMessage" class="alert alert-success">
-              ✅ Curso registrado exitosamente
-            </div>
-            <form [formGroup]="courseForm">
+            <form [formGroup]="courseForm" (ngSubmit)="onSubmit()"  [formGroup]="courseForm" novalidate autocomplete="off" >
               <div class="mb-3">
                 <label for="title" class="form-label text-white">Título del curso*</label> <!-- Texto blanco -->
                 <input type="text" id="title" formControlName="title" class="form-control"
@@ -53,6 +49,12 @@
                   El precio es obligatorio y debe ser mayor o igual a 0
                 </div>
               </div>
+                    <!-- Botón centrado -->
+      <div class="col-12 text-center mb-4">
+        <button type="submit" [disabled]="courseForm.invalid" class="btn btn-success w-50">
+          Registrar Curso
+        </button>
+      </div>
             </form>
           </div>
         </div>
@@ -108,12 +110,6 @@
         </div>
       </div>
 
-      <!-- Botón centrado -->
-      <div class="col-12 text-center mb-4">
-        <button type="submit" [disabled]="courseForm.invalid" class="btn btn-success w-50">
-          Registrar Curso
-        </button>
-      </div>
     </div>
   </div>
 </div>

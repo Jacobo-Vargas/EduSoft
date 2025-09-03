@@ -10,6 +10,7 @@ import { routes } from './app.routes';
 import { RouterModule } from '@angular/router';
 import { LayoutModule } from "./core/layout/layout.module";
 import { NavbarComponent } from './core/layout/components/navbar/navbar.component';
+import { MooduleModule } from './core/modules/module.module';
 
 export function httpTranslateLoader() {
   return new TranslateHttpLoader();
@@ -24,6 +25,7 @@ export function httpTranslateLoader() {
     RouterModule.forRoot(routes),
     BrowserModule,
     FormsModule,
+    MooduleModule,
     HttpClientModule,
     TranslateModule.forRoot({
         loader: {

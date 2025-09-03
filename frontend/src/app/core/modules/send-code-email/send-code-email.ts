@@ -6,9 +6,9 @@ import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-send-email',
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './send-code-email.html',
-  styleUrl: './send-code-email.css'
+  styleUrl: './send-code-email.css',
+  standalone: false,
 })
 export class SendEmail {
 
@@ -21,10 +21,8 @@ export class SendEmail {
   isLoading = false;
   errorMsg = '';
   showRecoverPassword = false;
-  isCodeSent = false;  // Nueva variable para gestionar el cambio de campos
-  // Almacenamos el código enviado en el frontend para verificarlo
+  isCodeSent = false;  
   generatedCode: string = '';
-    // Inyecta el Router
 
   constructor(
     private fb: FormBuilder,
@@ -68,11 +66,8 @@ onSubmit(): void {
 
   // Verificar si el código ya ha sido enviado
   if (this.isCodeSent) {
-    console.log('Verificando código:', formData.code , 'contra', this.generatedCode);
-
     // Guardar el username en el localStorage
     localStorage.setItem('username', formData.username);
-
     // Si el código ingresado es correcto
     this.auth.verifyCode(formData.code, { username: formData.username }).subscribe({
       next: (response) => {
@@ -102,7 +97,6 @@ onSubmit(): void {
         this.generatedCode = response;  // Guardamos el código recibido del backend
         this.userForm.addControl('code', this.fb.control('', [Validators.required]));  // Añadimos el control 'code' al formulario
         this.isLoading = false;
-
         // **Navegar al componente RecoverPassword**
         setTimeout(() => this.showSuccessMessage = false, 5000);  // Mensaje de éxito temporal
       },
@@ -110,14 +104,12 @@ onSubmit(): void {
         // Manejo de error
         this.errorMsg = err?.error?.message || 'Error inesperado';
         this.isLoading = false;
-        
         // Útil para depurar sin romper la UI
         console.error('[HTTP ERROR]', err);
       }
     });
   }
 }
-
   // (Opcional) si usas modal de términos en el HTML
   openTermsModal() { this.showTermsModal = true; }
   closeTermsModal() { this.showTermsModal = false; }

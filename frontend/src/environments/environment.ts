@@ -10,7 +10,6 @@ export const environment = {
   urlSendCodeEmail: '/auth/sendCodeEmail',
   urlRecoverPassword: '/auth/recover-password',
   urlUpdatePassword: '/auth/updatePassword',
-
   // Temporary roles subject to change
   roles: {
     admin: 'ROLE_ADMIN'
