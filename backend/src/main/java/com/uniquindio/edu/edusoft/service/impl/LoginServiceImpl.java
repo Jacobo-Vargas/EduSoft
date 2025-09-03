@@ -48,9 +48,11 @@ public class LoginServiceImpl implements LoginService {
     public ResponseEntity<?> login(LoginRequestDTO loginRequest, HttpServletResponse response) {
         String userInput = loginRequest.getUsername() == null ? "" : loginRequest.getUsername().trim();
         String rawPassword = loginRequest.getPassword();
+
         if (userInput.isEmpty() || rawPassword == null || rawPassword.isBlank()) {
             throw new IllegalArgumentException("Username y password son obligatorios");
         }
+
         // 1) Buscar por email o por teléfono
         User user;
         if (validateEmailDomain(userInput)) {
@@ -62,30 +64,44 @@ public class LoginServiceImpl implements LoginService {
         } else {
             throw new BadCredentialsException("Credenciales inválidas");
         }
+
         if (!user.isVerification()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(Map.of("message", "Cuenta no verificada"));
         }
+
         // Comparar password
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
             throw new BadCredentialsException("Credenciales inválidas");
         }
-        // Generar token (sug.: usa ID como 'sub' para unificar email/phone)
-        String subject = String.valueOf(user); // o user.getEmail()
-        String accessToken = jwtService.generateToken(subject);
+
+        String subject = user.getEmail();
+        String accessToken = jwtService.generateToken(subject, user.getUserType().toString(), user.getId());
         String jti = jwtService.extractJti(accessToken);
-        // Guardar jti en Redis con TTL (maneja Redis caído con tu @ControllerAdvice)
+
         tokenStoreService.storeToken(jti, subject);
-        // Crear cookie HttpOnly
+
         Cookie accessCookie = new Cookie("accessToken", accessToken);
-        accessCookie.setHttpOnly(true);   // protege contra XSS
-        accessCookie.setSecure(true);     // requiere HTTPS
+        accessCookie.setHttpOnly(true);
+        accessCookie.setSecure(true);
         accessCookie.setPath("/");
-        accessCookie.setMaxAge(15 * 60);  // 15 minutos
+        accessCookie.setMaxAge(15 * 60); // 15 minutos
         response.addCookie(accessCookie);
 
-        return BaseResponse.response("Inicio de sesión correcto", "success");
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("userType", user.getUserType().toString());
+        userData.put("email", user.getEmail());
+        userData.put("name", user.getName());
+
+        ResponseData<Map<String, Object>> response1 = new ResponseData<>(
+                userData, // Los datos del usuario van aquí
+                "Inicio de sesión correcto",
+                "success"
+        );
+
+        return ResponseEntity.ok(response1);
     }
+
     @Override
     public ResponseEntity<?> sendCodeEmail(LoginRequestDTO loginRequest, HttpServletResponse response) throws Exception {
         // Validar que el username no sea nulo ni vacío
@@ -242,7 +258,7 @@ public class LoginServiceImpl implements LoginService {
 
 
     public Boolean validateEmailDomain(String email){
-        Predicate<String> domainPredicate = e -> e != null && (e.endsWith("@uqvirtual.edu.co") || e.endsWith("@uniquindio.edu.co"));
+        Predicate<String> domainPredicate = e -> e != null && (e.endsWith("@uqvirtual.edu.co") || e.endsWith("@uniquindio.edu.co") || e.endsWith("@gmail.com"));
         return domainPredicate.test(email);
     }
 

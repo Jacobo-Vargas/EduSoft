@@ -81,6 +81,7 @@ export class RegisterUserComponent implements OnInit {
         alert('Usuario registrado exitosamente');
         this.userForm.reset();
         this.resetRecaptcha();
+        this.router.navigate(['/login']); 
       },
       error: (error) => {
         console.error('❌ Error al registrar usuario:', error);
@@ -97,11 +98,9 @@ export class RegisterUserComponent implements OnInit {
         this.alertService.createAlert(errorMessage, "error", false);
         this.resetRecaptcha();
 
-        // 🔥 Rehabilitar el botón si falla
         this.isSubmitting = false;
       },
       complete: () => {
-        // 🔥 También se asegura aquí en caso de éxito
         this.isSubmitting = false;
       }
     });

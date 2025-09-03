@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         String email = requestUserDTO.getEmail().toLowerCase();
         if (email.endsWith("@uqvirtual.edu.co")) {
             user.setUserType(EnumUserType.ESTUDIANTE);
-        } else if (email.endsWith("@uniquindio.edu.co")) {
+        } else if (email.endsWith("@uniquindio.edu.co") || email.endsWith("@gmail.com")) {
             user.setUserType(EnumUserType.PROFESOR);
         } else if (email.endsWith("@auditor.edu.co")) {
             user.setUserType(EnumUserType.AUDITOR);
