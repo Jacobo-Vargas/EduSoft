@@ -9,6 +9,7 @@ declare global {
 @Component({
   selector: 'app-recaptcha',
   template: `<div [id]="containerId"></div>`,
+  standalone: false
 })
 export class RecaptchaComponent implements AfterViewInit {
   @Output() tokenGenerated = new EventEmitter<string>();

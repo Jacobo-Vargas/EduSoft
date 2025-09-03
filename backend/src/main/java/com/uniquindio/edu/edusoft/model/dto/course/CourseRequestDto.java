@@ -1,6 +1,8 @@
 package com.uniquindio.edu.edusoft.model.dto.course;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.math.BigDecimal;
 
 @Data
@@ -9,7 +11,7 @@ public class CourseRequestDto {
     private String title;
     private String description;
     private BigDecimal price;
-    private String coverUrl;
+    private MultipartFile coverUrl;
     private Integer semester;
     private String priorKnowledge;
     private Integer estimatedDurationMinutes;

@@ -110,21 +110,18 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseEntity<List<ModuleResponseDto>> getModulesByCourse(Long courseId) throws Exception {
-        List<Module> modules = moduleRepository.findByCourseIdOrderByDisplayOrder(courseId);
-        List<ModuleResponseDto> responseDtos = moduleMapper.toResponseDtoList(modules);
-        return ResponseEntity.ok(responseDtos);
+        List<Module> modules = moduleRepository.findByCourseIdWithCourse(courseId);
+        return ResponseEntity.ok(moduleMapper.toResponseDtoList(modules));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseEntity<ModuleResponseDto> getModuleById(Long moduleId) throws Exception {
-        Optional<Module> moduleOpt = moduleRepository.findById(moduleId);
-        if (moduleOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        ModuleResponseDto responseDto = moduleMapper.toResponseDto(moduleOpt.get());
-        return ResponseEntity.ok(responseDto);
+        Module module = moduleRepository.findByIdWithCourse(moduleId)
+                .orElseThrow(() -> new IllegalArgumentException("Módulo no encontrado"));
+        return ResponseEntity.ok(moduleMapper.toResponseDto(module));
     }
 
     @Override
@@ -202,8 +199,8 @@ public class ModuleServiceImpl implements ModuleService {
         }
     }
 
-    private User validateTeacher(String userId) throws Exception {
-        User user = userRepository.findById(userId)
+    private User validateTeacher(String email) throws Exception {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
         if (user.getUserType() != EnumUserType.PROFESOR) {
@@ -213,11 +210,11 @@ public class ModuleServiceImpl implements ModuleService {
         return user;
     }
 
-    private Course validateCourseOwnership(Long courseId, String userId) throws Exception {
+    private Course validateCourseOwnership(Long courseId, String email) throws Exception {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado"));
 
-        if (!course.getUser().getId().equals(userId)) {
+        if (!course.getUser().getEmail().equals(email)) {
             throw new IllegalArgumentException("No tiene permisos para modificar este curso");
         }
 

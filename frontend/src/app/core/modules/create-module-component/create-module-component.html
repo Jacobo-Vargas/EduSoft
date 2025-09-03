@@ -1,0 +1,34 @@
+<div class="create-module-container">
+  <h2>Crear nuevo módulo</h2>
+
+  <form [formGroup]="moduleForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label>Nombre</label>
+      <input formControlName="name" type="text" />
+      <div *ngIf="moduleForm.get('name')?.invalid && moduleForm.get('name')?.touched" class="error">
+        El nombre es obligatorio y máximo de 120 caracteres.
+      </div>
+    </div>
+
+    <div>
+      <label>Descripción</label>
+      <textarea formControlName="description"></textarea>
+    </div>
+
+    <div>
+      <label>Orden de visualización</label>
+      <input formControlName="displayOrder" type="number" />
+    </div>
+
+    <div>
+      <label>
+        <input type="checkbox" formControlName="isVisible" />
+        Visible
+      </label>
+    </div>
+
+    <button type="submit" [disabled]="moduleForm.invalid">Crear Módulo</button>
+  </form>
+
+  <div *ngIf="message" class="message">{{ message }}</div>
+</div>

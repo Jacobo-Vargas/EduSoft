@@ -3,11 +3,12 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../services/usuario.service';
 import { RecaptchaComponent } from '../recaptcha/recaptcha.component';
+import { AlertService } from '../../services/alert.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-user',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RecaptchaComponent],
+  standalone: false,
   templateUrl: './register-user.component.html',
   styleUrls: ['./register-user.component.css']
 })
@@ -21,7 +22,7 @@ export class RegisterUserComponent implements OnInit {
   showSuccessMessage: boolean = false;
   isSubmitting: boolean = false; // Para evitar envíos múltiples
 
-  constructor(private fb: FormBuilder, private usuarioService: UsuarioService) {
+  constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private alertService: AlertService, private router: Router) {
     this.userForm = this.fb.group({
       documentNumber: ['', Validators.required],
       name: ['', Validators.required],
@@ -80,6 +81,7 @@ export class RegisterUserComponent implements OnInit {
         alert('Usuario registrado exitosamente');
         this.userForm.reset();
         this.resetRecaptcha();
+        this.router.navigate(['/login']); 
       },
       error: (error) => {
         console.error('❌ Error al registrar usuario:', error);
@@ -93,14 +95,12 @@ export class RegisterUserComponent implements OnInit {
           errorMessage += 'Problema de conexión.';
         }
 
-        alert(errorMessage);
+        this.alertService.createAlert(errorMessage, "error", false);
         this.resetRecaptcha();
 
-        // 🔥 Rehabilitar el botón si falla
         this.isSubmitting = false;
       },
       complete: () => {
-        // 🔥 También se asegura aquí en caso de éxito
         this.isSubmitting = false;
       }
     });
@@ -137,5 +137,9 @@ export class RegisterUserComponent implements OnInit {
   // Método para verificar si el botón debe estar deshabilitado
   isSubmitDisabled(): boolean {
     return this.userForm.invalid || !this.captchaToken || this.isSubmitting;
+  }
+
+  goBack(): void {
+   this.router.navigate(['']);
   }
 }

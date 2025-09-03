@@ -11,6 +11,13 @@ import java.util.Optional;
 
 public interface ModuleRepository extends JpaRepository<Module, Long> {
 
+
+    @Query("SELECT m FROM Module m JOIN FETCH m.course WHERE m.id = :id")
+    Optional<Module> findByIdWithCourse(@Param("id") Long id);
+
+    @Query("SELECT m FROM Module m JOIN FETCH m.course WHERE m.course.id = :courseId")
+    List<Module> findByCourseIdWithCourse(@Param("courseId") Long courseId);
+
     // Buscar módulos de un curso específico ordenados por displayOrder
     @Query("SELECT m FROM Module m WHERE m.course.id = :courseId ORDER BY m.displayOrder ASC")
     List<Module> findByCourseIdOrderByDisplayOrder(@Param("courseId") Long courseId);

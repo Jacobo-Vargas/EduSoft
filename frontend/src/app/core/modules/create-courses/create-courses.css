@@ -33,3 +33,18 @@ button {
   max-width: 200px;
   margin: 0 auto;
 }
+.btn-custom-outline-sm {
+  color: #198754;
+  border: 2px solid #198754;
+  background-color: transparent;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  line-height: 1.2;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.btn-custom-outline-sm:hover {
+  background-color: #198754;
+  color: #fff;
+}
