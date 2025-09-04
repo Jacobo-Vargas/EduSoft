@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CRUDService } from '../../../services/crud.service';
-import { UserInfoService } from '../../../services/user-info.service';
 
 @Component({
   selector: 'app-home',
@@ -20,8 +19,7 @@ export class HomeComponent implements OnInit {
   constructor(
     public crudService: CRUDService,
     public translate: TranslateService,
-    private cdRef: ChangeDetectorRef,
-    public userInfoService: UserInfoService
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -35,7 +33,7 @@ export class HomeComponent implements OnInit {
       { titulo: 'Curso de PostgreSQL', descripcion: 'Domina bases de datos relacionales.', imagen: '../../../assets/img/postgres.png' }
     ]
     this.crearGruposCursos();
-    this.cdRef.detectChanges(); // fuerza render actualizado
+    this.cdRef.detectChanges();
   }
 
   crearGruposCursos() {

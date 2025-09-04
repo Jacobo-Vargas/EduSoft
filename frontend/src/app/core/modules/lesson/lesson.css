@@ -1,0 +1,57 @@
+.lesson-container {
+  display: flex;
+  gap: 20px;
+  padding: 1rem;
+}
+
+.lesson-list,
+.lesson-actions {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover {
+  background-color: #125ea2;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+.lesson-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.lesson-list li {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.lesson-list li strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.lesson-list li p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}

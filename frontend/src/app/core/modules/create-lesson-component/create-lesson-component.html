@@ -1,0 +1,65 @@
+<div class="container mt-5 form-container-bg form-container">
+  <!-- Botón de regresar -->
+  <button type="button" class="btn btn-custom-outline-sm me-2" (click)="goBack()">
+    <i class="bi bi-arrow-left"></i>
+  </button>
+
+  <div class="row align-items-center">
+    <div class="col-12 text-center mb-4">
+      <h2 class="text-black">Registrar Lección</h2>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="lessonForm" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
+    <div class="row">
+      <!-- Columna izquierda -->
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="name" class="form-label text-black">Nombre de la lección*</label>
+          <input type="text" id="name" formControlName="name" class="form-control"
+            placeholder="Ej: Introducción a Java" />
+          <div class="text-danger" *ngIf="f['name']?.touched && f['name']?.invalid">
+            El nombre es obligatorio
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label text-black">Descripción*</label>
+          <textarea id="description" formControlName="description" class="form-control"
+            placeholder="Explica brevemente el contenido de la lección"></textarea>
+          <div class="text-danger" *ngIf="f['description']?.touched && f['description']?.invalid">
+            La descripción es obligatoria
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna derecha -->
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="displayOrder" class="form-label text-black">Orden de visualización*</label>
+          <input type="number" id="displayOrder" formControlName="displayOrder" class="form-control"
+            placeholder="Ej: 1" min="1" />
+          <div class="text-danger" *ngIf="f['displayOrder']?.touched && f['displayOrder']?.invalid">
+            El orden es obligatorio y debe ser mayor a 0
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="videoUrl" class="form-label text-black">URL del video (opcional)</label>
+          <input type="text" id="videoUrl" formControlName="videoUrl" class="form-control"
+            placeholder="Ej: https://youtube.com/ejemplo" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón centrado -->
+    <div class="row">
+      <div class="col-12 text-center mb-4">
+        <button type="submit" [disabled]="lessonForm.invalid" class="btn btn-success w-50">
+          Registrar Lección
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

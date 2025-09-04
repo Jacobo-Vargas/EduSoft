@@ -106,7 +106,15 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public ResponseEntity<List<LessonResponseDto>> getLessonsByModule(Long moduleId) throws Exception {
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new IllegalArgumentException("Módulo no encontrado"));
+
         List<Lesson> lessons = lessonRepository.findByModuleIdOrderByDisplayOrder(moduleId);
+
+        if (lessons.isEmpty()) {
+            return ResponseEntity.noContent().build(); // 204
+        }
+
         List<LessonResponseDto> responseDtos = lessonMapper.toResponseDtoList(lessons);
         return ResponseEntity.ok(responseDtos);
     }
@@ -344,8 +352,8 @@ public class LessonServiceImpl implements LessonService {
         return ResponseEntity.ok().build();
     }
 
-    private User validateTeacher(String userId) throws Exception {
-        User user = userRepository.findById(userId)
+    private User validateTeacher(String userEmail) throws Exception {
+        User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
         if (user.getUserType() != EnumUserType.PROFESOR) {
@@ -355,11 +363,11 @@ public class LessonServiceImpl implements LessonService {
         return user;
     }
 
-    private Module validateModuleOwnership(Long moduleId, String userId) throws Exception {
+    private Module validateModuleOwnership(Long moduleId, String userEmail) throws Exception {
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new IllegalArgumentException("Módulo no encontrado"));
 
-        if (!module.getCourse().getUser().getId().equals(userId)) {
+        if (!module.getCourse().getUser().getEmail().equals(userEmail)) {
             throw new IllegalArgumentException("No tiene permisos para modificar este módulo");
         }
 

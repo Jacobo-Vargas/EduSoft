@@ -11,8 +11,14 @@ import java.util.Optional;
 
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
-    // Buscar lecciones de un módulo ordenadas por displayOrder
-    @Query("SELECT l FROM Lesson l WHERE l.module.id = :moduleId ORDER BY l.displayOrder ASC")
+    @Query("""
+   SELECT DISTINCT l FROM Lesson l
+   JOIN FETCH l.module m
+   JOIN FETCH m.course c
+   LEFT JOIN FETCH l.contents ct
+   WHERE m.id = :moduleId
+   ORDER BY l.displayOrder ASC
+   """)
     List<Lesson> findByModuleIdOrderByDisplayOrder(@Param("moduleId") Long moduleId);
 
     // Buscar lecciones visibles y publicadas de un módulo
@@ -33,6 +39,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     Integer getNextDisplayOrder(@Param("moduleId") Long moduleId);
 
     // Buscar lecciones por curso
-    @Query("SELECT l FROM Lesson l WHERE l.module.course.id = :courseId ORDER BY l.module.displayOrder, l.displayOrder")
-    List<Lesson> findByCourseId(@Param("courseId") Long courseId);
+    @Query("SELECT l FROM Lesson l JOIN FETCH l.module WHERE l.module.id = :moduleId")
+    List<Lesson> findByModuleId(@Param("moduleId") Long moduleId);
 }

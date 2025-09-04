@@ -115,15 +115,19 @@ export class RecoverPassword implements OnInit {
     this.showSuccessMessage = false;
   }
   // Variables para controlar el estado de los ojitos
-showPassword1 = false;
-showPassword2 = false;
+  showPassword1 = false;
+  showPassword2 = false;
 
-togglePassword1(): void {
-  this.showPassword1 = !this.showPassword1;
-}
+  togglePassword1(): void {
+    this.showPassword1 = !this.showPassword1;
+  }
 
-togglePassword2(): void {
-  this.showPassword2 = !this.showPassword2;
-}
+  togglePassword2(): void {
+    this.showPassword2 = !this.showPassword2;
+  }
+
+  goBack(): void {
+    this.router.navigate(['']);
+  }
 
 }

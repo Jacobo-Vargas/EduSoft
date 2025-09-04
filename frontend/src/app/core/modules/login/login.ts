@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService, UserData } from '../../services/auth.service';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
   standalone: false,
   styleUrls: ['./login.css']
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent implements OnDestroy, OnInit  {
   userForm!: FormGroup;
   currentSize: 'small' | 'normal' | 'large' = 'normal';
   showPassword = false;
@@ -35,6 +35,18 @@ export class LoginComponent implements OnDestroy {
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]],
     });
+  }
+
+  ngOnInit(): void {
+    if (this.auth.isAuthenticated() && this.auth.getCurrentUserData()) {
+      this.auth.redirectByRole();
+    } else {
+      this.auth.initAuthState().subscribe((isAuth) => {
+        if (isAuth) {
+          this.auth.redirectByRole();
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -69,57 +81,20 @@ export class LoginComponent implements OnDestroy {
     const formData = this.userForm.value;
     this.isLoading = true;
 
-    const loginSub = this.auth.login(formData).subscribe({
+    this.auth.login(formData).subscribe({
       next: (response) => {
-        console.log("✅ Respuesta cruda del backend:", response);
         this.showSuccessMessage = true;
         this.userForm.reset();
         this.formSubmitted = false;
         this.isLoading = false;
-
-        // Ahora obtenemos los datos directamente del servicio
-        const userData = this.auth.getCurrentUserData();
-        console.log("📌 UserData guardado en AuthService:", userData);
-        const userRole = this.auth.getCurrentUserRole();
-        console.log("📌 Rol detectado en frontend:", userRole);
-        // Redirigir según el rol
-        this.redirectUserByRole(userRole, userData);
-
-        setTimeout(() => this.showSuccessMessage = false, 5000);
+        this.auth.redirectByRole();
       },
       error: (err) => {
         this.handleLoginError(err);
       }
     });
+    
 
-    this.subscriptions.push(loginSub);
-  }
-
-  private redirectUserByRole(userRole: string | null, userData: UserData | null): void {
-    if (userRole === 'PROFESOR') {
-      console.log('✅ Redirigiendo a /teacher');
-      // Pasar datos del usuario como state en la navegación
-      this.router.navigate(['/teacher'], { 
-        state: { userData: userData }
-      });
-      this.alertService.createAlert('Bienvenido, Profesor', "success", false);
-    } else if (userRole === 'ESTUDIANTE') {
-      this.router.navigate(['/student'], { 
-        state: { userData: userData }
-      });
-      this.alertService.createAlert('Bienvenido, Estudiante', "success", false);
-    } else if (userRole === 'AUDITOR') {
-      this.router.navigate(['/auditor'], { 
-        state: { userData: userData }
-      });
-      this.alertService.createAlert('Bienvenido, Auditor', "success", false);
-    } else {
-      console.log('⚠ Rol desconocido, redirigiendo a /dashboard');
-      this.router.navigate(['/dashboard'], { 
-        state: { userData: userData }
-      });
-      this.alertService.createAlert('Inicio de sesión exitoso', "success", false);
-    }
   }
 
   private handleLoginError(err: any): void {
@@ -143,12 +118,6 @@ export class LoginComponent implements OnDestroy {
     this.auth.clearUserData();
   }
 
-  // Método para verificar acceso específico a teacher (opcional)
-  checkTeacherAccess(): boolean {
-    return this.auth.isTeacher();
-  }
-
-  // (Opcional) si usas modal de términos en el HTML
   openTermsModal() {
     this.showTermsModal = true;
   }

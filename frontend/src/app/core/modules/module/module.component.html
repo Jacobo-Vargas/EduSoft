@@ -10,8 +10,14 @@
       <li *ngFor="let module of modules">
         <strong>{{ module.name }}</strong>
         <p>{{ module.description }}</p>
+
+        <!-- Botón para ver lecciones -->
+        <button [routerLink]="['/modules', module.id, 'lessons']">
+          Ver lecciones
+        </button>
       </li>
     </ul>
+
 
     <div *ngIf="!loading && modules.length === 0">
       <p>No tienes módulos creados.</p>

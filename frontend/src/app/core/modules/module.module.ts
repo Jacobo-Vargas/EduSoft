@@ -16,6 +16,9 @@ import { SendEmail } from './send-code-email/send-code-email';
 import { TeacherComponent } from './teacher/teacher';
 import { CreateModuleComponent } from './create-module-component/create-module-component';
 import { ModuleComponent } from './module/module.component';
+import { LessonComponent } from './lesson/lesson';
+import { CreateLessonComponent } from './create-lesson-component/create-lesson-component';
+
 
 @NgModule({
   declarations: [
@@ -30,7 +33,9 @@ import { ModuleComponent } from './module/module.component';
     SendEmail,
     TeacherComponent,
     CreateModuleComponent,
-    ModuleComponent  
+    ModuleComponent,
+    LessonComponent,
+    CreateLessonComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
@@ -52,7 +57,9 @@ import { ModuleComponent } from './module/module.component';
     SendEmail,
     TeacherComponent,
     CreateModuleComponent,
-    ModuleComponent  
+    ModuleComponent,
+    LessonComponent,
+    CreateLessonComponent 
   ]
 })
 export class MooduleModule { }

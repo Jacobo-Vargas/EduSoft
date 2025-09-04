@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map, BehaviorSubject } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable, map, BehaviorSubject, of, catchError} from 'rxjs';
+import {environment} from '../../../environments/environment';
+import {Route, Router} from '@angular/router';
+import {AlertService} from './alert.service';
 
 const API = environment.urlServer;
 
@@ -19,7 +21,6 @@ export interface AuthResponseDTO {
 }
 
 
-
 export interface LoginRequestDTO {
   username: string;
   password?: string;
@@ -34,11 +35,12 @@ export interface UserData {
 }
 
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+
   // BehaviorSubject para manejar el estado del usuario
   private userDataSubject = new BehaviorSubject<UserData | null>(null);
   public userData$ = this.userDataSubject.asObservable();
@@ -47,30 +49,31 @@ export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router, private alertService: AlertService) {
+  }
 
   /** POST /api/auth/login */
   login(body: LoginRequestDTO): Observable<AuthResponseDTO> {
-  return this.http.post<AuthResponseDTO>(`${API}/auth/login`, body, {
-    withCredentials: true
-  }).pipe(
-    map(res => {
-      if (res.success && res.data) {
-  const userData: UserData = {
-    id: res.data.id,
-    userType: res.data.userType,
-    email: res.data.email,
-    name: res.data.name
-  };
-  this.setUserData(userData);
-  this.setAuthenticated(true);
-}
+    return this.http.post<AuthResponseDTO>(`${API}/auth/login`, body, {
+      withCredentials: true
+    }).pipe(
+      map(res => {
+        if (res.success && res.data) {
+          const userData: UserData = {
+            id: res.data.id,
+            userType: res.data.userType,
+            email: res.data.email,
+            name: res.data.name
+          };
+          this.setUserData(userData);
+          this.setAuthenticated(true);
+        }
 
 
-      return res;
-    })
-  );
-}
+        return res;
+      })
+    );
+  }
 
 
   // Método para establecer datos del usuario
@@ -134,16 +137,19 @@ export class AuthService {
     return this.isAuthenticatedSubject.value;
   }
 
-  logout(): Observable<any> {
-    return this.http.post(`${API}/auth/logout`, {}, {
+  logout() {
+    this.http.post(`${API}/auth/logout`, {}, {
       withCredentials: true
-    }).pipe(
-      map(res => {
-        // Limpiar estado en lugar de localStorage
+    }).subscribe({
+      next: () => {
         this.clearUserData();
-        return res;
-      })
-    );
+        //this.loggedIn$.next(false);
+        this.router.navigate(['']);
+      },
+      error: (error) => {
+        this.alertService.createAlert(error.message, 'error', false);
+      }
+    });
   }
 
   // Método para limpiar datos (en caso de error)
@@ -163,8 +169,45 @@ export class AuthService {
   }
 
   getCurrentUserId(): number | null {
-  return this.getCurrentUserData()?.id || null;
-}
+    return this.getCurrentUserData()?.id || null;
+  }
+
+  initAuthState(): Observable<boolean> {
+    return this.http.get<AuthResponseDTO>(`${API}/auth/me`, {
+      withCredentials: true
+    }).pipe(
+      map((res) => {
+        if (res.success && res.data) {
+          const userData: UserData = {
+            id: res.data.id,
+            userType: res.data.userType,
+            email: res.data.email,
+            name: res.data.name
+          };
+          this.setUserData(userData);
+          this.setAuthenticated(true);
+          return true;
+        }
+        this.clearUserData();
+        return false;
+      }),
+      catchError((err) => {
+        this.clearUserData();
+        return of(false);
+      })
+    );
+  }
+
+  public redirectByRole() {
+    const role = this.getCurrentUserRole();
+    if (role === 'PROFESOR') {
+      this.router.navigate(['/teacher']);
+    } else if (role === 'ESTUDIANTE') {
+      this.router.navigate(['/home']);
+    } else {
+      this.router.navigate(['/home']);
+    }
+  }
 
 
 }

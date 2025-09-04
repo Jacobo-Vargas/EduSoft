@@ -7,7 +7,6 @@ import { ProgressComponent } from './components/progress/progress.component';
 import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
 import { DropdownHelpComponent } from './components/dropdown-help/dropdown-help.component';
 import { AccordionInfoComponent } from './components/accordion-info/accordion-info.component';
-import { ContactFormComponent } from './components/contact-form/contact-form.component';
 import { FormsModule } from '@angular/forms';
 import { DocumentViewerComponent } from './components/document-viewer/document-viewer.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -26,7 +25,6 @@ import { RouterModule } from '@angular/router';
     ProgressBarComponent,
     DropdownHelpComponent,
     AccordionInfoComponent,
-    ContactFormComponent,
     DocumentViewerComponent
   ], schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
@@ -43,7 +41,6 @@ import { RouterModule } from '@angular/router';
     ProgressComponent,
     DropdownHelpComponent,
     AccordionInfoComponent,
-    ContactFormComponent,
     DocumentViewerComponent
   ]
 })

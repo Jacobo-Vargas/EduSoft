@@ -22,6 +22,8 @@ export interface courseRequestDTO {
   estimatedDurationMinutes: number;
   categoryId: number;
   userId: string;
+  imageError: string | null ;
+
 
 
 }
@@ -37,11 +39,21 @@ export class CreateCourses implements OnInit {
   showSuccessMessage: any;
   categories: CategorieResponseDTO[] = [];
   selectedFile: File | null = null;
-
+  imageError: string | null = null;
+ 
   constructor(
     public fb: FormBuilder, 
     public courseService: CourseService,
     private router: Router) { }
+
+    // === Parámetros configurables ===
+private readonly TARGET_W = 800;
+private readonly TARGET_H = 600;
+private readonly MAX_SIZE_BYTES = 300 * 1024; // 300 KB
+private readonly OUTPUT_MIME = 'image/jpeg'; // comprimimos a JPG
+private readonly QUALITY_START = 0.9;
+private readonly QUALITY_MIN = 0.5;
+private readonly QUALITY_STEP = 0.1;
 
   ngOnInit(): void {
 
@@ -121,8 +133,121 @@ export class CreateCourses implements OnInit {
     goBack(): void {
    this.router.navigate(['/teacher']);
 }
-onFileSelected(event: any) {
-  this.selectedFile = event.target.files[0];
+
+async onFileSelected(event: any) {
+  const file: File = event.target.files[0];
+  this.imageError = null;
+  this.selectedFile = null;
+
+  if (!file) return;
+
+  const allowed = ['image/png', 'image/jpeg'];
+  if (!allowed.includes(file.type)) {
+    this.imageError = 'Solo se permiten imágenes PNG o JPG';
+    return;
+  }
+
+  try {
+    const img = await this.loadImageFromFile(file);
+
+    // Lienzo en 800x600 (cover)
+    const canvas = this.drawCover(img, this.TARGET_W, this.TARGET_H);
+
+    // Comprimir hasta alcanzar MAX_SIZE_BYTES
+    const blob = await this.compressToMaxSize(canvas, this.OUTPUT_MIME, this.MAX_SIZE_BYTES, this.QUALITY_START, this.QUALITY_MIN, this.QUALITY_STEP);
+
+    if (!blob) {
+      this.imageError = 'No se pudo comprimir la imagen. Intenta con otra.';
+      return;
+    }
+
+    // Archivo final (JPG)
+    this.selectedFile = new File([blob], `cover_${Date.now()}.jpg`, { type: this.OUTPUT_MIME });
+  } catch (e) {
+    console.error(e);
+    this.imageError = 'No se pudo procesar la imagen seleccionada.';
+  }
 }
+
+// === Utils ===
+private loadImageFromFile(file: File): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+    img.onerror = (err) => {
+      URL.revokeObjectURL(url);
+      reject(err);
+    };
+    img.src = url;
+  });
+}
+
+/**
+ * Dibuja la imagen "cubriendo" el área target (como object-fit: cover):
+ * llena 800x600 y recorta el exceso manteniendo proporciones.
+ */
+private drawCover(img: HTMLImageElement, targetW: number, targetH: number): HTMLCanvasElement {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d')!;
+  canvas.width = targetW;
+  canvas.height = targetH;
+
+  // Relleno blanco (por si la fuente era PNG con transparencia)
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, targetW, targetH);
+
+  const srcW = img.naturalWidth;
+  const srcH = img.naturalHeight;
+
+  const scale = Math.max(targetW / srcW, targetH / srcH); // cover
+  const drawW = srcW * scale;
+  const drawH = srcH * scale;
+
+  const dx = (targetW - drawW) / 2;
+  const dy = (targetH - drawH) / 2;
+
+  ctx.drawImage(img, dx, dy, drawW, drawH);
+  return canvas;
+}
+
+private canvasToBlob(canvas: HTMLCanvasElement, type: string, quality?: number): Promise<Blob | null> {
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => resolve(blob), type, quality);
+  });
+}
+
+/**
+ * Intenta reducir la calidad de JPG hasta quedar <= maxBytes.
+ * Si en QUALITY_MIN aún se pasa, retorna el último intento.
+ */
+private async compressToMaxSize(
+  canvas: HTMLCanvasElement,
+  mime: string,
+  maxBytes: number,
+  qualityStart: number,
+  qualityMin: number,
+  step: number
+): Promise<Blob | null> {
+  let q = qualityStart;
+  let lastBlob: Blob | null = null;
+
+  while (q >= qualityMin) {
+    const blob = await this.canvasToBlob(canvas, mime, q);
+    if (!blob) return null;
+    lastBlob = blob;
+
+    if (blob.size <= maxBytes) return blob;
+    q = Number((q - step).toFixed(2));
+  }
+
+  // Si no se alcanzó el tamaño, devolvemos el "mejor" intento
+  return lastBlob;
+}
+
+
 }
 
