@@ -202,8 +202,8 @@ public class ModuleServiceImpl implements ModuleService {
         }
     }
 
-    private User validateTeacher(String userId) throws Exception {
-        User user = userRepository.findById(userId)
+    private User validateTeacher(String email) throws Exception {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
         if (user.getUserType() != EnumUserType.PROFESOR) {
@@ -213,11 +213,11 @@ public class ModuleServiceImpl implements ModuleService {
         return user;
     }
 
-    private Course validateCourseOwnership(Long courseId, String userId) throws Exception {
+    private Course validateCourseOwnership(Long courseId, String email) throws Exception {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado"));
 
-        if (!course.getUser().getId().equals(userId)) {
+        if (!course.getUser().getEmail().equals(email)) {
             throw new IllegalArgumentException("No tiene permisos para modificar este curso");
         }
 
