@@ -33,6 +33,7 @@ public interface CourseMapper {
     @Mapping(source = "currentStatusId", target = "currentStatus.id")
     @Mapping(source = "auditStatusId", target = "auditStatus.id")
     @Mapping(source = "userId", target = "user.id")
-    Course toEntity(CourseRequestDto dto);
+    @Mapping(target = "coverUrl", ignore = true)
+    Course  toEntity(CourseRequestDto dto);
 
 }

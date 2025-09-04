@@ -81,7 +81,7 @@ export class CourseService {
     return this.http.get<CategorieResponseDTO[]>(`${API}/categories`, { withCredentials: true });
   }
 
-  createCourse(body: courseRequestDTO):Observable<AuthResponseDTO> {
+  createCourse(body: FormData):Observable<AuthResponseDTO> {
     return this.http.post<AuthResponseDTO>(`${API}/course/save`, body, { withCredentials: true }).pipe(
     map(res => res)
     );

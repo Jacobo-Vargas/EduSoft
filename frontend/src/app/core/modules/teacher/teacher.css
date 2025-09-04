@@ -58,3 +58,7 @@
 .actions button:hover {
   background: #228B22;
 }
+
+.btnColor{
+  color: white;
+}

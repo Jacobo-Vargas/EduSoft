@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,6 +23,7 @@ public class CourseServiceImpl implements CourseService {
     private final CategoryRepository categoryRepository;
     private final AuditStatusRepository auditStatusRepository;
     private final CurrentStatusRepository currentStatusRepository;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     public ResponseEntity<?> createCourse(CourseRequestDto courseRequestDto) throws Exception {
@@ -59,6 +61,11 @@ public class CourseServiceImpl implements CourseService {
             auditStatus.setDescription("Estado  en el cual los cursos se encontran si no han sido revisados por auditoria");
             auditStatusRepository.save(auditStatus);
             course.setAuditStatus(auditStatus);
+        }
+        if (courseRequestDto.getCoverUrl() != null && !courseRequestDto.getCoverUrl().isEmpty()) {
+            Map uploadResult = cloudinaryService.uploadFile(courseRequestDto.getCoverUrl());
+            String imageUrl = (String) uploadResult.get("secure_url");
+            course.setCoverUrl(imageUrl); // asume que Course tiene campo coverUrl
         }
         // Guardar curso
         Course saved = courseRepository.save(course);
@@ -107,12 +114,9 @@ public class CourseServiceImpl implements CourseService {
         }
 
         // Validar portada
-        if (courseRequestDto.getCoverUrl() == null || courseRequestDto.getCoverUrl().isBlank()) {
+        if (courseRequestDto.getCoverUrl() == null ) {
             message.append("Debe seleccionar una portada. ");
-        } else if (courseRequestDto.getCoverUrl().length() > 800) {
-            message.append("La URL de la portada no puede tener más de 800 caracteres. ");
         }
-
         // Validar semestre recomendado
         if (courseRequestDto.getSemester() == null) {
             message.append("El semestre recomendado es obligatorio. ");

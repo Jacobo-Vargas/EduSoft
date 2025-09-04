@@ -90,21 +90,19 @@ export class RecoverPassword implements OnInit {
 
     this.isLoading = true;
     const requestData = { username: this.username, password: formData.Password1 };
-
     this.auth.updatePassword(requestData).subscribe({
       next: () => {
         this.showSuccessMessage = true;
         this.userForm.reset();
         this.isLoading = false;
         setTimeout(() => this.showSuccessMessage = false, 5000);
-        this.router.navigate(['/login']);
+        this.router.navigate(['']);
       },
       error: (err) => {
         this.errorMsg = err?.error?.message || 'Error inesperado';
         this.isLoading = false;
       },
     });
-    localStorage.removeItem('username');
   }
 
   // (Opcional) si usas modal de términos en el HTML
