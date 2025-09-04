@@ -88,9 +88,9 @@ export class TeacherComponent implements OnInit, OnDestroy {
 }
 
   verCurso(curso: courseResponseDTO) {
-    this.router.navigate(['/curso', curso.id], {
-      state: { userData: this.userData, curso: curso }
-    });
+  this.router.navigate(['/modules', curso.id], {
+    state: { userData: this.userData, curso: curso }
+  });
   }
 
   crearCurso() {
@@ -114,5 +114,6 @@ export class TeacherComponent implements OnInit, OnDestroy {
   this.router.navigate(['/app-edit-course', curso.id], {
     state: { userData: this.userData, curso }
   });
-}
+  }
+  
 }

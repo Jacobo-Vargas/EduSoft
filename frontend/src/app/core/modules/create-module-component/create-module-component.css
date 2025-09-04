@@ -1,0 +1,35 @@
+.form-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+input, textarea, button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+}
+button {
+  margin-top: 15px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button:disabled {
+  background: #ccc;
+}
+.error {
+  color: red;
+  font-size: 0.9em;
+}
+.msg {
+  margin-top: 10px;
+  font-weight: bold;
+}

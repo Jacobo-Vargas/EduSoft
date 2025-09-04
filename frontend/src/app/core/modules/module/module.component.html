@@ -1,0 +1,26 @@
+<div class="module-container">
+  <!-- Columna izquierda -->
+  <div class="module-list">
+    <h3>Mis Módulos</h3>
+
+    <div *ngIf="loading">Cargando módulos...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+
+    <ul *ngIf="!loading && modules.length > 0">
+      <li *ngFor="let module of modules">
+        <strong>{{ module.name }}</strong>
+        <p>{{ module.description }}</p>
+      </li>
+    </ul>
+
+    <div *ngIf="!loading && modules.length === 0">
+      <p>No tienes módulos creados.</p>
+    </div>
+  </div>
+
+  <!-- Columna derecha -->
+  <div class="module-actions">
+    <h3>Acciones</h3>
+    <button [routerLink]="['/modules', courseId, 'create']">➕ Crear Módulo</button>
+  </div>
+</div>

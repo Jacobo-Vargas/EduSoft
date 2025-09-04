@@ -1,10 +1,9 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
-import { httpTranslateLoader } from '../../app.module';
+import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
+
 import { CreateCourses } from './create-courses/create-courses';
 import { CreateAuditStatus } from './create-audit-status/create-audit-status';
 import { CreateCategories } from './create-categories/create-categories';
@@ -15,6 +14,8 @@ import { RecoverPassword } from './recover-password/recover-password';
 import { RegisterUserComponent } from './register-user/register-user.component';
 import { SendEmail } from './send-code-email/send-code-email';
 import { TeacherComponent } from './teacher/teacher';
+import { CreateModuleComponent } from './create-module-component/create-module-component';
+import { ModuleComponent } from './module/module.component';
 
 @NgModule({
   declarations: [
@@ -27,9 +28,11 @@ import { TeacherComponent } from './teacher/teacher';
     RecoverPassword,
     RegisterUserComponent,
     SendEmail,
-    TeacherComponent
-
-  ], schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    TeacherComponent,
+    CreateModuleComponent,
+    ModuleComponent  
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     ReactiveFormsModule,
     CommonModule,
@@ -47,7 +50,9 @@ import { TeacherComponent } from './teacher/teacher';
     RecoverPassword,
     RegisterUserComponent,
     SendEmail,
-    TeacherComponent
+    TeacherComponent,
+    CreateModuleComponent,
+    ModuleComponent  
   ]
 })
 export class MooduleModule { }

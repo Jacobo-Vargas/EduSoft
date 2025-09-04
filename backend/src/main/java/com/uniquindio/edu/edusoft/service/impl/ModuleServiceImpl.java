@@ -110,21 +110,18 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseEntity<List<ModuleResponseDto>> getModulesByCourse(Long courseId) throws Exception {
-        List<Module> modules = moduleRepository.findByCourseIdOrderByDisplayOrder(courseId);
-        List<ModuleResponseDto> responseDtos = moduleMapper.toResponseDtoList(modules);
-        return ResponseEntity.ok(responseDtos);
+        List<Module> modules = moduleRepository.findByCourseIdWithCourse(courseId);
+        return ResponseEntity.ok(moduleMapper.toResponseDtoList(modules));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseEntity<ModuleResponseDto> getModuleById(Long moduleId) throws Exception {
-        Optional<Module> moduleOpt = moduleRepository.findById(moduleId);
-        if (moduleOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        ModuleResponseDto responseDto = moduleMapper.toResponseDto(moduleOpt.get());
-        return ResponseEntity.ok(responseDto);
+        Module module = moduleRepository.findByIdWithCourse(moduleId)
+                .orElseThrow(() -> new IllegalArgumentException("Módulo no encontrado"));
+        return ResponseEntity.ok(moduleMapper.toResponseDto(module));
     }
 
     @Override
