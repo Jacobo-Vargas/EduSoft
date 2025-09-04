@@ -23,8 +23,8 @@ public class ModuleController {
     public ResponseEntity<ModuleResponseDto> createModule(
             @RequestBody @Valid ModuleRequestDto moduleRequestDto,
             Authentication authentication) throws Exception {
-        String userId = authentication.getName();
-        return moduleService.createModule(moduleRequestDto, userId);
+        String userEmail = authentication.getName();
+        return moduleService.createModule(moduleRequestDto, userEmail);
     }
 
     @PutMapping("/{moduleId}")

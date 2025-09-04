@@ -221,11 +221,11 @@ public class ModuleServiceImpl implements ModuleService {
         return course;
     }
 
-    private Module validateModuleOwnership(Long moduleId, String userId) throws Exception {
+    private Module validateModuleOwnership(Long moduleId, String userEmail) throws Exception {
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new IllegalArgumentException("Módulo no encontrado"));
 
-        if (!module.getCourse().getUser().getId().equals(userId)) {
+        if (!module.getCourse().getUser().getEmail().equals(userEmail)) {
             throw new IllegalArgumentException("No tiene permisos para modificar este módulo");
         }
 

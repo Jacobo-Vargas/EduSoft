@@ -16,7 +16,7 @@ export interface ModuleResponseDto {
   providedIn: 'root'
 })
 export class ModuleService {
-  private apiUrl = 'http://localhost:8443/api/modules';
+  private apiUrl = 'https://localhost:8443/api/modules';
 
   constructor(private http: HttpClient) {}
 
