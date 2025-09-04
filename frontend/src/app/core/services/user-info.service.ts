@@ -80,7 +80,8 @@ export class UserInfoService {
 
 
   public logout() {
-    this.http.post('/api/logout', {}, { withCredentials: true }).subscribe({
+
+    this.http.post(`${environment.urlServer}/auth/logout`, {}, { withCredentials: true }).subscribe({
       next: () => {
       this.loggedIn$.next(false);
       this.router.navigate(['/']);

@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticatedPrincipal;
@@ -27,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.uniquindio.edu.edusoft.model.entities.User;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -81,12 +83,16 @@ public class LoginServiceImpl implements LoginService {
 
         tokenStoreService.storeToken(jti, subject);
 
-        Cookie accessCookie = new Cookie("accessToken", accessToken);
-        accessCookie.setHttpOnly(true);
-        accessCookie.setSecure(true);
-        accessCookie.setPath("/");
-        accessCookie.setMaxAge(15 * 60); // 15 minutos
-        response.addCookie(accessCookie);
+        ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(Duration.ofMinutes(15))
+                .sameSite("None")
+                .build();
+
+        response.addHeader("Set-Cookie", cookie.toString());
+
 
         Map<String, Object> userData = new HashMap<>();
         userData.put("id", user.getId());

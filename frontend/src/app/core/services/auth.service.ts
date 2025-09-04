@@ -139,7 +139,6 @@ export class AuthService {
       withCredentials: true
     }).pipe(
       map(res => {
-        // Limpiar estado en lugar de localStorage
         this.clearUserData();
         return res;
       })
