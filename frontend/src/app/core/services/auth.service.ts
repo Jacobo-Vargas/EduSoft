@@ -47,7 +47,7 @@ export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /** POST /api/auth/login */
   login(body: LoginRequestDTO): Observable<AuthResponseDTO> {
@@ -56,16 +56,19 @@ export class AuthService {
   }).pipe(
     map(res => {
       if (res.success && res.data) {
-  const userData: UserData = {
-    id: res.data.id,
-    userType: res.data.userType,
-    email: res.data.email,
-    name: res.data.name
-  };
-  this.setUserData(userData);
-  this.setAuthenticated(true);
-}
-
+        const userData: UserData = {
+          id: res.data.id,
+          userType: res.data.userType,
+          email: res.data.email,
+          name: res.data.name
+        };
+        this.setUserData(userData);
+        this.setAuthenticated(true);
+        
+        if (res.additionalData?.token) {
+          this.setToken(res.additionalData.token);
+        }
+      }
 
       return res;
     })
@@ -162,8 +165,18 @@ export class AuthService {
   }
 
   getCurrentUserId(): number | null {
-  return this.getCurrentUserData()?.id || null;
-}
+    return this.getCurrentUserData()?.id || null;
+  }
 
+  private tokenSubject = new BehaviorSubject<string | null>(null);
+  public token$ = this.tokenSubject.asObservable();
+
+  setToken(token: string): void {
+    this.tokenSubject.next(token);
+  }
+
+  getToken(): string | null {
+    return this.tokenSubject.value;
+  }
 
 }

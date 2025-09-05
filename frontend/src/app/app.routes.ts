@@ -13,6 +13,7 @@ import { TeacherGuard } from './core/guards/teacher.guard';
 import { ModuleComponent } from './core/modules/module/module.component';
 import { CreateModuleComponent } from './core/modules/create-module-component/create-module-component';
 import { LessonComponent } from './core/modules/lesson/lesson';
+import { CreateLessonComponent } from './core/modules//create-lesson-component/create-lesson-component';
 
 export const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: 'createAuditStatus', component: CreateAuditStatus },
   { path: 'teacher', component: TeacherComponent, canActivate: [TeacherGuard] },
   { path: 'modules/:moduleId/lessons', component: LessonComponent },
+  { path: 'modules/:moduleId/lessons/create', component: CreateLessonComponent },
   { path: 'modules/:courseId/create', component: CreateModuleComponent },
   { path: 'modules/:courseId', component: ModuleComponent },
   { path: '', component: LoginComponent },

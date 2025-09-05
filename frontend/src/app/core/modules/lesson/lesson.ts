@@ -23,7 +23,6 @@ export class LessonComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // 📌 obtener el id del módulo de la URL
     this.moduleId = Number(this.route.snapshot.paramMap.get('moduleId'));
     console.log('📌 moduleId obtenido de la URL:', this.moduleId);
 
@@ -50,7 +49,6 @@ export class LessonComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('🧹 Liberando suscripciones en LessonComponent');
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

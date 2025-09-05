@@ -1,0 +1,38 @@
+.form-container-bg {
+  background-color: rgba(144, 238, 144, 0.1);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+  background-color: rgba(212, 255, 212, 0.2);
+  padding: 20px;
+  border-radius: 8px;
+  color: black;
+}
+
+.form-label {
+  color: black !important;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+.btn-custom-outline-sm {
+  color: #198754;
+  border: 2px solid #198754;
+  background-color: transparent;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.btn-custom-outline-sm:hover {
+  background-color: #198754;
+  color: #fff;
+}
