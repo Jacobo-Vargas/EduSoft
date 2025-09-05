@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LessonService } from '../../services/lesson.service';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-create-lesson-component',
@@ -12,22 +13,31 @@ import { LessonService } from '../../services/lesson.service';
 export class CreateLessonComponent implements OnInit {
   lessonForm!: FormGroup;
   moduleId!: number;
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
     private lessonService: LessonService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService
   ) { }
 
   ngOnInit(): void {
     this.moduleId = Number(this.route.snapshot.paramMap.get('moduleId'));
+    console.log("🔍 moduleId capturado desde ruta:", this.moduleId);
+
+    if (!this.moduleId || isNaN(this.moduleId)) {
+      this.alertService.createAlert('⚠️ No se encontró moduleId en la URL', 'warning', false).then(() => {
+        this.router.navigate(['/modules']);
+      });
+      return;
+    }
 
     this.lessonForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      displayOrder: [1, [Validators.required, Validators.min(1)]],
-      videoUrl: ['']
+      name: ['', [Validators.required, Validators.minLength(5)]],
+      description: ['', [Validators.required, Validators.minLength(10)]],
+      displayOrder: [1, [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -38,20 +48,31 @@ export class CreateLessonComponent implements OnInit {
   onSubmit(): void {
     if (this.lessonForm.invalid) {
       Object.values(this.lessonForm.controls).forEach(c => c.markAsTouched());
+      this.alertService.createAlert('⚠️ Formulario inválido, verifica los campos', 'warning', false);
       return;
     }
 
     const lessonData = {
-      ...this.lessonForm.value,
-      moduleId: this.moduleId
+      name: this.lessonForm.value.name,
+      description: this.lessonForm.value.description,
+      moduleId: this.moduleId,
+      displayOrder: this.lessonForm.value.displayOrder
     };
 
+    this.loading = true;
+
     this.lessonService.createLesson(lessonData).subscribe({
-      next: () => {
-        this.router.navigate(['/modules', this.moduleId, 'lessons']);
+      next: (res) => {
+        this.loading = false;
+        this.alertService.createAlert('✅ Lección creada con éxito', 'success', false).then(() => {
+          this.goBack();
+        });
       },
       error: (err) => {
-        console.error('❌ Error al crear la lección:', err);
+        this.loading = false;
+        const errorMsg = err?.error?.message || 'Error al crear la lección';
+        this.alertService.createAlert(`❌ ${errorMsg}`, 'error', false);
+        console.error("❌ Error al crear la lección:", err);
       }
     });
   }

@@ -31,4 +31,5 @@ public class CourseResponseDto {
     // Fechas
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String state;
 }

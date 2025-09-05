@@ -1,6 +1,7 @@
 package com.uniquindio.edu.edusoft.model.entities;
 
 
+import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -74,4 +75,10 @@ public class Course extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "audit_status_id", nullable = false)
     private AuditStatus auditStatus;//Estados de auditoria
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "course_state", nullable = false, length = 20)
+    private EnumState state = EnumState.ACTIVE;
+
 }

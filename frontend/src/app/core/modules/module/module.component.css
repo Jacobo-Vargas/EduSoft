@@ -4,26 +4,85 @@
   padding: 1rem;
 }
 
-.module-list, .module-actions {
+.module-list,
+.module-actions {
   flex: 1;
   border: 1px solid #ddd;
   padding: 1rem;
   border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.module-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.module-list li {
+  display: flex;
+  justify-content: space-between; /* izquierda info, derecha botones */
+  align-items: flex-start;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+
+.module-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.module-info strong {
+  font-size: 16px;
+  color: #333;
+}
+
+.module-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Botón Ver lecciones debajo de la info, alineado a la izquierda */
+.module-info button {
+  align-self: flex-start;
+  margin-top: 5px;
+}
+
+/* Botón eliminar a la derecha */
+.module-actions-btn {
+  display: flex;
+  align-items: flex-start;
 }
 
 button {
-  padding: 10px 15px;
-  background-color: #1976d2;
-  color: white;
+  padding: 8px 12px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
 }
 
 button:hover {
-  background-color: #125ea2;
+  opacity: 0.8;
+}
+
+.btn-danger {
+  background-color: #d32f2f;
+  color: white;
+}
+
+.module-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .error {
   color: red;
+  font-weight: bold;
 }

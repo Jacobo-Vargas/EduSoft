@@ -20,7 +20,8 @@
           <input type="text" id="name" formControlName="name" class="form-control"
             placeholder="Ej: Introducción a Java" />
           <div class="text-danger" *ngIf="f['name']?.touched && f['name']?.invalid">
-            El nombre es obligatorio
+            <small *ngIf="f['name']?.errors?.['required']">⚠️ El nombre es obligatorio.</small>
+            <small *ngIf="f['name']?.errors?.['minlength']">⚠️ El nombre debe tener al menos 5 caracteres.</small>
           </div>
         </div>
 
@@ -29,7 +30,8 @@
           <textarea id="description" formControlName="description" class="form-control"
             placeholder="Explica brevemente el contenido de la lección"></textarea>
           <div class="text-danger" *ngIf="f['description']?.touched && f['description']?.invalid">
-            La descripción es obligatoria
+            <small *ngIf="f['description']?.errors?.['required']">⚠️ La descripción es obligatoria.</small>
+            <small *ngIf="f['description']?.errors?.['minlength']">⚠️ La descripción debe tener al menos 10 caracteres.</small>
           </div>
         </div>
       </div>
@@ -41,14 +43,9 @@
           <input type="number" id="displayOrder" formControlName="displayOrder" class="form-control"
             placeholder="Ej: 1" min="1" />
           <div class="text-danger" *ngIf="f['displayOrder']?.touched && f['displayOrder']?.invalid">
-            El orden es obligatorio y debe ser mayor a 0
+            <small *ngIf="f['displayOrder']?.errors?.['required']">⚠️ El orden es obligatorio.</small>
+            <small *ngIf="f['displayOrder']?.errors?.['min']">⚠️ El orden debe ser mayor a 0.</small>
           </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="videoUrl" class="form-label text-black">URL del video (opcional)</label>
-          <input type="text" id="videoUrl" formControlName="videoUrl" class="form-control"
-            placeholder="Ej: https://youtube.com/ejemplo" />
         </div>
       </div>
     </div>

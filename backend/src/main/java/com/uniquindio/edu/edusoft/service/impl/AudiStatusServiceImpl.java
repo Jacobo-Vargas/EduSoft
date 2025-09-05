@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AudiStatusServiceImpl implements AudiStatusService {
@@ -28,5 +30,11 @@ public class AudiStatusServiceImpl implements AudiStatusService {
         }
         AuditStatus saved = auditStatusRepository.save(auditStatus);
         return  ResponseEntity.ok().body(auditStatus);
+    }
+
+    @Override
+    public ResponseEntity<?> updateStatusAudit(AuditStatusRequestDto auditStatusRequestDto) {
+       return null;
+
     }
 }

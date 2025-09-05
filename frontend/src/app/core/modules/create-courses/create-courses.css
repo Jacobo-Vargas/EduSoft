@@ -1,31 +1,45 @@
 /* Estilo para el contenedor con fondo verde claro y caja */
 .form-container-bg {
-  background-color: rgba(144, 238, 144, 0.1); /* Fondo verde claro muy suave y transparente */
-  padding: 30px;  /* Añade algo de espacio interno */
-  border-radius: 12px; /* Bordes redondeados */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para darle énfasis */
+  background-color: rgba(144, 238, 144, 0.1);
+  /* Fondo verde claro muy suave y transparente */
+  padding: 30px;
+  /* Añade algo de espacio interno */
+  border-radius: 12px;
+  /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Sombra suave para darle énfasis */
 }
+
 h2 {
-  color: black !important; /* Fuerza el color negro en el h2 */
+  color: black !important;
+  /* Fuerza el color negro en el h2 */
 }
+
 /* Estilo para el formulario */
 .form-container {
-  background-color: rgba(212, 255, 212, 0.2); /* Fondo verde claro con algo más de opacidad para el formulario */
+  background-color: rgba(212, 255, 212, 0.2);
+  /* Fondo verde claro con algo más de opacidad para el formulario */
   padding: 20px;
-  border-radius: 8px; /* Bordes redondeados */
-  color: black; /* Cambia todo el texto dentro del formulario a negro */
+  border-radius: 8px;
+  /* Bordes redondeados */
+  color: black;
+  /* Cambia todo el texto dentro del formulario a negro */
 }
 
 /* Asegúrate de que las etiquetas también tengan texto negro */
 .form-label {
-  color: black !important; /* Asegura que las etiquetas sean negras */
+  color: black !important;
+  /* Asegura que las etiquetas sean negras */
 }
 
 /* Botón verde */
 .btn-success {
-  background-color: #28a745; /* Color verde para el fondo del botón */
-  border-color: #28a745; /* Borde verde para el botón */
-  color: white; /* Color de texto blanco para el botón */
+  background-color: #28a745;
+  /* Color verde para el fondo del botón */
+  border-color: #28a745;
+  /* Borde verde para el botón */
+  color: white;
+  /* Color de texto blanco para el botón */
 }
 
 /* Aseguramos que el botón sea más grande */
@@ -33,6 +47,37 @@ button {
   max-width: 200px;
   margin: 0 auto;
 }
+
+.btn-custom-outline-sm {
+  color: #198754;
+  border: 2px solid #198754;
+  background-color: transparent;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  line-height: 1.2;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.btn-custom-outline-sm:hover {
+  background-color: #198754;
+  color: #fff;
+}
+
+.form-box {
+  border: 1px solid #ddd;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container-bg {
+  background-color: rgba(144, 238, 144, 0.1);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .btn-custom-outline-sm {
   color: #198754;
   border: 2px solid #198754;

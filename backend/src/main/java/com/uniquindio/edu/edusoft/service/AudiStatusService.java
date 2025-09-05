@@ -6,4 +6,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface AudiStatusService {
     public ResponseEntity<?> createStatusAudi(AuditStatusRequestDto auditStatusRequestDto);
+    ResponseEntity<?> updateStatusAudit(AuditStatusRequestDto auditStatusRequestDto);
 }

@@ -1,23 +1,44 @@
+ <!-- <app-create-courses 
+  [tituloFormulario]="'Editar Curso'"
+  [textoBoton]="'Actualizar Curso'">
+</app-create-courses> -->
+
+
+
+
 <div class="module-container">
   <!-- Columna izquierda -->
   <div class="module-list">
+
+    <!-- Botón de regresar arriba a la izquierda -->
+    <button type="button" class="btn btn-link p-0 mb-2" (click)="goBack()" title="Regresar">
+      <i class="bi bi-arrow-left" style="font-size: 1.5rem;"></i>
+    </button>
+
     <h3>Mis Módulos</h3>
 
     <div *ngIf="loading">Cargando módulos...</div>
     <div *ngIf="error" class="error">{{ error }}</div>
 
     <ul *ngIf="!loading && modules.length > 0">
-      <li *ngFor="let module of modules">
-        <strong>{{ module.name }}</strong>
-        <p>{{ module.description }}</p>
+      <li *ngFor="let module of modules" class="module-item">
+        <!-- Info del módulo -->
+        <div class="module-info">
+          <strong>{{ module.name }}</strong>
+          <p>{{ module.description }}</p>
 
-        <!-- Botón para ver lecciones -->
-        <button [routerLink]="['/modules', module.id, 'lessons']">
-          Ver lecciones
-        </button>
+          <button [routerLink]="['/modules', module.id, 'lessons']">
+            Ver lecciones
+          </button>
+        </div>
+
+        <div class="module-actions-btn">
+          <button class="btn btn-danger" (click)="deleteModule(module)">
+            🗑 Eliminar
+          </button>
+        </div>
       </li>
     </ul>
-
 
     <div *ngIf="!loading && modules.length === 0">
       <p>No tienes módulos creados.</p>
@@ -27,6 +48,18 @@
   <!-- Columna derecha -->
   <div class="module-actions">
     <h3>Acciones</h3>
-    <button [routerLink]="['/modules', courseId, 'create']">➕ Crear Módulo</button>
+    <div class="d-grid gap-2">
+      <button class="btn btn-primary" [routerLink]="['/modules', courseId, 'create']">
+        ➕ Crear Módulo
+      </button>
+
+      <button class="btn btn-info" [routerLink]="['/history', courseId]">
+        📜 Ver Historial
+      </button>
+
+      <button class="btn btn-success" (click)="submitForAudit()">
+        📤 Enviar a Auditoría
+      </button>
+    </div>
   </div>
 </div>

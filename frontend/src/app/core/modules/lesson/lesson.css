@@ -2,56 +2,93 @@
   display: flex;
   gap: 20px;
   padding: 1rem;
+  align-items: flex-start; /* columnas alineadas arriba */
 }
 
-.lesson-list,
-.lesson-actions {
-  flex: 1;
+/* Columna izquierda (lista de lecciones) */
+.lesson-list {
+  flex: 1; /* mismo espacio que la derecha */
   border: 1px solid #ddd;
   padding: 1rem;
   border-radius: 8px;
   background-color: #fafafa;
 }
 
-button {
-  padding: 10px 15px;
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
+/* Columna derecha (acciones) */
+.lesson-actions {
+  flex: 1; /* mismo espacio que la izquierda */
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #fafafa;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-button:hover {
-  background-color: #125ea2;
-}
-
-.error {
-  color: red;
-  font-weight: bold;
-}
-
-.lesson-list ul {
-  list-style: none;
-  padding: 0;
-}
-
+/* Items de la lista */
 .lesson-list li {
+  display: flex;
+  justify-content: space-between; /* info izquierda, eliminar derecha */
+  align-items: flex-start;
   margin-bottom: 15px;
   padding: 10px;
   border-bottom: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #ffffff;
 }
 
-.lesson-list li strong {
-  display: block;
+/* Info de la lección */
+.lesson-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.lesson-info strong {
   font-size: 16px;
-  margin-bottom: 5px;
   color: #333;
 }
 
-.lesson-list li p {
+.lesson-info p {
   margin: 0;
   font-size: 14px;
   color: #555;
+}
+
+/* Botón azul debajo de la descripción */
+.lesson-documents-btn button {
+  margin-top: 6px;
+  background-color: #1976d2;
+  color: white;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+  align-self: flex-start;
+}
+
+.lesson-documents-btn button:hover {
+  opacity: 0.85;
+}
+
+/* Botón rojo eliminar */
+.lesson-actions-btn {
+  display: flex;
+  align-items: flex-start;
+}
+
+.btn-danger {
+  background-color: #d32f2f;
+  color: white;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
 }

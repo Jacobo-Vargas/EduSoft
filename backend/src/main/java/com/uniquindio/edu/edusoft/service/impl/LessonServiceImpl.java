@@ -6,16 +6,21 @@ import com.uniquindio.edu.edusoft.model.dto.common.ReorderRequestDto;
 import com.uniquindio.edu.edusoft.model.dto.content.ContentAssignmentDto;
 import com.uniquindio.edu.edusoft.model.entities.*;
 import com.uniquindio.edu.edusoft.model.entities.Module;
+import com.uniquindio.edu.edusoft.model.enums.EnumCourseEventType;
 import com.uniquindio.edu.edusoft.model.enums.EnumLifecycleStatus;
+import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.model.mapper.LessonMapper;
 import com.uniquindio.edu.edusoft.repository.*;
 import com.uniquindio.edu.edusoft.service.LessonService;
+import com.uniquindio.edu.edusoft.utils.BaseResponse;
+import com.uniquindio.edu.edusoft.utils.CourseEventUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +34,7 @@ public class LessonServiceImpl implements LessonService {
     private final ContentRepository contentRepository;
     private final UserRepository userRepository;
     private final LessonMapper lessonMapper;
+    private final CourseEventUtil courseEventUtil;
 
     @Override
     @Transactional
@@ -59,7 +65,19 @@ public class LessonServiceImpl implements LessonService {
         lesson.setModule(module);
 
         Lesson savedLesson = lessonRepository.save(lesson);
+
+        courseEventUtil.registerEvent(
+                module.getCourse(),
+                module,
+                savedLesson,
+                null,
+                user,
+                EnumCourseEventType.LESSON_CREATED,
+                "Se creó la lección: " + savedLesson.getName()
+        );
+
         return ResponseEntity.ok(lessonMapper.toResponseDto(savedLesson));
+
     }
 
     @Override
@@ -88,6 +106,15 @@ public class LessonServiceImpl implements LessonService {
         }
 
         Lesson savedLesson = lessonRepository.save(lesson);
+        courseEventUtil.registerEvent(
+                lesson.getModule().getCourse(),
+                lesson.getModule(),
+                savedLesson,
+                null,
+                user,
+                EnumCourseEventType.LESSON_UPDATED,
+                "Se actualizó la lección: " + savedLesson.getName()
+        );
         return ResponseEntity.ok(lessonMapper.toResponseDto(savedLesson));
     }
 
@@ -97,11 +124,20 @@ public class LessonServiceImpl implements LessonService {
         User user = validateTeacher(userId);
         Lesson lesson = validateLessonOwnership(lessonId, userId);
 
-        // Aplicar soft delete
         lesson.setLifecycleStatus(EnumLifecycleStatus.ELIMINADO);
+        lesson.setDeletedAt(new Date());
+        lesson.setUpdatedAt(new Date());
         lessonRepository.save(lesson);
-
-        return ResponseEntity.ok().build();
+        courseEventUtil.registerEvent(
+                lesson.getModule().getCourse(),
+                lesson.getModule(),
+                lesson,
+                null,
+                user,
+                EnumCourseEventType.LESSON_DELETED,
+                "Se eliminó la lección: " + lesson.getName()
+        );
+        return BaseResponse.response("Lección eliminado correctamente", "SUCCESS");
     }
 
     @Override
@@ -109,10 +145,10 @@ public class LessonServiceImpl implements LessonService {
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new IllegalArgumentException("Módulo no encontrado"));
 
-        List<Lesson> lessons = lessonRepository.findByModuleIdOrderByDisplayOrder(moduleId);
+        List<Lesson> lessons = lessonRepository.findActiveLessonsByModuleId(moduleId);
 
         if (lessons.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204
+            return ResponseEntity.noContent().build();
         }
 
         List<LessonResponseDto> responseDtos = lessonMapper.toResponseDtoList(lessons);
@@ -378,7 +414,7 @@ public class LessonServiceImpl implements LessonService {
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new IllegalArgumentException("Lección no encontrada"));
 
-        if (!lesson.getModule().getCourse().getUser().getId().equals(userId)) {
+        if (!lesson.getModule().getCourse().getUser().getEmail().equals(userId)) {
             throw new IllegalArgumentException("No tiene permisos para modificar esta lección");
         }
 

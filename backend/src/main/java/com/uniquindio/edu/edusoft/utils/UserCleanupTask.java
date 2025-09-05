@@ -1,6 +1,7 @@
 package com.uniquindio.edu.edusoft.utils;
 
 import com.uniquindio.edu.edusoft.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import java.util.Calendar;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class UserCleanupTask {
 
     private final UserRepository userRepository;
@@ -17,8 +19,7 @@ public class UserCleanupTask {
     @Scheduled(fixedRate = 30 * 60 * 1000)
     public void removeUnverifiedUsers() {
         Date thirtyMinutesAgo = new Date(System.currentTimeMillis() - 30 * 60 * 1000);
-
         userRepository.deleteAllByVerificationFalseAndCreatedAtBefore(thirtyMinutesAgo);
-        System.out.println("Usuarios no verificados eliminados antes de: " + thirtyMinutesAgo);
+        log.info("Usuarios no verificados eliminados antes de: {}", thirtyMinutesAgo);
     }
 }

@@ -1,29 +1,53 @@
 <div class="lesson-container">
-    <!-- Columna izquierda -->
-    <div class="lesson-list">
-        <h3>Mis Lecciones</h3>
+  <!-- Columna izquierda -->
+  <div class="lesson-list">
 
-        <div *ngIf="loading">Cargando lecciones...</div>
-        <div *ngIf="error" class="error">{{ error }}</div>
+    <!-- Botón de regresar arriba a la izquierda -->
+    <button type="button" class="btn btn-link p-0 mb-2" (click)="goBack()" title="Regresar">
+      <i class="bi bi-arrow-left" style="font-size: 1.5rem;"></i>
+    </button>
 
-        <ul *ngIf="!loading && lessons.length > 0">
-            <li *ngFor="let lesson of lessons">
-                <strong>{{ lesson.name }}</strong>
-                <p>{{ lesson.description }}</p>
-            </li>
-        </ul>
+    <h3>Mis Lecciones</h3>
 
+    <div *ngIf="loading">Cargando lecciones...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
 
-        <div *ngIf="!loading && lessons.length === 0">
-            <p>No tienes lecciones creadas.</p>
+    <ul *ngIf="!loading && lessons.length > 0">
+      <li *ngFor="let lesson of lessons" class="lesson-item">
+        <!-- Info -->
+        <div class="lesson-info">
+          <strong>{{ lesson.name }}</strong>
+          <p>{{ lesson.description }}</p>
+
+          <!-- Botón Ver Documentos debajo -->
+          <div class="lesson-documents-btn">
+            <button class="btn btn-primary" [routerLink]="['/lessons', lesson.id, 'contents']">
+              📂 Ver Documentos
+            </button>
+          </div>
         </div>
-    </div>
 
-    <!-- Columna derecha -->
-    <div class="lesson-actions">
-        <h3>Acciones</h3>
-        <button [routerLink]="['/modules', moduleId, 'lessons', 'create']">
-            ➕ Crear Lección
-        </button>
+        <!-- Botón eliminar a la derecha -->
+        <div class="lesson-actions-btn">
+          <button class="btn btn-danger" (click)="deleteLesson(lesson)">
+            🗑 Eliminar
+          </button>
+        </div>
+      </li>
+    </ul>
+
+    <div *ngIf="!loading && lessons.length === 0">
+      <p>No tienes lecciones creadas.</p>
     </div>
+  </div>
+
+  <!-- Columna derecha -->
+  <div class="lesson-actions">
+    <h3>Acciones</h3>
+    <div class="d-grid gap-2">
+      <button class="btn btn-primary" [routerLink]="['/modules', moduleId, 'lessons', 'create']">
+        ➕ Crear Lección
+      </button>
+    </div>
+  </div>
 </div>

@@ -38,4 +38,11 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
     // Obtener el siguiente número de orden disponible
     @Query("SELECT COALESCE(MAX(m.displayOrder), 0) + 1 FROM Module m WHERE m.course.id = :courseId")
     Integer getNextDisplayOrder(@Param("courseId") Long courseId);
+
+    @Query("SELECT m FROM Module m JOIN FETCH m.course " +
+            "WHERE m.course.id = :courseId " +
+            "AND (m.lifecycleStatus = com.uniquindio.edu.edusoft.model.enums.EnumLifecycleStatus.PUBLICADO " +
+            "     OR m.lifecycleStatus = com.uniquindio.edu.edusoft.model.enums.EnumLifecycleStatus.BORRADOR) " +
+            "ORDER BY m.displayOrder ASC")
+    List<Module> findActiveModulesByCourseId(@Param("courseId") Long courseId);
 }

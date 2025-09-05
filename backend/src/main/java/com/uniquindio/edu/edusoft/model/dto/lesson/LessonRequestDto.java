@@ -24,5 +24,5 @@ public class LessonRequestDto {
 
     private EnumLifecycleStatus lifecycleStatus = EnumLifecycleStatus.BORRADOR;
 
-    private Boolean isVisible = true;
+    private Boolean isVisible = false;
 }

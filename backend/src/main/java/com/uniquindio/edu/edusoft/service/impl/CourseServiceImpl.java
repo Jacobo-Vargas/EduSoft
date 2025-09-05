@@ -2,13 +2,20 @@ package com.uniquindio.edu.edusoft.service.impl;
 
 import com.uniquindio.edu.edusoft.model.dto.course.CourseRequestDto;
 import com.uniquindio.edu.edusoft.model.entities.*;
+import com.uniquindio.edu.edusoft.model.enums.EnumCourseEventType;
+import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import com.uniquindio.edu.edusoft.model.mapper.CourseMapper;
 import com.uniquindio.edu.edusoft.repository.*;
 import com.uniquindio.edu.edusoft.service.CourseService;
+import com.uniquindio.edu.edusoft.utils.BaseResponse;
+import com.uniquindio.edu.edusoft.utils.CourseEventUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,6 +31,7 @@ public class CourseServiceImpl implements CourseService {
     private final AuditStatusRepository auditStatusRepository;
     private final CurrentStatusRepository currentStatusRepository;
     private final CloudinaryService cloudinaryService;
+    private final CourseEventUtil courseEventUtil;
 
     @Override
     public ResponseEntity<?> createCourse(CourseRequestDto courseRequestDto) throws Exception {
@@ -34,6 +42,9 @@ public class CourseServiceImpl implements CourseService {
         }
         // Mapear DTO → Entity
         Course course = courseMapper.toEntity(courseRequestDto);
+        if (courseRepository.existsByTitleIgnoreCase(course.getTitle())) {
+            throw new IllegalArgumentException("El título ingresado ya ha sido registrado en otro curso");
+        }
         // Validar FK category
         Category category = categoryRepository.findById(courseRequestDto.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
@@ -67,8 +78,21 @@ public class CourseServiceImpl implements CourseService {
             String imageUrl = (String) uploadResult.get("secure_url");
             course.setCoverUrl(imageUrl); // asume que Course tiene campo coverUrl
         }
+        if(course.getPrice()==null){
+            course.setPrice(BigDecimal.ZERO);
+        }
         // Guardar curso
         Course saved = courseRepository.save(course);
+        courseEventUtil.registerEvent(
+                saved,
+                null,
+                null,
+                null,
+                profesor,
+                EnumCourseEventType.COURSE_CREATED,
+                "Se creó el curso: " + saved.getTitle()
+        );
+
         // Retornar respuesta con DTO enriquecido
         return ResponseEntity.ok(courseMapper.toResponseDto(saved));
     }
@@ -76,12 +100,15 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public ResponseEntity<?> getCoursesByUser(Long userId) {
         List<Course> courses = courseRepository.findByUserIdWithRelations(userId);
-
         return ResponseEntity.ok(
                 courses.stream()
                         .map(courseMapper::toResponseDto)
                         .toList()
         );
+    }
+
+    public List<Course> searchCourses(String title) {
+        return courseRepository.findByTitleContainingIgnoreCase(title);
     }
 
     public String validateFilds(CourseRequestDto courseRequestDto){
@@ -107,10 +134,10 @@ public class CourseServiceImpl implements CourseService {
         }
 
         // Validar precio
-        if (courseRequestDto.getPrice() == null) {
-            message.append("Debe indicar el precio. ");
-        } else if (courseRequestDto.getPrice().compareTo(BigDecimal.ZERO) < 0) {
-            message.append("El precio no puede ser negativo. ");
+        if(courseRequestDto.getPrice()!= null) {
+            if (courseRequestDto.getPrice().compareTo(BigDecimal.ZERO) < 0) {
+                message.append("El precio no puede ser negativo. ");
+            }
         }
 
         // Validar portada
@@ -139,5 +166,136 @@ public class CourseServiceImpl implements CourseService {
         }
         return message.toString().trim();
     }
+
+    @Override
+    public ResponseEntity<?> updateCourse(Long courseId, CourseRequestDto courseRequestDto) throws Exception {
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        if (optionalCourse.isEmpty()) {
+            return ResponseEntity.badRequest().body("El curso con id " + courseId + " no existe.");
+        }
+
+        Course course = optionalCourse.get();
+
+        // Validar campos
+        String messageValidate = validateFilds(courseRequestDto);
+        if (!messageValidate.isEmpty()) {
+            return ResponseEntity.badRequest().body(messageValidate);
+        }
+
+        // Actualizar campos simples
+        course.setTitle(courseRequestDto.getTitle());
+        course.setDescription(courseRequestDto.getDescription());
+        course.setPrice(courseRequestDto.getPrice());
+        course.setSemester(courseRequestDto.getSemester());
+        course.setPriorKnowledge(courseRequestDto.getPriorKnowledge());
+        course.setEstimatedDurationMinutes(courseRequestDto.getEstimatedDurationMinutes());
+
+        // Actualizar relaciones
+        if (courseRequestDto.getCategoryId() != null) {
+            Category category = categoryRepository.findById(courseRequestDto.getCategoryId())
+                    .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+            course.setCategory(category);
+        }
+
+        if (courseRequestDto.getUserId() != null) {
+            User profesor = userRepository.findById(courseRequestDto.getUserId())
+                    .orElseThrow(() -> new IllegalArgumentException("Profesor no encontrado"));
+            course.setUser(profesor);
+        }
+
+        if (courseRequestDto.getCurrentStatusId() != null) {
+            CurrentStatus currentStatus = currentStatusRepository.findById(courseRequestDto.getCurrentStatusId())
+                    .orElseThrow(() -> new IllegalArgumentException("Estado actual no encontrado"));
+            course.setCurrentStatus(currentStatus);
+        }
+
+        if (courseRequestDto.getAuditStatusId() != null) {
+            AuditStatus auditStatus = auditStatusRepository.findById(courseRequestDto.getAuditStatusId())
+                    .orElseThrow(() -> new IllegalArgumentException("Estado de auditoría no encontrado"));
+            course.setAuditStatus(auditStatus);
+        }
+
+        // Portada (subir nueva si se envía)
+        if (courseRequestDto.getCoverUrl() != null && !courseRequestDto.getCoverUrl().isEmpty()) {
+            Map uploadResult = cloudinaryService.uploadFile(courseRequestDto.getCoverUrl());
+            String imageUrl = (String) uploadResult.get("secure_url");
+            course.setCoverUrl(imageUrl);
+        }
+
+        // Guardar cambios
+        Course updated = courseRepository.save(course);
+        courseEventUtil.registerEvent(
+                updated,
+                null,
+                null,
+                null,
+                updated.getUser(),
+                EnumCourseEventType.COURSE_UPDATED,
+                "Se actualizó el curso: " + updated.getTitle()
+        );
+
+        return ResponseEntity.ok(courseMapper.toResponseDto(updated));
+    }
+
+    @Override
+    public ResponseEntity<?> deleteCourse(Long courseId) throws Exception {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado"));
+
+        Date now = new Date();
+        course.setState(EnumState.DELETED);
+        course.setDeletedAt(now);
+        course.setUpdatedAt(now);
+
+        courseRepository.save(course);
+        courseEventUtil.registerEvent(
+                course,
+                null,
+                null,
+                null,
+                course.getUser(),
+                EnumCourseEventType.COURSE_DELETED,
+                "Se eliminó el curso: " + course.getTitle()
+        );
+
+        return BaseResponse.response("Curso eliminado correctamente", "SUCCESS");
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> updateStatusAudit(long courseId) throws Exception {
+        Optional<Course> isExintgCourse = courseRepository.findById(courseId);
+        if (!isExintgCourse.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontró el curso proporcionado");
+        }
+        Optional<AuditStatus> existingAuditStatus = auditStatusRepository.findByName("En-revision");
+        AuditStatus auditStatus;
+        if (existingAuditStatus.isPresent()) {
+            auditStatus = existingAuditStatus.get();
+        } else {
+            auditStatus = new AuditStatus();
+            auditStatus.setName("En-revision");
+            auditStatus.setDescription("Significa que el curso se encuentra en revisión por auditoría");
+            auditStatus = auditStatusRepository.save(auditStatus);
+        }
+        Course course = isExintgCourse.get();
+        course.setAuditStatus(auditStatus);
+        course = courseRepository.save(course);
+        // Ahora toResponseDto puede acceder a todas las relaciones lazy
+        return ResponseEntity.ok(courseMapper.toResponseDto(course));
+    }
+
+    @Override
+    public ResponseEntity<?> searchCoursesByid(long id) {
+        Optional<Course> isExintgCourse = courseRepository.findByIdWithRelations(id);
+        if (!isExintgCourse.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontró el curso proporcionado");
+        }
+        Course course = isExintgCourse.get();
+        return ResponseEntity.ok(courseMapper.toResponseDto(course));
+    }
+
 
 }
