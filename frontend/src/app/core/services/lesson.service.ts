@@ -22,6 +22,7 @@ export class LessonService {
   constructor(private http: HttpClient) {}
 
   getLessonsByModule(moduleId: number): Observable<LessonResponseDto[]> {
+
     return this.http.get<LessonResponseDto[]>(`${this.apiUrl}/module/${moduleId}`);
   }
 
@@ -31,8 +32,7 @@ export class LessonService {
       lessonData,
       {withCredentials: true}
 
-    );
-  }
 
+)}
 
 }
