@@ -22,8 +22,6 @@ export class LessonService {
   constructor(private http: HttpClient) {}
 
   getLessonsByModule(moduleId: number): Observable<LessonResponseDto[]> {
-<<<<<<< Updated upstream
-
     return this.http.get<LessonResponseDto[]>(`${this.apiUrl}/module/${moduleId}`);
   }
 
@@ -35,25 +33,5 @@ export class LessonService {
 
 
 )}
-=======
-    return this.http.get<LessonResponseDto[]>(
-      `${this.apiUrl}/module/${moduleId}`,
-      { withCredentials: true }
-    );
-  }
-
-
-  createLesson(lessonData: any): Observable<LessonResponseDto> {
-  console.log("📤 Payload final:", lessonData);
-  return this.http.post<LessonResponseDto>(
-    this.apiUrl,
-    lessonData,
-    {
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true
-    }
-  );
-}
->>>>>>> Stashed changes
 
 }
