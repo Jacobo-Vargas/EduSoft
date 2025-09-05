@@ -1,1 +1,30 @@
 <h1>✅ ¡Entraste a LessonComponent!</h1>
+<div class="lesson-container">
+    <!-- Columna izquierda -->
+    <div class="lesson-list">
+        <h3>Mis Lecciones</h3>
+
+        <div *ngIf="loading">Cargando lecciones...</div>
+        <div *ngIf="error" class="error">{{ error }}</div>
+
+        <ul *ngIf="!loading && lessons.length > 0">
+            <li *ngFor="let lesson of lessons">
+                <strong>{{ lesson.name }}</strong>
+                <p>{{ lesson.description }}</p>
+            </li>
+        </ul>
+
+
+        <div *ngIf="!loading && lessons.length === 0">
+            <p>No tienes lecciones creadas.</p>
+        </div>
+    </div>
+
+    <!-- Columna derecha -->
+    <div class="lesson-actions">
+        <h3>Acciones</h3>
+        <button [routerLink]="['/modules', moduleId, 'lessons', 'create']">
+            ➕ Crear Lección
+        </button>
+    </div>
+</div>

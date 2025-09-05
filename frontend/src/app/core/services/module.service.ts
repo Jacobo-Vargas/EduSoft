@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
+const API = environment.urlServer;
 export interface ModuleResponseDto {
   id: number;
   name: string;
@@ -16,7 +18,8 @@ export interface ModuleResponseDto {
   providedIn: 'root'
 })
 export class ModuleService {
-  private apiUrl = 'https://localhost:8443/api/modules';
+
+  private apiUrl = `${API}/modules`;
 
   constructor(private http: HttpClient) {}
 
