@@ -7,6 +7,7 @@ import com.uniquindio.edu.edusoft.service.CurrentStatusService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class CurrentStatusController {
 
     // Crear un nuevo estado
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> createCurrentStatus(
             @Valid @RequestBody CurrentStatusRequestDto dto) {
        CurrentStatusResponseDto result = currentStatusService.createCurrentStatus(dto);
@@ -34,18 +36,21 @@ public class CurrentStatusController {
 
     // Obtener todos los estados
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<CurrentStatusResponseDto>> getAllCurrentStatuses() {
         return ResponseEntity.ok(currentStatusService.getAllCurrentStatuses());
     }
 
     // Obtener estado por ID
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CurrentStatusResponseDto> getCurrentStatusById(@PathVariable Long id) {
         return ResponseEntity.ok(currentStatusService.getCurrentStatusById(id));
     }
 
     // Actualizar un estado
     @PutMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CurrentStatusResponseDto> updateCurrentStatus(
             @PathVariable Long id, @Valid @RequestBody CurrentStatusRequestDto dto) {
         return ResponseEntity.ok(currentStatusService.updateCurrentStatus(id, dto));
@@ -53,6 +58,7 @@ public class CurrentStatusController {
 
     // Eliminar un estado
     @DeleteMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> deleteCurrentStatus(@PathVariable Long id) {
         currentStatusService.deleteCurrentStatus(id);
         return ResponseEntity.noContent().build();
