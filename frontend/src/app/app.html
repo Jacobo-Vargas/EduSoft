@@ -1,6 +1,8 @@
 <div class="flex flex-col min-h-screen">
   <!-- Navbar -->
   <!-- <app-navbar></app-navbar> -->
+     <!-- Navbar -->
+  <app-navbar *ngIf="userInfo.loggedIn$ "></app-navbar>
 
   <!-- Contenido dinámico -->
   <main class="flex-1 p-10 bg-gray-100">

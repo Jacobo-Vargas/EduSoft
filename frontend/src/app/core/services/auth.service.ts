@@ -51,7 +51,7 @@ export class AuthService {
 
   /** POST /api/auth/login */
   login(body: LoginRequestDTO): Observable<AuthResponseDTO> {
-  return this.http.post<AuthResponseDTO>(`${API}/auth/login`, body, {
+  return this.http.post<AuthResponseDTO>(`${API}/login`, body, {
     withCredentials: true
   }).pipe(
     map(res => {

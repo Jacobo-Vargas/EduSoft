@@ -18,7 +18,7 @@
         <div class="mb-3">
           <label for="title" class="form-label text-white">Título del curso*</label>
           <input type="text" id="title" formControlName="title" class="form-control"
-                 placeholder="Ej: Curso de Java desde Cero" />
+            placeholder="Ej: Curso de Java desde Cero" />
           <div class="text-danger" *ngIf="f['title']?.touched && f['title']?.invalid">
             El título es obligatorio
           </div>
@@ -27,7 +27,7 @@
         <div class="mb-3">
           <label for="description" class="form-label text-white">Descripción*</label>
           <input type="text" id="description" formControlName="description" class="form-control"
-                 placeholder="Descripción del curso" />
+            placeholder="Descripción del curso" />
           <div class="text-danger" *ngIf="f['description']?.touched && f['description']?.invalid">
             La descripción es obligatoria
           </div>
@@ -43,8 +43,8 @@
 
         <div class="mb-3">
           <label for="price" class="form-label text-white">Precio (COP)*</label>
-          <input type="number" id="price" formControlName="price" class="form-control"
-                 placeholder="Ej: 120.50" min="0" step="0.01" />
+          <input type="number" id="price" formControlName="price" class="form-control" placeholder="Ej: 120.50" min="0"
+            step="0.01" />
           <div class="text-danger" *ngIf="f['price']?.touched && f['price']?.invalid">
             El precio es obligatorio y debe ser mayor o igual a 0
           </div>
@@ -55,16 +55,22 @@
       <div class="col-md-6">
         <div class="mb-3">
           <label for="formFile" class="form-label text-white">Portada*</label>
-          <input class="form-control" type="file" id="formFile" (change)="onFileSelected($event)">
-          <div class="text-danger" *ngIf="!selectedFile && f['coverUrl']?.touched">
-            La portada es obligatoria
-          </div>
+          <input class="form-control" type="file" id="formFile" accept="image/png,image/jpeg"
+            (change)="onFileSelected($event)" />
+
+          <!-- Mensaje opcional -->
+          <small class="text-muted">
+            La imagen se ajustará automáticamente a 800×600 y ≤ 300 KB.
+          </small>
+
+          <div class="text-danger mt-1" *ngIf="imageError">{{ imageError }}</div>
+
         </div>
 
         <div class="mb-3">
           <label for="semester" class="form-label text-white">Semestre*</label>
-          <input type="number" id="semester" formControlName="semester" class="form-control"
-                 placeholder="Ej: 1" min="0" />
+          <input type="number" id="semester" formControlName="semester" class="form-control" placeholder="Ej: 1"
+            min="0" />
           <div class="text-danger" *ngIf="f['semester']?.touched && f['semester']?.invalid">
             El semestre es obligatorio y debe ser mayor o igual a 0
           </div>
@@ -75,13 +81,13 @@
             Conocimientos previos <span *ngIf="isPriorKnowledgeRequired">*</span>
           </label>
           <input type="text" id="priorKnowledge" formControlName="priorKnowledge" class="form-control"
-                 placeholder="Ej: Conocimientos básicos de lógica de programación" />
+            placeholder="Ej: Conocimientos básicos de lógica de programación" />
           <div class="text-danger"
-               *ngIf="isPriorKnowledgeRequired && f['priorKnowledge']?.touched && f['priorKnowledge']?.hasError('required')">
+            *ngIf="isPriorKnowledgeRequired && f['priorKnowledge']?.touched && f['priorKnowledge']?.hasError('required')">
             Este campo es obligatorio cuando el semestre es distinto de 0
           </div>
           <div class="text-danger"
-               *ngIf="isPriorKnowledgeRequired && f['priorKnowledge']?.touched && f['priorKnowledge']?.hasError('minlength')">
+            *ngIf="isPriorKnowledgeRequired && f['priorKnowledge']?.touched && f['priorKnowledge']?.hasError('minlength')">
             Debe tener al menos 3 caracteres
           </div>
         </div>
@@ -89,9 +95,9 @@
         <div class="mb-3">
           <label for="estimatedDurationMinutes" class="form-label text-white">Duración estimada (minutos)*</label>
           <input type="number" id="estimatedDurationMinutes" formControlName="estimatedDurationMinutes"
-                 class="form-control" placeholder="Ej: 480" min="1" />
+            class="form-control" placeholder="Ej: 480" min="1" />
           <div class="text-danger"
-               *ngIf="f['estimatedDurationMinutes']?.touched && f['estimatedDurationMinutes']?.invalid">
+            *ngIf="f['estimatedDurationMinutes']?.touched && f['estimatedDurationMinutes']?.invalid">
             La duración es obligatoria y debe ser mayor a 0
           </div>
         </div>
