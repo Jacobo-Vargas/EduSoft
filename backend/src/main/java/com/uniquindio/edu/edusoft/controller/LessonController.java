@@ -21,9 +21,8 @@ public class LessonController {
     private final LessonService lessonService;
 
     @PostMapping
-    public ResponseEntity<LessonResponseDto> createLesson(
-            @RequestBody @Valid LessonRequestDto lessonRequestDto,
-            Authentication authentication) throws Exception {
+    public ResponseEntity<LessonResponseDto> createLesson(@RequestBody @Valid LessonRequestDto lessonRequestDto, Authentication authentication) throws Exception {
+        System.out.println("📥 Payload recibido: " + lessonRequestDto);
         String userId = authentication.getName();
         return lessonService.createLesson(lessonRequestDto, userId);
     }

@@ -14,12 +14,27 @@
 
 .form-label {
   color: black !important;
+  font-weight: 500;
+}
+
+.form-control {
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
 .btn-success {
   background-color: #28a745;
   border-color: #28a745;
   color: white;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  transform: scale(1.02);
 }
 
 .btn-custom-outline-sm {
@@ -27,7 +42,7 @@
   border: 2px solid #198754;
   background-color: transparent;
   font-size: 1rem;
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 0.6rem;
   border-radius: 6px;
   transition: all 0.3s ease;
 }
@@ -36,3 +51,10 @@
   background-color: #198754;
   color: #fff;
 }
+
+.text-danger small {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
