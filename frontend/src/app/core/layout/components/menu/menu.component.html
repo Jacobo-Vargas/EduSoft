@@ -6,32 +6,14 @@
 <!-- Sidebar -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="sidebarMenuLabel">Hola, {{ userInfo.userName }}</h5>
+    <h5 class="offcanvas-title" id="sidebarMenuLabel"></h5>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
 
   <div class="offcanvas-body d-flex flex-column p-0">
-    <!-- Menú -->
-    <nav class="nav flex-column">
-      <a class="nav-link d-flex align-items-center px-3 py-2" routerLink="/" data-bs-dismiss="offcanvas">
-        <img src="assets/icons/home.svg" alt="" class="me-2" style="width:24px;"> Inicio
-      </a>
-      <a class="nav-link d-flex align-items-center px-3 py-2" routerLink="/invest" data-bs-dismiss="offcanvas">
-        <img src="assets/icons/invest.svg" alt="" class="me-2" style="width:24px;"> Invertir
-      </a>
-      <a class="nav-link d-flex align-items-center px-3 py-2" routerLink="/investments" data-bs-dismiss="offcanvas">
-        <img src="assets/icons/investments.svg" alt="" class="me-2" style="width:24px;"> Mis Inversiones
-      </a>
-      <a class="nav-link d-flex align-items-center px-3 py-2" routerLink="/help" data-bs-dismiss="offcanvas">
-        <img src="assets/icons/help.svg" alt="" class="me-2" style="width:24px;"> Ayuda
-      </a>
-      <a class="nav-link d-flex align-items-center px-3 py-2" routerLink="/settings" data-bs-dismiss="offcanvas">
-        <img src="assets/icons/settings.svg" alt="" class="me-2" style="width:24px;"> Configuraciones
-      </a>
-    </nav>
 
     <div class="mt-auto">
-      <a class="nav-link d-flex align-items-center px-3 py-2 text-danger" (click)="userInfo.logout()">
+      <a class="nav-link d-flex align-items-center px-3 py-2 text-danger" (click)="authService.logout()">
         <img src="assets/icons/logout.svg" alt="" class="me-2" style="width:24px;"> Cerrar sesión
       </a>
     </div>

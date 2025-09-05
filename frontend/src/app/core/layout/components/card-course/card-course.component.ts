@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertService } from '../../../services/alert.service';
-import { UserInfoService } from '../../../services/user-info.service';
 
 @Component({
   selector: 'app-card-course',
@@ -18,7 +17,7 @@ export class CardCourseComponent {
   @Input() iconColor!: string;
   @Input() action!: number;
 
-  constructor(public router: Router, public alertService: AlertService,  public userInfoService: UserInfoService) { }
+  constructor(public router: Router, public alertService: AlertService) { }
 
     generateAction() {
     if (this.action === 1) {

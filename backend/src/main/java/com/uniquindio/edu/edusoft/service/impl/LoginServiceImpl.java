@@ -100,13 +100,7 @@ public class LoginServiceImpl implements LoginService {
         userData.put("email", user.getEmail());
         userData.put("name", user.getName());
 
-        ResponseData<Map<String, Object>> response1 = new ResponseData<>(
-                userData, // Los datos del usuario van aquí
-                "Inicio de sesión correcto",
-                "success"
-        );
-
-        return ResponseEntity.ok(response1);
+        return BaseResponse.response(userData, "Inicio de sesión correcto", "success");
     }
 
     @Override

@@ -1,140 +1,105 @@
-/* Contenedor general con la imagen de fondo */
-.fondo {
-  background-image: url('../../../../assets/img/fondo-cafe.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh; /* Ocupa toda la altura de la ventana */
-  width: 100vw;      /* Ocupa todo el ancho de la ventana */
-  position: fixed;   /* Fija el fondo en la ventana */
-  
-}
-.container {
-  max-width: 600px; /* Limita el ancho del formulario */
-  margin: 0 auto; /* Centra el formulario */
 
-}
-
-/* Estilo para la shadowbox */
-.shadowbox {
-  background-color: white; /* Fondo blanco para el formulario */
-  padding: 30px;  /* Añade espacio alrededor del formulario */
-  border-radius: 12px; /* Bordes redondeados */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave alrededor de la caja */
-  margin-top: 20px; /* Separación superior */
-  margin-bottom: 20px; /* Separación inferior */
-}
-
-/* Centrado del título */
-h1.text-center {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 2rem; /* Aumenta el tamaño de la fuente */
-  font-weight: bold; /* Hace el título más prominente */
-}
-
-/* Estilo para el párrafo de explicación */
-p.text-center {
-  font-size: 1rem; /* Ajusta el tamaño de fuente */
-  color: #6c757d; /* Color gris suave para la explicación */
-  line-height: 1.5; /* Espaciado entre líneas para mejor legibilidad */
-  margin-bottom: 30px;
-}
-
-/* Ajuste del botón */
-.btn-outline-success {
-  padding: 12px 25px; /* Ajusta el tamaño del botón */
-  font-size: 16px; /* Aumenta el tamaño de la fuente del botón */
-  border-radius: 8px; /* Bordes redondeados para el botón */
-  transition: background-color 0.3s, border-color 0.3s; /* Efecto de transición */
-  margin-top: 20px;
-}
-
-.btn-outline-success:hover {
-  background-color: #28a745; /* Color de fondo verde cuando se pasa el mouse */
-  border-color: #28a745; /* Cambio del borde al verde */
-  color: white; /* Color del texto en blanco */
-}
-
-/* Campos de formulario con un buen espaciado */
-.form-control {
-  padding: 12px 15px; /* Aumenta el padding para mayor comodidad */
-  font-size: 16px; /* Ajusta el tamaño de fuente para una mejor visualización */
-  border-radius: 8px; /* Bordes redondeados para los campos */
-  transition: border 0.3s; /* Efecto de transición para los campos */
-}
-
-.form-control:focus {
-  border-color: #28a745; /* Cambia el color del borde al verde cuando el campo está enfocado */
-  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Añade una sombra suave */
-}
-
-/* Espaciado entre campos */
-.g-3 .col-sm-9 {
-  margin-bottom: 15px;
-}
-
-.text-danger {
-  color: red; /* Asegura que los errores se muestren en color rojo */
-  font-size: 0.875rem; /* Reduce el tamaño de la fuente para los mensajes de error */
-  margin-top: 5px;
-}
-
-/* Contenedor para el logo a la derecha */
-.logo-container {
-  text-align: right; /* Alinea el logo a la derecha */
-  margin-top: 20px; /* Ajusta el margen superior */
-}
-
-/* Estilo para el logo */
-.logo-uq {
-  width: 150px; /* Establece un tamaño pequeño para el logo */
-}
-
-.verification-code {
-  margin-top: 1rem;
-  text-align: center;
-}
-
-.verification-code label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #333;
-}
-
-.code-inputs {
+/* Accesibilidad */
+.accessibility-controls {
+  position: fixed;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+.accessibility-controls button {
+  background: #004b23;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+  box-shadow: 0 2px 6px rgba(123, 231, 101, 0.2);
+  position: relative;
+  width: auto;
+}
+.accessibility-controls button:hover { background: #228B22; }
+/* Tooltip de accesibilidad */
+.accessibility-controls button::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 110%;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 14px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1001;
+  pointer-events: none;
+}
+.accessibility-controls button::after {
+  content: '';
+  position: absolute;
+  left: 102%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-right-color: #d41f1f;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1001;
+  pointer-events: none;
+}
+.accessibility-controls button:hover::before,
+.accessibility-controls button:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+app-recaptcha{
+  display: block;
+  margin-bottom: 20px;
+}
+
+
+.image-background {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 12px; /* Espacio entre inputs */
+  overflow: hidden;
 }
 
-.code-inputs input {
-  width: 50px;
-  height: 55px;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  outline: none;
-  transition: all 0.2s ease-in-out;
-  background-color: #f9f9f9;
+.image-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: url('/assets/img/fondo-cafe.png') no-repeat center center/cover;
+
+  filter: blur(12px);
+  -webkit-filter: blur(12px);
+
+  z-index: -1;
 }
 
-/* Efecto al hacer foco */
-.code-inputs input:focus {
-  border-color: #198754; /* verde bootstrap */
-  box-shadow: 0 0 6px rgba(25, 135, 84, 0.5);
-  background-color: #fff;
+.background-color-card {
+  background-color: #006400;
 }
 
-/* Validación (campo inválido) */
-.code-inputs input.ng-invalid.ng-touched {
-  border-color: #dc3545; /* rojo bootstrap */
-  background-color: #ffe5e5;
-}
-.btn-custom-outline-sm {
+.person {
   color: #198754;
   border: 2px solid #198754;
   background-color: transparent;
@@ -145,7 +110,7 @@ p.text-center {
   transition: all 0.3s ease;
 }
 
-.btn-custom-outline-sm:hover {
+.person:hover {
   background-color: #198754;
   color: #fff;
 }

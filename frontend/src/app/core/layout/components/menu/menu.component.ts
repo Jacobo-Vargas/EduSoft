@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertService } from '../../../services/alert.service';
 import { CRUDService } from '../../../services/crud.service';
-import { UserInfoService } from '../../../services/user-info.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -13,7 +13,7 @@ import { UserInfoService } from '../../../services/user-info.service';
 export class MenuComponent {
   @Input() crudService!: CRUDService;
 
-  constructor(public userInfo: UserInfoService , public router: Router,private alertService: AlertService){
+  constructor(public router: Router, private alertService: AlertService, public authService: AuthService){
 
   }
 

@@ -2,7 +2,7 @@
   <!-- Navbar -->
   <!-- <app-navbar></app-navbar> -->
      <!-- Navbar -->
-  <app-navbar *ngIf="userInfo.loggedIn$ "></app-navbar>
+  <app-navbar *ngIf="authService.isAuthenticated()"></app-navbar>
 
   <!-- Contenido dinámico -->
   <main class="flex-1 p-10 bg-gray-100">

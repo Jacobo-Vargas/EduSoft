@@ -1,72 +1,88 @@
-<div class="fondo">
-    <div class="container py-5">
-        <div class="shadowbox mx-auto">
-            <button type="button" class="btn btn-custom-outline-sm me-2" (click)="goBack()">
-                <i class="bi bi-arrow-left"></i>
+<section class="vh-100 image-background">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-10 col-md-8 col-lg-6">
+        <div class="card shadow" style="border-radius: 1rem;">
+          <div class="card-body p-4 p-lg-5 text-black">
+
+            <!-- Botón atrás -->
+            <button type="button" class="person me-2" (click)="goBack()">
+              <i class="bi bi-arrow-left"></i>
             </button>
 
-            <h1 class="text-center mb-2" *ngIf="!isCodeSent">Recuperar contraseña</h1>
+            <!-- Título dinámico -->
+            <div class="text-center mb-4">
+              <span class="h1 fw-bold" *ngIf="!isCodeSent">Recuperar contraseña</span>
+              <span class="h1 fw-bold" *ngIf="isCodeSent">Verificar código</span>
 
-            <h1 class="text-center mb-2" *ngIf="isCodeSent">Verificar código</h1>
-
-            <p class="text-center mb-4 text-muted" *ngIf="!isCodeSent">
-                Se validará si hay una cuenta con ese email o teléfono y se enviará un código a esa cuenta.
-            </p>
-
-            <p class="text-center mb-4 text-muted" *ngIf="isCodeSent">
-                Ingrese el código de verificación que hemos enviado a su correo o teléfono.
-            </p>
+              <h5 class="fw-normal mt-2 text-muted" *ngIf="!isCodeSent" style="letter-spacing: 1px;">
+                Se validará si hay una cuenta con ese email o teléfono y se enviará un código.
+              </h5>
+              <h5 class="fw-normal mt-2 text-muted" *ngIf="isCodeSent" style="letter-spacing: 1px;">
+                Ingrese el código de verificación enviado a su correo o teléfono.
+              </h5>
+            </div>
 
             <!-- Alertas -->
             <div *ngIf="errorMsg" class="alert alert-danger mb-3">{{ errorMsg }}</div>
             <div *ngIf="showSuccessMessage" class="alert alert-success mb-3">
-                ✅ Código enviado correctamente
+              ✅ Código enviado correctamente
             </div>
 
-            <form class="row g-3" [formGroup]="userForm" (ngSubmit)="onSubmit()">
-                <!-- Correo/Teléfono -->
-                <div *ngIf="!isCodeSent" class="form-floating mb-3">
-                    <input type="text" id="username" formControlName="username" class="form-control"
-                        placeholder="name@example.com" />
-                    <label for="username">Ingrese el correo o el teléfono</label>
-                    <div class="text-danger" *ngIf="f['username']?.touched && f['username']?.hasError('required')">
-                        El correo o teléfono es obligatorio.
-                    </div>
+            <!-- Formulario -->
+            <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="w-100">
+
+              <!-- Correo/Teléfono -->
+              <div *ngIf="!isCodeSent" class="mb-3">
+                <input type="text" id="username" formControlName="username"
+                  class="form-control form-control-lg"
+                  placeholder="Correo o teléfono *"
+                  [class.is-invalid]="f['username']?.touched && f['username']?.invalid" />
+
+                <div class="invalid-feedback d-block"
+                  *ngIf="f['username']?.touched && f['username']?.hasError('required')">
+                  El correo o teléfono es obligatorio.
+                </div>
+              </div>
+
+              <!-- Código de verificación -->
+              <div *ngIf="isCodeSent" class="mb-3 text-center">
+                <label class="form-label fw-bold mb-2">Código de verificación</label>
+                <div class="d-flex justify-content-center gap-2">
+                  <input type="text" maxlength="1" formControlName="code1" class="form-control text-center"
+                    style="width: 50px;" (input)="autoFocusNext($event, 1)" />
+                  <input type="text" maxlength="1" formControlName="code2" class="form-control text-center"
+                    style="width: 50px;" (input)="autoFocusNext($event, 2)" />
+                  <input type="text" maxlength="1" formControlName="code3" class="form-control text-center"
+                    style="width: 50px;" (input)="autoFocusNext($event, 3)" />
+                  <input type="text" maxlength="1" formControlName="code4" class="form-control text-center"
+                    style="width: 50px;" (input)="autoFocusNext($event, 4)" />
                 </div>
 
-                <!-- Código de verificación -->
-                <div *ngIf="isCodeSent" class="verification-code">
-                    <label>Código de verificación</label>
-                    <div class="code-inputs">
-                        <input type="text" maxlength="1" formControlName="code1" (input)="autoFocusNext($event, 1)" />
-                        <input type="text" maxlength="1" formControlName="code2" (input)="autoFocusNext($event, 2)" />
-                        <input type="text" maxlength="1" formControlName="code3" (input)="autoFocusNext($event, 3)" />
-                        <input type="text" maxlength="1" formControlName="code4" (input)="autoFocusNext($event, 4)" />
-                    </div>
-                    <div class="text-danger"
-                        *ngIf="(f['code1']?.invalid || f['code2']?.invalid || f['code3']?.invalid || f['code4']?.invalid) && formSubmitted">
-                        El código es obligatorio y debe contener 4 dígitos numéricos.
-                    </div>
+                <div class="invalid-feedback d-block mt-2"
+                  *ngIf="(f['code1']?.invalid || f['code2']?.invalid || f['code3']?.invalid || f['code4']?.invalid) && formSubmitted">
+                  El código es obligatorio y debe contener 4 dígitos numéricos.
                 </div>
+              </div>
 
+              <!-- Botones -->
+              <div class="pt-1 mb-3 d-flex justify-content-center">
+                <button type="button" class="btn btn-outline-secondary me-2 w-25" (click)="onReset()" [disabled]="isLoading">
+                  Limpiar
+                </button>
 
-                <!-- Acciones -->
-                <div class="col-12 text-center mt-3">
-                    <button type="button" class="btn btn-outline-secondary me-2" (click)="onReset()"
-                        [disabled]="isLoading">
-                        Limpiar
-                    </button>
+                <button type="submit" class="btn btn-success w-50"
+                  [disabled]="isLoading || (!isCodeSent && f['username'].invalid) || (isCodeSent && userForm.invalid)">
+                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  {{ isCodeSent ? 'Verificar código' : 'Enviar código' }}
+                </button>
+              </div>
 
-
-                    <button type="submit" class="btn btn-success"
-                        [disabled]="isLoading || (!isCodeSent && f['username'].invalid) || (isCodeSent && userForm.invalid)">
-                        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"
-                            aria-hidden="true"></span>
-                        {{ isCodeSent ? 'Verificar código' : 'Enviar código' }}
-                    </button>
-
-                </div>
             </form>
+
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
+</section>

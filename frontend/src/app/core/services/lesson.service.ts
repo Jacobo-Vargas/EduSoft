@@ -27,15 +27,10 @@ export class LessonService {
   }
 
   createLesson(lessonData: any): Observable<LessonResponseDto> {
-    const token = this.authService.getToken();
-    console.log(token);
-    const headers = { Authorization: `Bearer ${token}` };
-
-
     return this.http.post<LessonResponseDto>(
       this.apiUrl,
       lessonData,
-      { headers }
+      {withCredentials: true}
     );
   }
 

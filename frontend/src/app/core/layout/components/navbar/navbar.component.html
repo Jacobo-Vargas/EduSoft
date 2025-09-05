@@ -1,7 +1,11 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
   <div class="container-fluid">
+    <!-- Logo -->
+    <a class="navbar-brand" href="">
+      <img src="../../../../../assets/img/EduSoft-logo.png" alt="EduSoft" height="40">EduSoft
+    </a>
 
-    <!-- Botón hamburguesa -->
+    <!-- Botón hamburguesa móvil -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
       aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -11,10 +15,10 @@
 
       <!-- IZQUIERDA -->
       <div class="d-flex align-items-center">
-        <a class="navbar-brand" href="#">EduSoft</a>
+
         <ul class="navbar-nav mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page">Cursos</a>
+            <a class="nav-link active"[routerLink]="['/teacher']" aria-current="page">Cursos</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" [routerLink]="['/app-create-courses']">Crear Cursos</a>
@@ -38,23 +42,29 @@
         </select>
 
         <!-- Perfil de usuario -->
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" *ngIf="authService.isAuthenticated()">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
               {{ 'nav.user' | translate}}
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
               <li><a class="dropdown-item" routerLink="/perfil">Perfil</a></li>
-              <li><hr class="dropdown-divider"></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
               <li><a class="dropdown-item text-danger" (click)="logout()">
-                {{ 'nav.logout' | translate}}
-              </a></li>
+                  {{ 'nav.logout' | translate}}
+                </a></li>
             </ul>
           </li>
         </ul>
       </div>
 
     </div>
+
   </div>
 </nav>
+
+<!-- Margen para que el contenido no quede debajo del navbar -->
+<div style="height: 70px;"></div>
