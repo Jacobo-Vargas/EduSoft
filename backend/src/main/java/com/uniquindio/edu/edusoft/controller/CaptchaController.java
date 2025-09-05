@@ -1,6 +1,5 @@
 package com.uniquindio.edu.edusoft.controller;
 
-import jakarta.annotation.security.PermitAll;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +19,6 @@ public class CaptchaController {
     private String recaptchaSecret;
 
     @PostMapping("/verify")
-    @PermitAll
     public ResponseEntity<?> verifyCaptcha(@RequestBody Map<String, String> request) {
         String token = request.get("token");
 

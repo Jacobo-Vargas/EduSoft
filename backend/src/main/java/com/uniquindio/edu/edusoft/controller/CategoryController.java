@@ -6,7 +6,6 @@ import com.uniquindio.edu.edusoft.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +19,6 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryRequestDto dto) {
         CategoryResponseDto result = categoryService.createCategory(dto);
         if (result == null) {
@@ -34,13 +32,11 @@ public class CategoryController {
     }
 
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<CategoryResponseDto>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CategoryResponseDto> getCategoryById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
