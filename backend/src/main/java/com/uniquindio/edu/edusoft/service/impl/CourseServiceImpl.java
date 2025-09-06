@@ -7,6 +7,7 @@ import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import com.uniquindio.edu.edusoft.model.mapper.CourseMapper;
 import com.uniquindio.edu.edusoft.repository.*;
 import com.uniquindio.edu.edusoft.service.CourseService;
+import com.uniquindio.edu.edusoft.utils.BaseResponse;
 import com.uniquindio.edu.edusoft.utils.CourseEventUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -257,7 +258,7 @@ public class CourseServiceImpl implements CourseService {
                 "Se eliminó el curso: " + course.getTitle()
         );
 
-        return ResponseEntity.ok("Curso marcado como eliminado en " + course.getDeletedAt());
+        return BaseResponse.response("Curso eliminado correctamente", "SUCCESS");
     }
 
     @Override

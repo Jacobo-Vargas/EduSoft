@@ -41,4 +41,17 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     // Buscar lecciones por curso
     @Query("SELECT l FROM Lesson l JOIN FETCH l.module WHERE l.module.id = :moduleId")
     List<Lesson> findByModuleId(@Param("moduleId") Long moduleId);
+
+    @Query("""
+   SELECT l FROM Lesson l
+   JOIN FETCH l.module m
+   JOIN FETCH m.course c
+   LEFT JOIN FETCH l.contents ct
+   WHERE m.id = :moduleId
+   AND (l.lifecycleStatus = com.uniquindio.edu.edusoft.model.enums.EnumLifecycleStatus.BORRADOR
+        OR l.lifecycleStatus = com.uniquindio.edu.edusoft.model.enums.EnumLifecycleStatus.PUBLICADO)
+   ORDER BY l.displayOrder ASC
+   """)
+    List<Lesson> findActiveLessonsByModuleId(@Param("moduleId") Long moduleId);
+
 }

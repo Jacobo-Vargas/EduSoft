@@ -14,6 +14,7 @@ import com.uniquindio.edu.edusoft.repository.CourseRepository;
 import com.uniquindio.edu.edusoft.repository.ModuleRepository;
 import com.uniquindio.edu.edusoft.repository.UserRepository;
 import com.uniquindio.edu.edusoft.service.ModuleService;
+import com.uniquindio.edu.edusoft.utils.BaseResponse;
 import com.uniquindio.edu.edusoft.utils.CourseEventUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -141,13 +143,13 @@ public class ModuleServiceImpl implements ModuleService {
                 EnumCourseEventType.MODULE_DELETED,
                 "Se eliminó el módulo: " + module.getName()
         );
-        return ResponseEntity.ok("Módulo eliminado correctamente");
+        return BaseResponse.response("Módulo eliminado correctamente", "SUCCESS");
     }
 
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<List<ModuleResponseDto>> getModulesByCourse(Long courseId) throws Exception {
-        List<Module> modules = moduleRepository.findByCourseIdWithCourse(courseId);
+        List<Module> modules = moduleRepository.findActiveModulesByCourseId(courseId);
         return ResponseEntity.ok(moduleMapper.toResponseDtoList(modules));
     }
 

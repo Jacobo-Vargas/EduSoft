@@ -20,7 +20,7 @@ import java.util.List;
 
         List<CurrentStatusResponseDto> toResponseDtoList(List<CurrentStatus> currentStatuses);
 
-       
+
         @Mapping(target = "id", ignore = true) // ignore id for new records
         CurrentStatus toEntity(CurrentStatusRequestDto dto);
     }

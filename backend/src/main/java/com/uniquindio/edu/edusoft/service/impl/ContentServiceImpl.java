@@ -13,6 +13,7 @@ import com.uniquindio.edu.edusoft.repository.LessonRepository;
 import com.uniquindio.edu.edusoft.repository.UserRepository;
 import com.uniquindio.edu.edusoft.service.ContentService;
 import com.uniquindio.edu.edusoft.model.mapper.ContentMapper;
+import com.uniquindio.edu.edusoft.utils.BaseResponse;
 import com.uniquindio.edu.edusoft.utils.CourseEventUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -73,11 +74,14 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     public ResponseEntity<List<ContentResponseDto>> getContentsByLesson(Long lessonId) {
-        List<ContentResponseDto> contents = contentRepository.findByLessonIdOrderByDisplayOrder(lessonId)
+        List<ContentResponseDto> contents = contentRepository.findActiveByLessonId(lessonId)
                 .stream()
                 .map(contentMapper::toResponseDto)
                 .collect(Collectors.toList());
 
+        if (contents.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(contents);
     }
 
@@ -139,7 +143,7 @@ public class ContentServiceImpl implements ContentService {
                 EnumCourseEventType.CONTENT_DELETED,
                 "Se eliminó el contenido: " + content.getTitle()
         );
-        return ResponseEntity.ok("Contenido eliminado");
+        return BaseResponse.response("Contenido eliminado correctamente", "SUCCESS");
     }
 
     private User validateTeacher(String userEmail) {

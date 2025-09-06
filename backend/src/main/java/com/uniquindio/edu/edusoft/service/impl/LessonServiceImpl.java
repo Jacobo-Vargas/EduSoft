@@ -13,6 +13,7 @@ import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.model.mapper.LessonMapper;
 import com.uniquindio.edu.edusoft.repository.*;
 import com.uniquindio.edu.edusoft.service.LessonService;
+import com.uniquindio.edu.edusoft.utils.BaseResponse;
 import com.uniquindio.edu.edusoft.utils.CourseEventUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -136,7 +137,7 @@ public class LessonServiceImpl implements LessonService {
                 EnumCourseEventType.LESSON_DELETED,
                 "Se eliminó la lección: " + lesson.getName()
         );
-        return ResponseEntity.ok("Lección eliminada correctamente");
+        return BaseResponse.response("Lección eliminado correctamente", "SUCCESS");
     }
 
     @Override
@@ -144,10 +145,10 @@ public class LessonServiceImpl implements LessonService {
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new IllegalArgumentException("Módulo no encontrado"));
 
-        List<Lesson> lessons = lessonRepository.findByModuleIdOrderByDisplayOrder(moduleId);
+        List<Lesson> lessons = lessonRepository.findActiveLessonsByModuleId(moduleId);
 
         if (lessons.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204
+            return ResponseEntity.noContent().build();
         }
 
         List<LessonResponseDto> responseDtos = lessonMapper.toResponseDtoList(lessons);

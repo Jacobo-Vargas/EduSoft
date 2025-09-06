@@ -36,25 +36,19 @@ public class ContentController {
     }
 
     @PostMapping("/assign")
-    public ResponseEntity<?> assignContentsToLesson(
-            @RequestBody @Valid ContentAssignmentDto dto,
-            Authentication authentication) throws Exception {
+    public ResponseEntity<?> assignContentsToLesson(@RequestBody @Valid ContentAssignmentDto dto, Authentication authentication) throws Exception {
         String userEmail = authentication.getName();
         return contentService.assignContentsToLesson(dto, userEmail);
     }
 
     @PutMapping("/{contentId}/unassign")
-    public ResponseEntity<?> unassignContent(
-            @PathVariable Long contentId,
-            Authentication authentication) throws Exception {
+    public ResponseEntity<?> unassignContent(@PathVariable Long contentId, Authentication authentication) throws Exception {
         String userEmail = authentication.getName();
         return contentService.unassignContent(contentId, userEmail);
     }
 
     @DeleteMapping("/{contentId}")
-    public ResponseEntity<?> deleteContent(
-            @PathVariable Long contentId,
-            Authentication authentication) throws Exception {
+    public ResponseEntity<?> deleteContent(@PathVariable Long contentId, Authentication authentication) throws Exception {
         String userEmail = authentication.getName();
         return contentService.deleteContent(contentId, userEmail);
     }

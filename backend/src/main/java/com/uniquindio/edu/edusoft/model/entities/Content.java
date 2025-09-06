@@ -1,6 +1,7 @@
 package com.uniquindio.edu.edusoft.model.entities;
 
 import com.uniquindio.edu.edusoft.model.enums.EnumFileType;
+import com.uniquindio.edu.edusoft.model.enums.EnumLifecycleStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -64,5 +65,10 @@ public class Content extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "file_type", nullable = false, length = 20)
     private EnumFileType fileType = EnumFileType.UNKNOWN;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "lifecycle_status", nullable = false)
+    private EnumLifecycleStatus lifecycleStatus = EnumLifecycleStatus.BORRADOR;
 
 }

@@ -65,6 +65,12 @@ button:hover {
   gap: 10px;
 }
 
+.lesson-actions-btn {
+  display: flex;
+  align-items: flex-start;
+}
+
+
 .error {
   color: red;
   font-weight: bold;
