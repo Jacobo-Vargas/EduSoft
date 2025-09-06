@@ -14,7 +14,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             "JOIN FETCH c.user " +
             "JOIN FETCH c.currentStatus " +
             "JOIN FETCH c.auditStatus " +
-            "WHERE c.user.id = :userId")
+            "WHERE c.user.id = :userId AND c.state = 'ACTIVE'")
     List<Course> findByUserIdWithRelations(@Param("userId") Long userId);
 
 

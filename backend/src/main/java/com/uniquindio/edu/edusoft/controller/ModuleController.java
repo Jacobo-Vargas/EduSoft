@@ -36,7 +36,7 @@ public class ModuleController {
         return moduleService.updateModule(moduleId, moduleRequestDto, userId);
     }
 
-    @DeleteMapping("/{moduleId}")
+    @DeleteMapping("/delete/{moduleId}")
     public ResponseEntity<?> deleteModule(
             @PathVariable Long moduleId,
             Authentication authentication) throws Exception {

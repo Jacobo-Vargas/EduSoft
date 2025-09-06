@@ -24,6 +24,7 @@ public interface CourseMapper {
     @Mapping(source = "auditStatus.name", target = "auditStatusName")
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "user.name", target = "userName") // suponiendo que tu entidad User tiene "name"
+    @Mapping(source = "state", target = "state")
     CourseResponseDto toResponseDto(Course course);
 
     List<CourseResponseDto> toResponseDtoList(List<Course> courses);
@@ -34,6 +35,7 @@ public interface CourseMapper {
     @Mapping(source = "auditStatusId", target = "auditStatus.id")
     @Mapping(source = "userId", target = "user.id")
     @Mapping(target = "coverUrl", ignore = true)
+    @Mapping(target = "state", expression = "java( dto.getState() != null ? com.uniquindio.edu.edusoft.model.enums.EnumState.valueOf(dto.getState()) : com.uniquindio.edu.edusoft.model.enums.EnumState.ACTIVE )")
     Course  toEntity(CourseRequestDto dto);
 
 }

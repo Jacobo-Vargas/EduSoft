@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -102,11 +103,11 @@ public class ModuleServiceImpl implements ModuleService {
         User user = validateTeacher(userId);
         Module module = validateModuleOwnership(moduleId, userId);
 
-        // Aplicar soft delete
         module.setLifecycleStatus(EnumLifecycleStatus.ELIMINADO);
+        module.setDeletedAt(new Date());
+        module.setUpdatedAt(new Date());
         moduleRepository.save(module);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Modulo eliminada correctamente");
     }
 
     @Override

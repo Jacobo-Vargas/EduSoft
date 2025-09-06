@@ -24,4 +24,17 @@ public class CourseController {
         return courseService.getCoursesByUser(userId);
     }
 
+    @PutMapping(value = "/update/{courseId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateCourse(
+            @PathVariable Long courseId,
+            @ModelAttribute CourseRequestDto courseRequestDto) throws Exception {
+        return courseService.updateCourse(courseId, courseRequestDto);
+    }
+
+    @DeleteMapping("/delete/{courseId}")
+    public ResponseEntity<?> deleteCourse(@PathVariable Long courseId) throws Exception {
+        return courseService.deleteCourse(courseId);
+    }
+
+
 }

@@ -4,8 +4,17 @@
       <div class="card h-100"> <img [src]="curso.coverUrl" class="card-img-top fixed-img" alt="{{curso.title}}" />
         <div class="card-body">
           <h5 class="card-title">{{ curso.title }}</h5>
-          <p class="card-text"> {{ curso.description || 'Sin descripción' }} </p> <button class="btn btn-primary me-2"
-            (click)="verCurso(curso)"> Ver Curso </button>
+          <p class="card-text">
+            {{ curso.description || 'Sin descripción' }}
+          </p>
+          <button class="btn btn-primary me-2" (click)="verCurso(curso)">
+            Ver Curso
+          </button>
+          <button class="btn btn-danger btn-trash" (click)="eliminarCurso(curso)">
+            <i class="fas fa-trash"></i>
+            <span class="btn-text">Eliminar</span>
+          </button>
+
         </div>
       </div>
     </div>

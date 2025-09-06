@@ -23,7 +23,7 @@ export class ModuleComponent implements OnInit, OnDestroy {
     private moduleService: ModuleService,
     private authService: AuthService,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // obtener el id del curso de la URL
@@ -72,6 +72,21 @@ export class ModuleComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(modulesSub);
+  }
+
+  deleteModule(module: ModuleResponseDto) {
+    if (!confirm(`¿Deseas eliminar el módulo "${module.name}"?`)) return;
+
+    this.moduleService.deleteModule(module.id).subscribe({
+      next: () => {
+        this.modules = this.modules.filter(m => m.id !== module.id);
+        console.log(`Módulo ${module.name} eliminado`);
+      },
+      error: (err) => {
+        console.error('Error eliminando módulo:', err);
+        alert('No se pudo eliminar el módulo');
+      }
+    });
   }
 
   ngOnDestroy(): void {

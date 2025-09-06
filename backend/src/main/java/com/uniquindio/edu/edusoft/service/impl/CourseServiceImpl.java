@@ -2,6 +2,7 @@ package com.uniquindio.edu.edusoft.service.impl;
 
 import com.uniquindio.edu.edusoft.model.dto.course.CourseRequestDto;
 import com.uniquindio.edu.edusoft.model.entities.*;
+import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import com.uniquindio.edu.edusoft.model.mapper.CourseMapper;
 import com.uniquindio.edu.edusoft.repository.*;
 import com.uniquindio.edu.edusoft.service.CourseService;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -145,5 +147,85 @@ public class CourseServiceImpl implements CourseService {
         }
         return message.toString().trim();
     }
+
+    @Override
+    public ResponseEntity<?> updateCourse(Long courseId, CourseRequestDto courseRequestDto) throws Exception {
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        if (optionalCourse.isEmpty()) {
+            return ResponseEntity.badRequest().body("El curso con id " + courseId + " no existe.");
+        }
+
+        Course course = optionalCourse.get();
+
+        // Validar campos
+        String messageValidate = validateFilds(courseRequestDto);
+        if (!messageValidate.isEmpty()) {
+            return ResponseEntity.badRequest().body(messageValidate);
+        }
+
+        // Actualizar campos simples
+        course.setTitle(courseRequestDto.getTitle());
+        course.setDescription(courseRequestDto.getDescription());
+        course.setPrice(courseRequestDto.getPrice());
+        course.setSemester(courseRequestDto.getSemester());
+        course.setPriorKnowledge(courseRequestDto.getPriorKnowledge());
+        course.setEstimatedDurationMinutes(courseRequestDto.getEstimatedDurationMinutes());
+
+        // Actualizar relaciones
+        if (courseRequestDto.getCategoryId() != null) {
+            Category category = categoryRepository.findById(courseRequestDto.getCategoryId())
+                    .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+            course.setCategory(category);
+        }
+
+        if (courseRequestDto.getUserId() != null) {
+            User profesor = userRepository.findById(courseRequestDto.getUserId())
+                    .orElseThrow(() -> new IllegalArgumentException("Profesor no encontrado"));
+            course.setUser(profesor);
+        }
+
+        if (courseRequestDto.getCurrentStatusId() != null) {
+            CurrentStatus currentStatus = currentStatusRepository.findById(courseRequestDto.getCurrentStatusId())
+                    .orElseThrow(() -> new IllegalArgumentException("Estado actual no encontrado"));
+            course.setCurrentStatus(currentStatus);
+        }
+
+        if (courseRequestDto.getAuditStatusId() != null) {
+            AuditStatus auditStatus = auditStatusRepository.findById(courseRequestDto.getAuditStatusId())
+                    .orElseThrow(() -> new IllegalArgumentException("Estado de auditoría no encontrado"));
+            course.setAuditStatus(auditStatus);
+        }
+
+        // Portada (subir nueva si se envía)
+        if (courseRequestDto.getCoverUrl() != null && !courseRequestDto.getCoverUrl().isEmpty()) {
+            Map uploadResult = cloudinaryService.uploadFile(courseRequestDto.getCoverUrl());
+            String imageUrl = (String) uploadResult.get("secure_url");
+            course.setCoverUrl(imageUrl);
+        }
+
+        // Guardar cambios
+        Course updated = courseRepository.save(course);
+
+        return ResponseEntity.ok(courseMapper.toResponseDto(updated));
+    }
+
+    @Override
+    public ResponseEntity<?> deleteCourse(Long courseId) throws Exception {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado"));
+
+        Date now = new Date();
+
+        course.setState(EnumState.DELETED);
+        course.setDeletedAt(now);
+        course.setUpdatedAt(now);
+
+        courseRepository.save(course);
+
+        return ResponseEntity.ok("Curso marcado como eliminado en " + course.getDeletedAt());
+    }
+
+
+
 
 }

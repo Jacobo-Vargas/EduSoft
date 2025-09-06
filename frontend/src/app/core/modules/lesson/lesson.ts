@@ -20,7 +20,7 @@ export class LessonComponent implements OnInit, OnDestroy {
   constructor(
     private lessonService: LessonService,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.moduleId = Number(this.route.snapshot.paramMap.get('moduleId'));
@@ -47,6 +47,22 @@ export class LessonComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(sub);
   }
+
+  deleteLesson(lesson: LessonResponseDto) {
+    if (!confirm(`¿Deseas eliminar la lección "${lesson.name}"?`)) return;
+
+    this.lessonService.deleteLesson(lesson.id).subscribe({
+      next: () => {
+        this.lessons = this.lessons.filter(l => l.id !== lesson.id);
+        console.log(`Lección ${lesson.name} eliminada`);
+      },
+      error: (err) => {
+        console.error('Error eliminando lección:', err);
+        alert('No se pudo eliminar la lección');
+      }
+    });
+  }
+
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());

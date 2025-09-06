@@ -7,17 +7,24 @@
     <div *ngIf="error" class="error">{{ error }}</div>
 
     <ul *ngIf="!loading && modules.length > 0">
-      <li *ngFor="let module of modules">
-        <strong>{{ module.name }}</strong>
-        <p>{{ module.description }}</p>
+      <li *ngFor="let module of modules" class="module-item">
+        <!-- Info del módulo -->
+        <div class="module-info">
+          <strong>{{ module.name }}</strong>
+          <p>{{ module.description }}</p>
 
-        <!-- Botón para ver lecciones -->
-        <button [routerLink]="['/modules', module.id, 'lessons']">
-          Ver lecciones
-        </button>
+          <button [routerLink]="['/modules', module.id, 'lessons']">
+            Ver lecciones
+          </button>
+        </div>
+
+        <div class="module-actions-btn">
+          <button class="btn btn-danger" (click)="deleteModule(module)">
+            🗑 Eliminar
+          </button>
+        </div>
       </li>
     </ul>
-
 
     <div *ngIf="!loading && modules.length === 0">
       <p>No tienes módulos creados.</p>

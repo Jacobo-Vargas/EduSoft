@@ -20,4 +20,5 @@ public class CourseRequestDto {
     private Long currentStatusId;
     private Long auditStatusId;
     private String userId;
+    private String state;
 }

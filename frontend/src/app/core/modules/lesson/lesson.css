@@ -15,21 +15,20 @@
 
 button {
   padding: 10px 15px;
-  background-color: #1976d2;
-  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
+  transition: all 0.3s;
 }
 
 button:hover {
-  background-color: #125ea2;
+  opacity: 0.8;
 }
 
-.error {
-  color: red;
-  font-weight: bold;
+.btn-danger {
+  background-color: #d32f2f;
+  color: white;
 }
 
 .lesson-list ul {
@@ -38,20 +37,35 @@ button:hover {
 }
 
 .lesson-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 15px;
   padding: 10px;
   border-bottom: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
 }
 
-.lesson-list li strong {
+.lesson-info strong {
   display: block;
   font-size: 16px;
-  margin-bottom: 5px;
   color: #333;
 }
 
-.lesson-list li p {
+.lesson-info p {
   margin: 0;
   font-size: 14px;
   color: #555;
+}
+
+.lesson-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
 }

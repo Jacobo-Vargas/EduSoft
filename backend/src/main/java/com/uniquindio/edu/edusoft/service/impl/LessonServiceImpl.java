@@ -7,6 +7,7 @@ import com.uniquindio.edu.edusoft.model.dto.content.ContentAssignmentDto;
 import com.uniquindio.edu.edusoft.model.entities.*;
 import com.uniquindio.edu.edusoft.model.entities.Module;
 import com.uniquindio.edu.edusoft.model.enums.EnumLifecycleStatus;
+import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.model.mapper.LessonMapper;
 import com.uniquindio.edu.edusoft.repository.*;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -97,12 +99,14 @@ public class LessonServiceImpl implements LessonService {
         User user = validateTeacher(userId);
         Lesson lesson = validateLessonOwnership(lessonId, userId);
 
-        // Aplicar soft delete
         lesson.setLifecycleStatus(EnumLifecycleStatus.ELIMINADO);
+        lesson.setDeletedAt(new Date());
+        lesson.setUpdatedAt(new Date());
         lessonRepository.save(lesson);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Lección eliminada correctamente");
     }
+
+
 
     @Override
     public ResponseEntity<List<LessonResponseDto>> getLessonsByModule(Long moduleId) throws Exception {

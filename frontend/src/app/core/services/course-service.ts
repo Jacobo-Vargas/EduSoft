@@ -25,7 +25,7 @@ export interface CategorieResponseDTO {
   description?: string;
   createdAt: string;
 }
-export interface courseRequestDTO{
+export interface courseRequestDTO {
   id: number;
   title: string;
   description: String;
@@ -36,9 +36,9 @@ export interface courseRequestDTO{
   estimatedDurationMinutes: number;
   categoryId: number;
   userId: number;
-} 
+}
 
-export interface courseResponseDTO{
+export interface courseResponseDTO {
   id: number;
   title: string;
   description: String;
@@ -49,44 +49,50 @@ export interface courseResponseDTO{
   estimatedDurationMinutes: number;
   categoryId: number;
   userId: number;
-} 
+}
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class CourseService {
-    constructor(private http: HttpClient) {}  
-  
-  
-    createCategorie(body: CategorieRequestDTO): Observable<AuthResponseDTO> {
+  constructor(private http: HttpClient) { }
+
+
+  createCategorie(body: CategorieRequestDTO): Observable<AuthResponseDTO> {
     return this.http.post<AuthResponseDTO>(`${API}/categories`, body, { withCredentials: true }).pipe(
-    map(res => res)
+      map(res => res)
     );
-     }
+  }
 
-    createStatusCourse(body: currentStatusRequestDTO): Observable<AuthResponseDTO> {
+  createStatusCourse(body: currentStatusRequestDTO): Observable<AuthResponseDTO> {
     return this.http.post<AuthResponseDTO>(`${API}/currentStatuses`, body, { withCredentials: true }).pipe(
-    map(res => res)
+      map(res => res)
     );
-     }
+  }
 
-    createStatusAudi(body: auditStatusRequestDTO): Observable<AuthResponseDTO> {
+  createStatusAudi(body: auditStatusRequestDTO): Observable<AuthResponseDTO> {
     return this.http.post<AuthResponseDTO>(`${API}/audiStatus/createAudiStatus`, body, { withCredentials: true }).pipe(
-    map(res => res)
+      map(res => res)
     );
-     }
+  }
 
-      getCategories(): Observable<CategorieResponseDTO[]> {
+  getCategories(): Observable<CategorieResponseDTO[]> {
     return this.http.get<CategorieResponseDTO[]>(`${API}/categories`, { withCredentials: true });
   }
 
-  createCourse(body: FormData):Observable<AuthResponseDTO> {
+  createCourse(body: FormData): Observable<AuthResponseDTO> {
     return this.http.post<AuthResponseDTO>(`${API}/course/save`, body, { withCredentials: true }).pipe(
-    map(res => res)
+      map(res => res)
     );
   }
 
+  deleteCourse(courseId: number): Observable<any> {
+    return this.http.delete<any>(`${API}/course/delete/${courseId}`, { withCredentials: true });
+  }
+
+
   getCoursesByUser(userId: number): Observable<courseResponseDTO[]> {
-  return this.http.get<courseResponseDTO[]>(`${API}/course/user/${userId}`, { withCredentials: true });
-}}
+    return this.http.get<courseResponseDTO[]>(`${API}/course/user/${userId}`, { withCredentials: true });
+  }
+}

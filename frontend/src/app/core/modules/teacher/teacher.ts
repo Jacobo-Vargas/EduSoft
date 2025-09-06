@@ -116,4 +116,19 @@ export class TeacherComponent implements OnInit, OnDestroy {
     });
   }
 
+  eliminarCurso(curso: courseResponseDTO) {
+  if (confirm(`¿Deseas eliminar el curso "${curso.title}"?`)) {
+    this.courseService.deleteCourse(curso.id).subscribe({
+      next: () => {
+        this.cursos = this.cursos.filter(c => c.id !== curso.id);
+        console.log("Curso eliminado:", curso.id);
+      },
+      error: (err) => console.error("Error eliminando curso:", err)
+    });
+  }
+}
+
+
+  
+
 }

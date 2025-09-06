@@ -21,12 +21,12 @@ export class ModuleService {
 
   private apiUrl = `${API}/modules`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getModulesByCourse(courseId: number): Observable<ModuleResponseDto[]> {
     const url = `${this.apiUrl}/course/${courseId}`;
     console.log('🔗 URL completa:', url);
-    
+
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -47,4 +47,9 @@ export class ModuleService {
 
     return this.http.post(`${this.apiUrl}`, payload, httpOptions);
   }
+
+  deleteModule(moduleId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete/${moduleId}`, { withCredentials: true });
+  }
+
 }

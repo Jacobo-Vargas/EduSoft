@@ -36,7 +36,7 @@ public class LessonController {
         return lessonService.updateLesson(lessonId, lessonRequestDto, userId);
     }
 
-    @DeleteMapping("/{lessonId}")
+    @DeleteMapping("/delete/{lessonId}")
     public ResponseEntity<?> deleteLesson(
             @PathVariable Long lessonId,
             Authentication authentication) throws Exception {
