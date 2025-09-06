@@ -16,4 +16,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             "JOIN FETCH c.auditStatus " +
             "WHERE c.user.id = :userId")
     List<Course> findByUserIdWithRelations(@Param("userId") Long userId);
+
+
+    Boolean existsByTitleIgnoreCase(String name);
 }

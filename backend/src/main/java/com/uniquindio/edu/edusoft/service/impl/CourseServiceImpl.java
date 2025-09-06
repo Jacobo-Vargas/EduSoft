@@ -6,6 +6,7 @@ import com.uniquindio.edu.edusoft.model.mapper.CourseMapper;
 import com.uniquindio.edu.edusoft.repository.*;
 import com.uniquindio.edu.edusoft.service.CourseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
@@ -34,6 +35,9 @@ public class CourseServiceImpl implements CourseService {
         }
         // Mapear DTO → Entity
         Course course = courseMapper.toEntity(courseRequestDto);
+        if (courseRepository.existsByTitleIgnoreCase(course.getTitle())) {
+            throw new IllegalArgumentException("El título ingresado ya ha sido registrado en otro curso");
+        }
         // Validar FK category
         Category category = categoryRepository.findById(courseRequestDto.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
@@ -67,6 +71,9 @@ public class CourseServiceImpl implements CourseService {
             String imageUrl = (String) uploadResult.get("secure_url");
             course.setCoverUrl(imageUrl); // asume que Course tiene campo coverUrl
         }
+        if(course.getPrice()==null){
+            course.setPrice(BigDecimal.ZERO);
+        }
         // Guardar curso
         Course saved = courseRepository.save(course);
         // Retornar respuesta con DTO enriquecido
@@ -76,7 +83,6 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public ResponseEntity<?> getCoursesByUser(Long userId) {
         List<Course> courses = courseRepository.findByUserIdWithRelations(userId);
-
         return ResponseEntity.ok(
                 courses.stream()
                         .map(courseMapper::toResponseDto)
@@ -107,10 +113,10 @@ public class CourseServiceImpl implements CourseService {
         }
 
         // Validar precio
-        if (courseRequestDto.getPrice() == null) {
-            message.append("Debe indicar el precio. ");
-        } else if (courseRequestDto.getPrice().compareTo(BigDecimal.ZERO) < 0) {
-            message.append("El precio no puede ser negativo. ");
+        if(courseRequestDto.getPrice()!= null) {
+            if (courseRequestDto.getPrice().compareTo(BigDecimal.ZERO) < 0) {
+                message.append("El precio no puede ser negativo. ");
+            }
         }
 
         // Validar portada

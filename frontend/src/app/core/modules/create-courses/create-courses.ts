@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CourseService } from '../../services/course-service';
 import { Router } from '@angular/router';
+import { AlertService } from '../../services/alert.service';
 
 export interface CategorieResponseDTO {
   id: number;
@@ -47,7 +48,8 @@ export class CreateCourses implements OnInit {
   constructor(
     public fb: FormBuilder,
     public courseService: CourseService,
-    private router: Router) { }
+    private router: Router,
+    private alertService: AlertService) { }
 
   // === Parámetros configurables ===
   private readonly TARGET_W = 800;
@@ -69,9 +71,8 @@ export class CreateCourses implements OnInit {
     this.courseForm = this.fb.group({
       title: ['', Validators.required], // Título obligatorio
       description: ['', Validators.required], // Descripción obligatoria
-      price: [null, [Validators.required, Validators.min(0)]], // Precio obligatorio y mayor que 0
-
-      semester: [null, [Validators.required, Validators.min(0)]], // Semestre obligatorio y mayor que 0
+      price: [''], // Precio obligatorio y mayor que 0
+      semester: [null, [Validators.required, Validators.min(0), Validators.max(13)]], // Semestre obligatorio y mayor que 0
       priorKnowledge: [''],
       estimatedDurationMinutes: [null, [Validators.required, Validators.min(1)]],
       categoryId: [null, Validators.required] // Duración obligatoria y mayor que 0
@@ -109,7 +110,10 @@ export class CreateCourses implements OnInit {
       Object.values(this.courseForm.controls).forEach(c => c.markAsTouched());
       return;
     }
-    this.isLoading = true; // 👈 Activar spinner
+    this.isLoading = true;
+  if (!this.courseForm.value.price) {
+  this.courseForm.value.price = 0;
+}
 
     const formData = new FormData();
     formData.append('title', this.courseForm.value.title);
@@ -131,8 +135,23 @@ export class CreateCourses implements OnInit {
         setTimeout(() => this.router.navigate(['/teacher']), 2000);
       },
       error: (err) => {
-        this.isLoading = false;
-        console.error('Error al crear el curso:', err);
+        let errorMessage = 'Ha ocurrido un error inesperado.';
+
+        if (err.error?.message) {
+          // Si el backend envió un mensaje claro
+          errorMessage = err.error.message;
+        } else if (err.message) {
+          // Fallback en caso de error de red u otro tipo
+          errorMessage = err.message;
+        }
+
+        // Mostrar en consola (opcional)
+        console.error('Error al registrar curso:', err);
+
+        // Aquí decides cómo mostrarlo (alerta, toast, snackbar, etc.)
+        this.handleCourseError(err);
+        this.alertService.createAlert(errorMessage, 'error', false);
+        this.isLoading = false; // Desactivar spinner
       }
     });
   }
@@ -234,6 +253,24 @@ export class CreateCourses implements OnInit {
 
     // Si no se alcanzó el tamaño, devolvemos el "mejor" intento
     return lastBlob;
+  }
+  private handleCourseError(err: any): void {
+    const status = err?.status;
+    const msg = err?.error?.message || 'Error inesperado';
+
+    let errorMsg: string;
+    if (status === 400) {
+      errorMsg = 'Datos inválidos, revisa los campos.';
+    } else if (status === 404) {
+      errorMsg = 'Recurso no encontrado.';
+    } else if (status === 500) {
+      errorMsg = 'Error en el servidor. Inténtalo más tarde.';
+    } else {
+      errorMsg = msg;
+    }
+
+    this.isLoading = false;
+    this.alertService.createAlert(errorMsg, 'error', false);
   }
 
 
