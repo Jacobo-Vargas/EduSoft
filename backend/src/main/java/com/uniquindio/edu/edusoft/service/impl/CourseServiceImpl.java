@@ -2,10 +2,12 @@ package com.uniquindio.edu.edusoft.service.impl;
 
 import com.uniquindio.edu.edusoft.model.dto.course.CourseRequestDto;
 import com.uniquindio.edu.edusoft.model.entities.*;
+import com.uniquindio.edu.edusoft.model.enums.EnumCourseEventType;
 import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import com.uniquindio.edu.edusoft.model.mapper.CourseMapper;
 import com.uniquindio.edu.edusoft.repository.*;
 import com.uniquindio.edu.edusoft.service.CourseService;
+import com.uniquindio.edu.edusoft.utils.CourseEventUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,7 @@ public class CourseServiceImpl implements CourseService {
     private final AuditStatusRepository auditStatusRepository;
     private final CurrentStatusRepository currentStatusRepository;
     private final CloudinaryService cloudinaryService;
+    private final CourseEventUtil courseEventUtil;
 
     @Override
     public ResponseEntity<?> createCourse(CourseRequestDto courseRequestDto) throws Exception {
@@ -79,6 +82,16 @@ public class CourseServiceImpl implements CourseService {
         }
         // Guardar curso
         Course saved = courseRepository.save(course);
+        courseEventUtil.registerEvent(
+                saved,
+                null,
+                null,
+                null,
+                profesor,
+                EnumCourseEventType.COURSE_CREATED,
+                "Se creó el curso: " + saved.getTitle()
+        );
+
         // Retornar respuesta con DTO enriquecido
         return ResponseEntity.ok(courseMapper.toResponseDto(saved));
     }
@@ -210,6 +223,15 @@ public class CourseServiceImpl implements CourseService {
 
         // Guardar cambios
         Course updated = courseRepository.save(course);
+        courseEventUtil.registerEvent(
+                updated,
+                null,
+                null,
+                null,
+                updated.getUser(),
+                EnumCourseEventType.COURSE_UPDATED,
+                "Se actualizó el curso: " + updated.getTitle()
+        );
 
         return ResponseEntity.ok(courseMapper.toResponseDto(updated));
     }
@@ -220,15 +242,24 @@ public class CourseServiceImpl implements CourseService {
                 .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado"));
 
         Date now = new Date();
-
         course.setState(EnumState.DELETED);
         course.setDeletedAt(now);
         course.setUpdatedAt(now);
 
         courseRepository.save(course);
+        courseEventUtil.registerEvent(
+                course,
+                null,
+                null,
+                null,
+                course.getUser(),
+                EnumCourseEventType.COURSE_DELETED,
+                "Se eliminó el curso: " + course.getTitle()
+        );
 
         return ResponseEntity.ok("Curso marcado como eliminado en " + course.getDeletedAt());
     }
+
     @Override
     @Transactional
     public ResponseEntity<?> updateStatusAudit(long courseId) throws Exception {

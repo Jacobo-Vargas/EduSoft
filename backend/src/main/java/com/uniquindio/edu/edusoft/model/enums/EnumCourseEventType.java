@@ -1,0 +1,20 @@
+package com.uniquindio.edu.edusoft.model.enums;
+
+public enum EnumCourseEventType {
+    COURSE_CREATED,
+    COURSE_UPDATED,
+    COURSE_DELETED,
+    MODULE_CREATED,
+    MODULE_UPDATED,
+    MODULE_DELETED,
+    LESSON_CREATED,
+    LESSON_UPDATED,
+    LESSON_DELETED,
+    CONTENT_CREATED,
+    CONTENT_UPDATED,
+    CONTENT_DELETED,
+    STUDENT_ENROLLED,
+    STUDENT_COMPLETED,
+    STUDENT_COMMENTED
+}
+

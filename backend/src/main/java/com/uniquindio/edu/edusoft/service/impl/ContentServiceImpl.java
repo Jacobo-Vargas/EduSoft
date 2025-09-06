@@ -6,12 +6,14 @@ import com.uniquindio.edu.edusoft.model.dto.content.ContentAssignmentDto;
 import com.uniquindio.edu.edusoft.model.entities.Content;
 import com.uniquindio.edu.edusoft.model.entities.Lesson;
 import com.uniquindio.edu.edusoft.model.entities.User;
+import com.uniquindio.edu.edusoft.model.enums.EnumCourseEventType;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.repository.ContentRepository;
 import com.uniquindio.edu.edusoft.repository.LessonRepository;
 import com.uniquindio.edu.edusoft.repository.UserRepository;
 import com.uniquindio.edu.edusoft.service.ContentService;
 import com.uniquindio.edu.edusoft.model.mapper.ContentMapper;
+import com.uniquindio.edu.edusoft.utils.CourseEventUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,8 @@ public class ContentServiceImpl implements ContentService {
     private final LessonRepository lessonRepository;
     private final UserRepository userRepository;
     private final ContentMapper contentMapper;
+    private final CourseEventUtil courseEventUtil;
+
 
     @Override
     @Transactional
@@ -45,7 +49,15 @@ public class ContentServiceImpl implements ContentService {
         content.setCourse(lesson.getModule().getCourse());
 
         Content saved = contentRepository.save(content);
-
+        courseEventUtil.registerEvent(
+                lesson.getModule().getCourse(),
+                lesson.getModule(),
+                lesson,
+                saved,
+                lesson.getModule().getCourse().getUser(),
+                EnumCourseEventType.CONTENT_CREATED,
+                "Se creó el contenido: " + saved.getTitle()
+        );
         return ResponseEntity.ok(contentMapper.toResponseDto(saved));
     }
 
@@ -118,6 +130,15 @@ public class ContentServiceImpl implements ContentService {
                 .orElseThrow(() -> new IllegalArgumentException("Contenido no encontrado"));
 
         contentRepository.delete(content);
+        courseEventUtil.registerEvent(
+                content.getCourse(),
+                null,
+                null,
+                content,
+                content.getCourse().getUser(),
+                EnumCourseEventType.CONTENT_DELETED,
+                "Se eliminó el contenido: " + content.getTitle()
+        );
         return ResponseEntity.ok("Contenido eliminado");
     }
 

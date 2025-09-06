@@ -6,6 +6,7 @@ import com.uniquindio.edu.edusoft.model.dto.common.ReorderRequestDto;
 import com.uniquindio.edu.edusoft.model.entities.Course;
 import com.uniquindio.edu.edusoft.model.entities.Module;
 import com.uniquindio.edu.edusoft.model.entities.User;
+import com.uniquindio.edu.edusoft.model.enums.EnumCourseEventType;
 import com.uniquindio.edu.edusoft.model.enums.EnumLifecycleStatus;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.model.mapper.ModuleMapper;
@@ -13,6 +14,7 @@ import com.uniquindio.edu.edusoft.repository.CourseRepository;
 import com.uniquindio.edu.edusoft.repository.ModuleRepository;
 import com.uniquindio.edu.edusoft.repository.UserRepository;
 import com.uniquindio.edu.edusoft.service.ModuleService;
+import com.uniquindio.edu.edusoft.utils.CourseEventUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,7 @@ public class ModuleServiceImpl implements ModuleService {
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
     private final ModuleMapper moduleMapper;
+    private final CourseEventUtil courseEventUtil;
 
     @Override
     @Transactional
@@ -65,6 +68,15 @@ public class ModuleServiceImpl implements ModuleService {
         module.setCourse(course);
 
         Module savedModule = moduleRepository.save(module);
+        courseEventUtil.registerEvent(
+                course,
+                savedModule,
+                null,
+                null,
+                user,
+                EnumCourseEventType.MODULE_CREATED,
+                "Se creó el módulo: " + savedModule.getName()
+        );
         return ResponseEntity.ok(moduleMapper.toResponseDto(savedModule));
     }
 
@@ -94,7 +106,18 @@ public class ModuleServiceImpl implements ModuleService {
         }
 
         Module savedModule = moduleRepository.save(module);
+        courseEventUtil.registerEvent(
+                module.getCourse(),
+                savedModule,
+                null,
+                null,
+                user,
+                EnumCourseEventType.MODULE_UPDATED,
+                "Se actualizó el módulo: " + savedModule.getName()
+        );
+
         return ResponseEntity.ok(moduleMapper.toResponseDto(savedModule));
+
     }
 
     @Override
@@ -106,8 +129,19 @@ public class ModuleServiceImpl implements ModuleService {
         module.setLifecycleStatus(EnumLifecycleStatus.ELIMINADO);
         module.setDeletedAt(new Date());
         module.setUpdatedAt(new Date());
+
         moduleRepository.save(module);
-        return ResponseEntity.ok("Modulo eliminada correctamente");
+
+        courseEventUtil.registerEvent(
+                module.getCourse(),
+                module,
+                null,
+                null,
+                user,
+                EnumCourseEventType.MODULE_DELETED,
+                "Se eliminó el módulo: " + module.getName()
+        );
+        return ResponseEntity.ok("Módulo eliminado correctamente");
     }
 
     @Override

@@ -6,12 +6,14 @@ import com.uniquindio.edu.edusoft.model.dto.common.ReorderRequestDto;
 import com.uniquindio.edu.edusoft.model.dto.content.ContentAssignmentDto;
 import com.uniquindio.edu.edusoft.model.entities.*;
 import com.uniquindio.edu.edusoft.model.entities.Module;
+import com.uniquindio.edu.edusoft.model.enums.EnumCourseEventType;
 import com.uniquindio.edu.edusoft.model.enums.EnumLifecycleStatus;
 import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.model.mapper.LessonMapper;
 import com.uniquindio.edu.edusoft.repository.*;
 import com.uniquindio.edu.edusoft.service.LessonService;
+import com.uniquindio.edu.edusoft.utils.CourseEventUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class LessonServiceImpl implements LessonService {
     private final ContentRepository contentRepository;
     private final UserRepository userRepository;
     private final LessonMapper lessonMapper;
+    private final CourseEventUtil courseEventUtil;
 
     @Override
     @Transactional
@@ -61,7 +64,19 @@ public class LessonServiceImpl implements LessonService {
         lesson.setModule(module);
 
         Lesson savedLesson = lessonRepository.save(lesson);
+
+        courseEventUtil.registerEvent(
+                module.getCourse(),
+                module,
+                savedLesson,
+                null,
+                user,
+                EnumCourseEventType.LESSON_CREATED,
+                "Se creó la lección: " + savedLesson.getName()
+        );
+
         return ResponseEntity.ok(lessonMapper.toResponseDto(savedLesson));
+
     }
 
     @Override
@@ -90,6 +105,15 @@ public class LessonServiceImpl implements LessonService {
         }
 
         Lesson savedLesson = lessonRepository.save(lesson);
+        courseEventUtil.registerEvent(
+                lesson.getModule().getCourse(),
+                lesson.getModule(),
+                savedLesson,
+                null,
+                user,
+                EnumCourseEventType.LESSON_UPDATED,
+                "Se actualizó la lección: " + savedLesson.getName()
+        );
         return ResponseEntity.ok(lessonMapper.toResponseDto(savedLesson));
     }
 
@@ -103,10 +127,17 @@ public class LessonServiceImpl implements LessonService {
         lesson.setDeletedAt(new Date());
         lesson.setUpdatedAt(new Date());
         lessonRepository.save(lesson);
+        courseEventUtil.registerEvent(
+                lesson.getModule().getCourse(),
+                lesson.getModule(),
+                lesson,
+                null,
+                user,
+                EnumCourseEventType.LESSON_DELETED,
+                "Se eliminó la lección: " + lesson.getName()
+        );
         return ResponseEntity.ok("Lección eliminada correctamente");
     }
-
-
 
     @Override
     public ResponseEntity<List<LessonResponseDto>> getLessonsByModule(Long moduleId) throws Exception {
