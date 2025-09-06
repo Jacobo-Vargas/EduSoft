@@ -9,6 +9,14 @@
       <h2 class="text-white">Registrar Curso</h2>
     </div>
   </div>
+  <div class="text-danger mt-1" *ngIf="imageError">{{ imageError }}</div>
+
+  <!-- Previsualización -->
+  <div class="mt-3 text-center" *ngIf="previewUrl">
+    <p class="text-white">Previsualización:</p>
+    <img [src]="previewUrl" alt="Previsualización" class="img-fluid rounded shadow"
+      style="max-width: 300px; max-height: 200px;" />
+  </div>
 
   <!-- Un solo formulario -->
   <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
@@ -58,13 +66,9 @@
           <input class="form-control" type="file" id="formFile" accept="image/png,image/jpeg"
             (change)="onFileSelected($event)" />
 
-          <!-- Mensaje opcional -->
           <small class="text-muted">
             La imagen se ajustará automáticamente a 800×600 y ≤ 300 KB.
           </small>
-
-          <div class="text-danger mt-1" *ngIf="imageError">{{ imageError }}</div>
-
         </div>
 
         <div class="mb-3">
@@ -110,6 +114,10 @@
         <button type="submit" [disabled]="courseForm.invalid || !selectedFile" class="btn btn-success w-50">
           Registrar Curso
         </button>
+        <span *ngIf="isLoading">
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          Procesando...
+        </span>
       </div>
     </div>
   </form>
