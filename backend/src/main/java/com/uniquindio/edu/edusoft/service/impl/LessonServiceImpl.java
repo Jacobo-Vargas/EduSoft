@@ -382,7 +382,7 @@ public class LessonServiceImpl implements LessonService {
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new IllegalArgumentException("Lección no encontrada"));
 
-        if (!lesson.getModule().getCourse().getUser().getId().equals(userId)) {
+        if (!lesson.getModule().getCourse().getUser().getEmail().equals(userId)) {
             throw new IllegalArgumentException("No tiene permisos para modificar esta lección");
         }
 

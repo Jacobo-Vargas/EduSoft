@@ -1,5 +1,6 @@
 package com.uniquindio.edu.edusoft.model.entities;
 
+import com.uniquindio.edu.edusoft.model.enums.EnumFileType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -37,11 +38,6 @@ public class Content extends BaseEntity {
     @Column(name = "file_url", length = 1000, nullable = false)
     private String fileUrl;
 
-    @NotBlank
-    @Size(max = 50)
-    @Column(name = "content_type", length = 50, nullable = false)
-    private String contentType; // doc, png, mp4, pdf
-
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
@@ -60,10 +56,13 @@ public class Content extends BaseEntity {
     @Column(name = "is_visible", nullable = false)
     private Boolean isVisible = true;
 
-    @Column(name = "file_size")
-    private Long fileSize;
-
     @Size(max = 10)
     @Column(name = "file_extension", length = 10)
     private String fileExtension;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "file_type", nullable = false, length = 20)
+    private EnumFileType fileType = EnumFileType.UNKNOWN;
+
 }
