@@ -4,6 +4,7 @@
       <div class="card h-100"> <img [src]="curso.coverUrl" class="card-img-top fixed-img" alt="{{curso.title}}" />
         <div class="card-body">
           <h5 class="card-title">{{ curso.title }}</h5>
+          <p class="card-text"><span class="fw-bold">Auditoría:</span> {{ curso.auditStatusName }}</p>
           <p class="card-text">
             {{ curso.description || 'Sin descripción' }}
           </p>

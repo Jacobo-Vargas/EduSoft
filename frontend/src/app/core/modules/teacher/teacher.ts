@@ -1,20 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { CourseService } from '../../services/course-service';
+import { CourseService, courseResponseDTO } from '../../services/course-service';
 import { AuthService, UserData } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
-export interface courseResponseDTO {
-  id: number;
-  title: string;
-  description: String;
-  price: number;
-  coverUrl: String;
-  semester: number;
-  priorKnowledge: String;
-  estimatedDurationMinutes: number;
-  categoryId: number;
-  userId: number;
-}
+
 @Component({
   selector: 'app-teacher',
   templateUrl: './teacher.html',

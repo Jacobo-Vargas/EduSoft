@@ -1,11 +1,16 @@
 package com.uniquindio.edu.edusoft.controller;
 
+import com.uniquindio.edu.edusoft.model.dto.auditStatus.AuditStatusRequestDto;
 import com.uniquindio.edu.edusoft.model.dto.course.CourseRequestDto;
+import com.uniquindio.edu.edusoft.model.entities.Course;
 import com.uniquindio.edu.edusoft.service.CourseService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/course")
@@ -35,6 +40,17 @@ public class CourseController {
     public ResponseEntity<?> deleteCourse(@PathVariable Long courseId) throws Exception {
         return courseService.deleteCourse(courseId);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Course>> searchCourses(@RequestParam String title) throws Exception {
+        return ResponseEntity.ok(courseService.searchCourses(title));
+    }
+
+    @PutMapping("/updateCourseAuditStatus/{courseId}")
+    public ResponseEntity<?> updateCourseStatusAudit(@PathVariable Long courseId) throws Exception {
+        return this.courseService.updateStatusAudit(courseId);
+    }
+
 
 
 }

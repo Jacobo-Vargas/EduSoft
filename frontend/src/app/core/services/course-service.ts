@@ -49,6 +49,7 @@ export interface courseResponseDTO {
   estimatedDurationMinutes: number;
   categoryId: number;
   userId: number;
+  auditStatusName: string;
 }
 
 @Injectable({
@@ -95,4 +96,16 @@ export class CourseService {
   getCoursesByUser(userId: number): Observable<courseResponseDTO[]> {
     return this.http.get<courseResponseDTO[]>(`${API}/course/user/${userId}`, { withCredentials: true });
   }
+
+  searchCourses(title: string): Observable<courseResponseDTO[]> {
+    return this.http.get<any[]>(`${API}/search?title=${title}`, { withCredentials: true });
+  }
+  setStatusAudit(courseId: number): Observable<courseResponseDTO> {
+    return this.http.put<courseResponseDTO>(
+        `${API}/course/updateCourseAuditStatus/${courseId}`,
+        null,  // body vacío
+        { withCredentials: true }  // opciones
+    );
+}
+
 }

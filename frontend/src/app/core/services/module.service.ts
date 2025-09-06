@@ -52,4 +52,6 @@ export class ModuleService {
     return this.http.delete(`${this.apiUrl}/delete/${moduleId}`, { withCredentials: true });
   }
 
+  
+
 }

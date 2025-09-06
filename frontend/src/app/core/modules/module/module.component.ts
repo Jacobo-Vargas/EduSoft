@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ModuleService, ModuleResponseDto } from '../../services/module.service';
 import { AuthService, UserData } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
+import { CourseService } from '../../services/course-service';
 
 @Component({
   selector: 'app-module',
@@ -11,6 +12,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./module.component.css']
 })
 export class ModuleComponent implements OnInit, OnDestroy {
+
   modules: ModuleResponseDto[] = [];
   loading = true;
   error: string | null = null;
@@ -19,10 +21,12 @@ export class ModuleComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
+
   constructor(
     private moduleService: ModuleService,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private couserService: CourseService
   ) { }
 
   ngOnInit(): void {
@@ -92,5 +96,19 @@ export class ModuleComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     console.log('🧹 Liberando suscripciones en ModuleComponent');
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  submitForAudit() {
+    if (!confirm(`¿Deseas enviar el curso a auditoria ?`)) return;
+   this.couserService.setStatusAudit(this.courseId).subscribe({
+      next: (res) => {
+        console.log('✅ Curso enviado a auditoria:', res);
+        alert('Curso enviado a auditoria exitosamente');
+      },
+      error: (err) => {
+        console.error('❌ Error enviando curso a auditoria:', err);
+        alert('No se pudo enviar el curso a auditoria');
+      }
+    });
   }
 }

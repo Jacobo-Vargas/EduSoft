@@ -6,6 +6,7 @@ import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import com.uniquindio.edu.edusoft.model.mapper.CourseMapper;
 import com.uniquindio.edu.edusoft.repository.*;
 import com.uniquindio.edu.edusoft.service.CourseService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,6 +91,10 @@ public class CourseServiceImpl implements CourseService {
                         .map(courseMapper::toResponseDto)
                         .toList()
         );
+    }
+
+    public List<Course> searchCourses(String title) {
+        return courseRepository.findByTitleContainingIgnoreCase(title);
     }
 
     public String validateFilds(CourseRequestDto courseRequestDto){
@@ -224,8 +229,31 @@ public class CourseServiceImpl implements CourseService {
 
         return ResponseEntity.ok("Curso marcado como eliminado en " + course.getDeletedAt());
     }
+    @Override
+    @Transactional
+    public ResponseEntity<?> updateStatusAudit(long courseId) throws Exception {
+        Optional<Course> isExintgCourse = courseRepository.findById(courseId);
+        if (!isExintgCourse.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontró el curso proporcionado");
+        }
+        Optional<AuditStatus> existingAuditStatus = auditStatusRepository.findByName("En-revision");
+        AuditStatus auditStatus;
+        if (existingAuditStatus.isPresent()) {
+            auditStatus = existingAuditStatus.get();
+        } else {
+            auditStatus = new AuditStatus();
+            auditStatus.setName("En-revision");
+            auditStatus.setDescription("Significa que el curso se encuentra en revisión por auditoría");
+            auditStatus = auditStatusRepository.save(auditStatus);
+        }
+        Course course = isExintgCourse.get();
+        course.setAuditStatus(auditStatus);
+        course = courseRepository.save(course);
 
-
+        // Ahora toResponseDto puede acceder a todas las relaciones lazy
+        return ResponseEntity.ok(courseMapper.toResponseDto(course));
+    }
 
 
 }

@@ -17,6 +17,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             "WHERE c.user.id = :userId AND c.state = 'ACTIVE'")
     List<Course> findByUserIdWithRelations(@Param("userId") Long userId);
 
+    List<Course> findByTitleContainingIgnoreCase(String title);
 
     Boolean existsByTitleIgnoreCase(String name);
+
+    Course findByTitleIgnoreCase(String title);
 }
