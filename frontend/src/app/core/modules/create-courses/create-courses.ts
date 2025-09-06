@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CourseService } from '../../services/course-service';
 import { Router } from '@angular/router';
@@ -36,6 +36,10 @@ export interface courseRequestDTO {
 })
 
 export class CreateCourses implements OnInit {
+
+  @Input() tituloFormulario: string = 'Registrar Curso';
+  @Input() textoBoton: string = 'Registrar Curso';
+
   courseForm!: FormGroup; // Definimos el formulario
   showSuccessMessage: any;
   categories: CategorieResponseDTO[] = [];
@@ -62,10 +66,13 @@ export class CreateCourses implements OnInit {
 
   ngOnInit(): void {
 
+    
+
     this.courseService.getCategories().subscribe({
       next: (cats) => this.categories = cats,
       error: () => {/* manejar error */ }
     });
+    
 
     // Inicializamos el formulario con FormBuilder y los validadores necesarios
     this.courseForm = this.fb.group({

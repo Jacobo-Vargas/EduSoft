@@ -15,4 +15,5 @@ public interface CourseService {
     ResponseEntity<?> deleteCourse(Long courseId) throws Exception;
     public List<Course> searchCourses(String title)throws Exception;
     ResponseEntity<?> updateStatusAudit(long courseId)throws Exception;
+    ResponseEntity<?> searchCoursesByid(long id);
 }

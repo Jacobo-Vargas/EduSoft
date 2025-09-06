@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModuleService, ModuleResponseDto } from '../../services/module.service';
 import { AuthService, UserData } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
-import { CourseService } from '../../services/course-service';
+import { CategorieResponseDTO, courseResponseDTO, CourseService } from '../../services/course-service';
 
 @Component({
   selector: 'app-module',
@@ -18,6 +18,8 @@ export class ModuleComponent implements OnInit, OnDestroy {
   error: string | null = null;
   userData: UserData | null = null;
   courseId!: number;
+  categories: CategorieResponseDTO[] = [];
+  courseData: courseResponseDTO | null = null;
 
   private subscriptions: Subscription[] = [];
 
@@ -26,13 +28,26 @@ export class ModuleComponent implements OnInit, OnDestroy {
     private moduleService: ModuleService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private couserService: CourseService
+    private couserService: CourseService,
+    private courseService: CourseService
   ) { }
 
   ngOnInit(): void {
+     this.courseService.getCategories().subscribe({
+      next: (cats) => this.categories = cats,
+      error: () => {/* manejar error */ }
+    });
     // obtener el id del curso de la URL
     this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
     console.log('📌 courseId obtenido de la URL:', this.courseId);
+
+    this.moduleService.getCourseById(this.courseId).subscribe({
+    next: (course) => {
+      console.log('📌 courseData recibido:', course);
+      this.courseData = course;
+    },
+    error: (err) => console.error('❌ Error obteniendo curso:', err)
+  });
 
     // cargar datos del usuario autenticado
     const userDataSub = this.authService.getUserData().subscribe({

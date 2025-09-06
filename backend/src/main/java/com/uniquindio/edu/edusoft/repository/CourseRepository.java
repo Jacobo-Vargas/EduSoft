@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
@@ -21,5 +22,11 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     Boolean existsByTitleIgnoreCase(String name);
 
-    Course findByTitleIgnoreCase(String title);
+    @Query("SELECT c FROM Course c " +
+            "JOIN FETCH c.category " +
+            "JOIN FETCH c.user " +
+            "JOIN FETCH c.currentStatus " +
+            "JOIN FETCH c.auditStatus " +
+            "WHERE c.id = :id AND c.state = 'ACTIVE'")
+    Optional<Course> findByIdWithRelations(@Param("id") Long id);
 }
