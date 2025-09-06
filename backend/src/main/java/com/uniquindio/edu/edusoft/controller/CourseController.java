@@ -51,6 +51,11 @@ public class CourseController {
         return this.courseService.updateStatusAudit(courseId);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> searchCoursesByid(@PathVariable Long id) throws Exception {
+        return ResponseEntity.ok(courseService.searchCoursesByid(id));
+    }
+
 
 
 }

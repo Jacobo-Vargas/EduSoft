@@ -281,8 +281,18 @@ public class CourseServiceImpl implements CourseService {
         Course course = isExintgCourse.get();
         course.setAuditStatus(auditStatus);
         course = courseRepository.save(course);
-
         // Ahora toResponseDto puede acceder a todas las relaciones lazy
+        return ResponseEntity.ok(courseMapper.toResponseDto(course));
+    }
+
+    @Override
+    public ResponseEntity<?> searchCoursesByid(long id) {
+        Optional<Course> isExintgCourse = courseRepository.findByIdWithRelations(id);
+        if (!isExintgCourse.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontró el curso proporcionado");
+        }
+        Course course = isExintgCourse.get();
         return ResponseEntity.ok(courseMapper.toResponseDto(course));
     }
 
