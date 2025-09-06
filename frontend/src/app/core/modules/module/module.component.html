@@ -35,18 +35,23 @@
   <div class="module-actions">
     <h3>Acciones</h3>
     <!-- Usamos d-grid gap-2 para que los botones tengan separación vertical uniforme -->
-  <div class="d-grid gap-2">
-    <button class="btn btn-primary" [routerLink]="['/modules', courseId, 'create']">
-      ➕ Crear Módulo
-    </button>
+    <div class="d-grid gap-2">
+      <button class="btn btn-primary" [routerLink]="['/modules', courseId, 'create']">
+        ➕ Crear Módulo
+      </button>
 
-    <button class="btn btn-warning" >
-      ✏️ Editar Información
-    </button>
+      <button class="btn btn-warning">
+        ✏️ Editar Información
+      </button>
 
-    <button class="btn btn-success" (click)="submitForAudit()">
-      📤 Enviar a Auditoría
-    </button>
-  </div>
+      <button class="btn btn-info" [routerLink]="['/history', courseId]">
+        📜 Ver Historial
+      </button>
+
+      <button class="btn btn-success" (click)="submitForAudit()">
+        📤 Enviar a Auditoría
+      </button>
+
+    </div>
   </div>
 </div>

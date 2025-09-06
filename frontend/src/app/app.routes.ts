@@ -16,6 +16,7 @@ import { LessonComponent } from './core/modules/lesson/lesson';
 import { CreateLessonComponent } from './core/modules//create-lesson-component/create-lesson-component';
 import { AuditGuard } from './core/guards/AuditGuard';
 import { AuthGuard } from './core/guards/AuthGuard';
+import { History } from './core/modules/history/history';
 import { StudentGuard } from './core/guards/StudentGuard';
 
 export const routes: Routes = [
@@ -32,6 +33,7 @@ export const routes: Routes = [
   { path: 'modules/:moduleId/lessons/create', component: CreateLessonComponent, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'modules/:courseId', component: ModuleComponent, canActivate: [AuthGuard, TeacherGuard]},
   { path: 'modules/:courseId/create', component: CreateModuleComponent, canActivate: [AuthGuard,TeacherGuard] },
+  { path: 'history/:courseId', component: History, canActivate: [AuthGuard, TeacherGuard] },
   { path: '', component: LoginComponent},
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];

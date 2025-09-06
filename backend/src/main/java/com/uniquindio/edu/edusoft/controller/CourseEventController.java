@@ -22,10 +22,11 @@ public class CourseEventController {
     private final CourseEventRepository courseEventRepository;
     private final CourseEventMapper eventMapper;
 
-    @GetMapping("/{courseId}/history")
+    @GetMapping("/courses/{courseId}/history")
     public ResponseEntity<List<CourseEventResponseDto>> getCourseHistory(@PathVariable Long courseId) {
         List<CourseEvent> events = courseEventRepository.findByCourseIdOrderByCreatedAtDesc(courseId);
         return ResponseEntity.ok(eventMapper.toResponseDtoList(events));
     }
+
 }
 
