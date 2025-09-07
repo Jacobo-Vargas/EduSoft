@@ -1,115 +1,121 @@
-<div class="container mt-5 form-container-bg form-container">
-  <button type="button" class="btn btn-custom-outline-sm me-2" (click)="goBack()">
-    <i class="bi bi-arrow-left"></i>
-  </button>
+<div class="container mt-5 form-container-bg">
+  <!-- Cuadro del formulario -->
+  <div class="form-box p-4 rounded shadow-sm bg-white">
+    <!-- Botón de regresar -->
+    <button type="button" class="btn btn-custom-outline-sm me-2 mb-3" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i>
+    </button>
 
-  <div class="row align-items-center">
-    <!-- Título centrado -->
-    <div class="col-12 text-center mb-4">
-      <h2 class="text-white">{{ tituloFormulario }}</h2>
-      <div class="mt-3 text-center py-3" *ngIf="previewUrl">
-        <p class="text-white mb-2">Previsualización:</p>
-        <img [src]="previewUrl" alt="Previsualización" class="img-fluid rounded shadow"
-          style="max-width: 300px; max-height: 200px;" />
-      </div>
-    </div>
-  </div>
-
-  <div class="text-danger mt-1" *ngIf="imageError">{{ imageError }}</div>
-
-  <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
-    <div class="row">
-      <!-- Columna izquierda -->
-      <div class="col-md-6">
-        <div class="mb-3">
-          <label for="title" class="form-label text-white">Título del curso</label>
-          <input type="text" id="title" formControlName="title" class="form-control"
-            placeholder="Ej: Curso de Java desde Cero" />
-          <div class="text-danger" *ngIf="f['title']?.touched && f['title']?.invalid">
-            El título es obligatorio
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="description" class="form-label text-white">Descripción</label>
-          <input type="text" id="description" formControlName="description" class="form-control"
-            placeholder="Descripción del curso" />
-          <div class="text-danger" *ngIf="f['description']?.touched && f['description']?.invalid">
-            La descripción es obligatoria
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="categorie" class="form-label text-white">Categoría</label>
-          <select class="form-select" formControlName="categoryId" [disabled]="!categories.length">
-            <option [ngValue]="null" disabled>Selecciona una categoría</option>
-            <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label for="price" class="form-label text-white">Precio (COP)</label>
-          <input type="number" id="price" formControlName="price" class="form-control" placeholder="Ej: 120.50" min="0"
-            step="0.01" />
-        </div>
-      </div>
-
-      <!-- Columna derecha -->
-      <div class="col-md-6">
-        <div class="mb-3">
-          <label for="formFile" class="form-label text-white">Portada</label>
-          <input class="form-control" type="file" id="formFile" accept="image/png,image/jpeg"
-            (change)="onFileSelected($event)" />
-        </div>
-
-        <div class="mb-3">
-          <label for="semester" class="form-label text-white">Semestre</label>
-          <input type="number" id="semester" formControlName="semester" class="form-control" placeholder="Ej: 1"
-            min="0" />
-          <div class="text-danger" *ngIf="f['semester']?.touched && f['semester']?.invalid">
-            El semestre es obligatorio y debe ser mayor o igual a 0 y menor a 13
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="priorKnowledge" class="form-label text-white">
-            Conocimientos previos <span *ngIf="isPriorKnowledgeRequired">*</span>
-          </label>
-          <input type="text" id="priorKnowledge" formControlName="priorKnowledge" class="form-control"
-            placeholder="Ej: Conocimientos básicos de lógica de programación" />
-          <div class="text-danger"
-            *ngIf="isPriorKnowledgeRequired && f['priorKnowledge']?.touched && f['priorKnowledge']?.hasError('required')">
-            Este campo es obligatorio cuando el semestre es distinto de 0
-          </div>
-          <div class="text-danger"
-            *ngIf="isPriorKnowledgeRequired && f['priorKnowledge']?.touched && f['priorKnowledge']?.hasError('minlength')">
-            Debe tener al menos 3 caracteres
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="estimatedDurationMinutes" class="form-label text-white">Duración estimada (Horas)</label>
-          <input type="number" id="estimatedDurationMinutes" formControlName="estimatedDurationMinutes"
-            class="form-control" placeholder="Ej: 480" min="1" />
-          <div class="text-danger"
-            *ngIf="f['estimatedDurationMinutes']?.touched && f['estimatedDurationMinutes']?.invalid">
-            La duración es obligatoria y debe ser mayor a 0
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Botón centrado -->
-    <div class="row">
+    <!-- Título del formulario -->
+    <div class="row align-items-center">
       <div class="col-12 text-center mb-4">
-        <button type="submit" [disabled]="courseForm.invalid || !selectedFile" class="btn btn-success w-50">
-        {{ textoBoton }}
-        </button>
-        <span *ngIf="isLoading">
-          <span class="spinner-border spinner-border-sm me-2"></span>
-          Procesando...
-        </span>
+        <h2 class="text-black">{{ tituloFormulario }}</h2>
+
+        <div class="mt-3 text-center py-3" *ngIf="previewUrl">
+          <p class="text-black mb-2">Previsualización:</p>
+          <img [src]="previewUrl" alt="Previsualización" class="img-fluid rounded shadow"
+               style="max-width: 300px; max-height: 200px;" />
+        </div>
       </div>
     </div>
-  </form>
+
+    <div class="text-danger mt-1" *ngIf="imageError">{{ imageError }}</div>
+
+    <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
+      <div class="row">
+        <!-- Columna izquierda -->
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="title" class="form-label text-black">Título del curso</label>
+            <input type="text" id="title" formControlName="title" class="form-control"
+                   placeholder="Ej: Curso de Java desde Cero" />
+            <div class="text-danger" *ngIf="f['title']?.touched && f['title']?.invalid">
+              El título es obligatorio
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label text-black">Descripción</label>
+            <input type="text" id="description" formControlName="description" class="form-control"
+                   placeholder="Descripción del curso" />
+            <div class="text-danger" *ngIf="f['description']?.touched && f['description']?.invalid">
+              La descripción es obligatoria
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="categorie" class="form-label text-black">Categoría</label>
+            <select class="form-select" formControlName="categoryId" [disabled]="!categories.length">
+              <option [ngValue]="null" disabled>Selecciona una categoría</option>
+              <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="price" class="form-label text-black">Precio (COP)</label>
+            <input type="number" id="price" formControlName="price" class="form-control"
+                   placeholder="Ej: 120.50" min="0" step="0.01" />
+          </div>
+        </div>
+
+        <!-- Columna derecha -->
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="formFile" class="form-label text-black">Portada</label>
+            <input class="form-control" type="file" id="formFile" accept="image/png,image/jpeg"
+                   (change)="onFileSelected($event)" />
+          </div>
+
+          <div class="mb-3">
+            <label for="semester" class="form-label text-black">Semestre</label>
+            <input type="number" id="semester" formControlName="semester" class="form-control"
+                   placeholder="Ej: 1" min="0" />
+            <div class="text-danger" *ngIf="f['semester']?.touched && f['semester']?.invalid">
+              El semestre es obligatorio y debe ser entre 0 y 13
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="priorKnowledge" class="form-label text-black">
+              Conocimientos previos <span *ngIf="isPriorKnowledgeRequired">*</span>
+            </label>
+            <input type="text" id="priorKnowledge" formControlName="priorKnowledge" class="form-control"
+                   placeholder="Ej: Conocimientos básicos de lógica de programación" />
+            <div class="text-danger"
+                 *ngIf="isPriorKnowledgeRequired && f['priorKnowledge']?.touched && f['priorKnowledge']?.hasError('required')">
+              Este campo es obligatorio cuando el semestre es distinto de 0
+            </div>
+            <div class="text-danger"
+                 *ngIf="isPriorKnowledgeRequired && f['priorKnowledge']?.touched && f['priorKnowledge']?.hasError('minlength')">
+              Debe tener al menos 3 caracteres
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="estimatedDurationMinutes" class="form-label text-black">Duración estimada (Horas)</label>
+            <input type="number" id="estimatedDurationMinutes" formControlName="estimatedDurationMinutes"
+                   class="form-control" placeholder="Ej: 480" min="1" />
+            <div class="text-danger"
+                 *ngIf="f['estimatedDurationMinutes']?.touched && f['estimatedDurationMinutes']?.invalid">
+              La duración es obligatoria y debe ser mayor a 0
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón centrado -->
+      <div class="row">
+        <div class="col-12 text-center mb-4">
+          <button type="submit" [disabled]="courseForm.invalid || !selectedFile"
+                  class="btn btn-success w-50">
+            {{ textoBoton }}
+          </button>
+          <span *ngIf="isLoading">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Procesando...
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>

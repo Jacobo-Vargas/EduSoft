@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CourseService, courseResponseDTO } from '../../services/course-service';
 import { AuthService, UserData } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-teacher',
@@ -13,13 +14,15 @@ import { Subscription } from 'rxjs';
 export class TeacherComponent implements OnInit, OnDestroy {
   cursos: courseResponseDTO[] = [];
   userData: UserData | null = null;
+  loading = false;
 
   private subscriptions: Subscription[] = [];
 
   constructor(
     private router: Router,
     private courseService: CourseService,
-    private authService: AuthService
+    private authService: AuthService,
+    private alertService: AlertService
   ) { }
 
   ngOnInit(): void {
@@ -56,20 +59,22 @@ export class TeacherComponent implements OnInit, OnDestroy {
   }
 
   private loadUserCourses(): void {
-    // Usar el ID real del usuario desde el AuthService
     const userId = this.authService.getCurrentUserId();
     if (!userId) {
       console.error("❌ No se pudo obtener el ID del usuario");
       return;
     }
 
+    this.loading = true;
     const coursesSub = this.courseService.getCoursesByUser(userId).subscribe({
       next: (res) => {
         this.cursos = res;
-        console.log("📚 Cursos cargados:", this.cursos);
+        this.loading = false;
       },
       error: (err) => {
+        this.alertService.createAlert('Error cargando cursos', 'error', false);
         console.error("❌ Error cargando cursos:", err);
+        this.loading = false;
       }
     });
 
@@ -88,6 +93,37 @@ export class TeacherComponent implements OnInit, OnDestroy {
     });
   }
 
+  editarCurso(curso: courseResponseDTO) {
+    this.router.navigate(['/app-edit-course', curso.id], {
+      state: { userData: this.userData, curso }
+    });
+  }
+
+  eliminarCurso(curso: courseResponseDTO) {
+    this.alertService.confirmCustomAlert(
+      `¿Deseas eliminar el curso "${curso.title}"?`,
+      'question',
+      this.alertService.jsonData['alert']?.['btnAccept'] || 'Aceptar',
+      this.alertService.jsonData['alert']?.['btnCancel'] || 'Cancelar'
+    ).then(result => {
+      if (!result.isConfirmed) return;
+
+      this.loading = true;
+      this.courseService.deleteCourse(curso.id).subscribe({
+        next: () => {
+          this.cursos = this.cursos.filter(c => c.id !== curso.id);
+          this.alertService.createAlert(`Curso "${curso.title}" eliminado correctamente`, 'success', false);
+          this.loading = false;
+        },
+        error: (err) => {
+          this.alertService.createAlert('No se pudo eliminar el curso', 'error', false);
+          console.error("Error eliminando curso:", err);
+          this.loading = false;
+        }
+      });
+    });
+  }
+
   getUserDisplayName(): string {
     return this.userData?.name || 'Usuario';
   }
@@ -99,25 +135,4 @@ export class TeacherComponent implements OnInit, OnDestroy {
   getUserRole(): string {
     return this.userData?.userType || '';
   }
-  editarCurso(curso: courseResponseDTO) {
-    this.router.navigate(['/app-edit-course', curso.id], {
-      state: { userData: this.userData, curso }
-    });
-  }
-
-  eliminarCurso(curso: courseResponseDTO) {
-  if (confirm(`¿Deseas eliminar el curso "${curso.title}"?`)) {
-    this.courseService.deleteCourse(curso.id).subscribe({
-      next: () => {
-        this.cursos = this.cursos.filter(c => c.id !== curso.id);
-        console.log("Curso eliminado:", curso.id);
-      },
-      error: (err) => console.error("Error eliminando curso:", err)
-    });
-  }
-}
-
-
-  
-
 }

@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModuleService, ModuleResponseDto } from '../../services/module.service';
+import { ModuleService, ModuleResponseDto, CategorieResponseDTO, courseResponseDTO } from '../../services/module.service';
 import { AuthService, UserData } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
-import { CategorieResponseDTO, courseResponseDTO, CourseService } from '../../services/course-service';
+import { AlertService } from '../../services/alert.service';
+import { CourseService } from '../../services/course-service';
 
 @Component({
   selector: 'app-module',
@@ -14,7 +15,7 @@ import { CategorieResponseDTO, courseResponseDTO, CourseService } from '../../se
 export class ModuleComponent implements OnInit, OnDestroy {
 
   modules: ModuleResponseDto[] = [];
-  loading = true;
+  loading = false;
   error: string | null = null;
   userData: UserData | null = null;
   courseId!: number;
@@ -23,112 +24,125 @@ export class ModuleComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-
   constructor(
     private moduleService: ModuleService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private couserService: CourseService,
     private courseService: CourseService,
-    private router: Router 
+    private router: Router,
+    private alertService: AlertService
   ) { }
 
   ngOnInit(): void {
-     this.courseService.getCategories().subscribe({
-      next: (cats) => this.categories = cats,
-      error: () => {/* manejar error */ }
-    });
-    // obtener el id del curso de la URL
+    this.loading = true;
+
+    // Obtener courseId de la URL
     this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
-    console.log('📌 courseId obtenido de la URL:', this.courseId);
 
-    this.moduleService.getCourseById(this.courseId).subscribe({
-    next: (course) => {
-      console.log('📌 courseData recibido:', course);
-      this.courseData = course;
-    },
-    error: (err) => console.error('❌ Error obteniendo curso:', err)
-  });
+    // Cargar categorías
+    const catSub = this.moduleService.getCategories().subscribe({
+      next: (cats) => this.categories = cats,
+      error: () => { "Error la cargar categorías"}
+    });
+    this.subscriptions.push(catSub);
 
-    // cargar datos del usuario autenticado
+    // Obtener datos del curso
+    const courseSub = this.moduleService.getCourseById(this.courseId).subscribe({
+      next: (course) => {
+        this.courseData = course;
+      },
+      error: (err) => this.handleError('Error obteniendo curso', err)
+    });
+    this.subscriptions.push(courseSub);
+
+    // Cargar datos del usuario autenticado
     const userDataSub = this.authService.getUserData().subscribe({
       next: (userData) => {
-        console.log('📌 userData recibido desde AuthService:', userData);
         this.userData = userData;
 
         if (userData) {
-          console.log('✅ Usuario válido, cargando módulos del curso...');
           this.loadModules();
         } else {
-          this.error = 'No se encontraron datos del usuario';
-          this.loading = false;
-          console.warn('⚠ No se encontraron datos de usuario en AuthService');
+          this.handleError('No se encontraron datos del usuario');
         }
       },
-      error: (err) => {
-        this.error = 'Error obteniendo datos de usuario';
-        this.loading = false;
-        console.error('❌ Error al obtener datos de usuario:', err);
-      }
+      error: (err) => this.handleError('Error obteniendo datos de usuario', err)
     });
-
     this.subscriptions.push(userDataSub);
   }
 
   private loadModules(): void {
-    console.log(`📡 Solicitando módulos para courseId=${this.courseId}`);
+    this.loading = true;
 
     const modulesSub = this.moduleService.getModulesByCourse(this.courseId).subscribe({
       next: (data) => {
-        console.log('✅ Respuesta recibida del backend:', data);
         this.modules = data;
         this.loading = false;
       },
-      error: (err) => {
-        this.error = 'Error al cargar los módulos';
-        this.loading = false;
-        console.error('❌ Error al cargar módulos desde backend:', err);
-      }
+      error: (err) => this.handleError('Error al cargar los módulos', err)
     });
-
     this.subscriptions.push(modulesSub);
   }
 
   deleteModule(module: ModuleResponseDto) {
-    if (!confirm(`¿Deseas eliminar el módulo "${module.name}"?`)) return;
+    this.alertService.confirmCustomAlert(
+      `¿Deseas eliminar el módulo "${module.name}"?`,
+      'question',
+      this.alertService.jsonData['alert']?.['btnAccept'] || 'Aceptar',
+      this.alertService.jsonData['alert']?.['btnCancel'] || 'Cancelar'
+    ).then(result => {
+      if (!result.isConfirmed) return;
 
-    this.moduleService.deleteModule(module.id).subscribe({
-      next: () => {
-        this.modules = this.modules.filter(m => m.id !== module.id);
-        console.log(`Módulo ${module.name} eliminado`);
-      },
-      error: (err) => {
-        console.error('Error eliminando módulo:', err);
-        alert('No se pudo eliminar el módulo');
-      }
+      this.loading = true;
+      const sub = this.moduleService.deleteModule(module.id).subscribe({
+        next: () => {
+          this.modules = this.modules.filter(m => m.id !== module.id);
+          this.alertService.createAlert(
+            `Módulo "${module.name}" eliminado correctamente`,
+            'success',
+            false
+          );
+          this.loading = false;
+        },
+        error: (err) => this.handleError('No se pudo eliminar el módulo', err)
+      });
+      this.subscriptions.push(sub);
     });
-  }
-
-  ngOnDestroy(): void {
-    console.log('🧹 Liberando suscripciones en ModuleComponent');
-    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   submitForAudit() {
-    if (!confirm(`¿Deseas enviar el curso a auditoria ?`)) return;
-   this.couserService.setStatusAudit(this.courseId).subscribe({
-      next: (res) => {
-        console.log('✅ Curso enviado a auditoria:', res);
-        alert('Curso enviado a auditoria exitosamente');
-      },
-      error: (err) => {
-        console.error('❌ Error enviando curso a auditoria:', err);
-        alert('No se pudo enviar el curso a auditoria');
-      }
+    this.alertService.confirmCustomAlert(
+      `¿Deseas enviar el curso a auditoría?`,
+      'question',
+      this.alertService.jsonData['alert']?.['btnAccept'] || 'Aceptar',
+      this.alertService.jsonData['alert']?.['btnCancel'] || 'Cancelar'
+    ).then(result => {
+      if (!result.isConfirmed) return;
+
+      this.loading = true;
+      this.courseService.setStatusAudit(this.courseId).subscribe({
+        next: (res) => {
+          this.alertService.createAlert('Curso enviado a auditoría exitosamente', 'success', false)
+          this.loading = false;
+        },
+        error: (err) => this.handleError('No se pudo enviar el curso a auditoría', err)
+      });
     });
   }
 
+  private handleError(msg: string, err?: any) {
+    const errorMessage = err?.error?.message || msg;
+    this.error = errorMessage;
+    this.alertService.createAlert(errorMessage, 'error', false);
+    console.error('❌', errorMessage, err);
+    this.loading = false;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
   goBack(): void {
-  this.router.navigate(['/teacher']);
-}
+    this.router.navigate(['/teacher']);
+  }
 }
