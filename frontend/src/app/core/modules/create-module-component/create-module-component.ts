@@ -36,12 +36,11 @@ export class CreateModuleComponent implements OnInit {
       return;
     }
 
-    // inicializar formulario
+    // inicializar formulario sin isVisible
     this.moduleForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(120)]],
       description: ['', [Validators.maxLength(800)]],
-      displayOrder: ['', Validators.required],
-      isVisible: [true]
+      displayOrder: ['', Validators.required]
     });
   }
 

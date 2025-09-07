@@ -1,10 +1,13 @@
-<div class="container mt-5 form-container-bg">
-  <!-- Botón de regresar -->
-  <button type="button" class="btn btn-custom-outline-sm me-2" (click)="goBack()">
-    <i class="bi bi-arrow-left"></i>
-  </button>
+<!-- Fondo de pantalla completa -->
+<div class="fondo"></div>
 
+<div class="container mt-5 form-container-bg">
   <div class="form-container">
+    <!-- Botón de regresar movido dentro del formulario -->
+    <button type="button" class="btn btn-custom-outline-sm me-2" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+
     <div class="row align-items-center">
       <div class="col-12 text-center mb-4">
         <h2 class="text-black">Crear nuevo módulo</h2>
@@ -44,15 +47,6 @@
               placeholder="Ej: 1" min="1" />
             <div class="text-danger" *ngIf="f['displayOrder']?.touched && f['displayOrder']?.invalid">
               <small *ngIf="f['displayOrder']?.errors?.['required']">⚠️ El orden es obligatorio.</small>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <div class="form-check">
-              <input type="checkbox" id="isVisible" formControlName="isVisible" class="form-check-input">
-              <label for="isVisible" class="form-check-label text-black">
-                Visible para estudiantes
-              </label>
             </div>
           </div>
         </div>
