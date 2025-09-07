@@ -25,7 +25,7 @@ public class ContentRequestDto {
     @NotNull
     private Integer displayOrder;
 
-    private Boolean isVisible = true;
+    private Boolean isVisible = false;
 
     private EnumLifecycleStatus lifecycleStatus = EnumLifecycleStatus.BORRADOR;
 }
