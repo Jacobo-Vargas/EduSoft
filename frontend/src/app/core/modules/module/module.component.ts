@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModuleService, ModuleResponseDto } from '../../services/module.service';
 import { AuthService, UserData } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
@@ -29,7 +29,8 @@ export class ModuleComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private route: ActivatedRoute,
     private couserService: CourseService,
-    private courseService: CourseService
+    private courseService: CourseService,
+    private router: Router 
   ) { }
 
   ngOnInit(): void {
@@ -126,4 +127,8 @@ export class ModuleComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  goBack(): void {
+  this.router.navigate(['/teacher']);
+}
 }

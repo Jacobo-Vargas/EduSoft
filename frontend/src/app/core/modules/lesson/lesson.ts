@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LessonService, LessonResponseDto } from '../../services/lesson.service';
 import { Subscription } from 'rxjs';
 
@@ -19,7 +19,8 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   constructor(
     private lessonService: LessonService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router 
   ) { }
 
   ngOnInit(): void {
@@ -63,8 +64,12 @@ export class LessonComponent implements OnInit, OnDestroy {
     });
   }
 
-
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
+
+  goBack(): void {
+    this.router.navigate(['/modules',this.moduleId]);
+  }
+
 }

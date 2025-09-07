@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ContentService, ContentResponseDto } from '../../services/content.service';
 
@@ -19,7 +19,8 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   constructor(
     private contentService: ContentService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -57,5 +58,9 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  goBack(): void {
+    this.router.navigate(['/modules', this.lessonId, 'lessons']);
   }
 }

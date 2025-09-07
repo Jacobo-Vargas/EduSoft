@@ -1,7 +1,7 @@
-<app-create-courses 
+ <!-- <app-create-courses 
   [tituloFormulario]="'Editar Curso'"
   [textoBoton]="'Actualizar Curso'">
-</app-create-courses>
+</app-create-courses> -->
 
 
 
@@ -9,6 +9,12 @@
 <div class="module-container">
   <!-- Columna izquierda -->
   <div class="module-list">
+
+    <!-- Botón de regresar arriba a la izquierda -->
+    <button type="button" class="btn btn-link p-0 mb-2" (click)="goBack()" title="Regresar">
+      <i class="bi bi-arrow-left" style="font-size: 1.5rem;"></i>
+    </button>
+
     <h3>Mis Módulos</h3>
 
     <div *ngIf="loading">Cargando módulos...</div>
@@ -42,14 +48,9 @@
   <!-- Columna derecha -->
   <div class="module-actions">
     <h3>Acciones</h3>
-    <!-- Usamos d-grid gap-2 para que los botones tengan separación vertical uniforme -->
     <div class="d-grid gap-2">
       <button class="btn btn-primary" [routerLink]="['/modules', courseId, 'create']">
         ➕ Crear Módulo
-      </button>
-
-      <button class="btn btn-warning">
-        ✏️ Editar Información
       </button>
 
       <button class="btn btn-info" [routerLink]="['/history', courseId]">
@@ -59,7 +60,6 @@
       <button class="btn btn-success" (click)="submitForAudit()">
         📤 Enviar a Auditoría
       </button>
-
     </div>
   </div>
 </div>

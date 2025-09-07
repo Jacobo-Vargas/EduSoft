@@ -1,6 +1,12 @@
 <div class="lesson-container">
   <!-- Columna izquierda -->
   <div class="lesson-list">
+    <!-- Botón de regresar arriba a la izquierda -->
+    <button type="button" class="btn btn-link p-0 mb-3" (click)="goBack()" title="Regresar">
+      <!-- Usamos un ícono de Bootstrap como flecha -->
+      <i class="bi bi-arrow-left" style="font-size: 1.5rem;"></i>
+    </button>
+
     <h3>Mis Documentos</h3>
 
     <div *ngIf="loading">Cargando documentos...</div>
@@ -15,35 +21,26 @@
 
           <!-- Renderizado dinámico -->
           <ng-container [ngSwitch]="content.fileType">
-            <!-- Imagen -->
             <div *ngSwitchCase="'IMAGE'">
               <img [src]="content.fileUrl" alt="{{ content.title }}" style="max-width:200px; border-radius:5px;">
             </div>
-
-            <!-- Video -->
             <div *ngSwitchCase="'VIDEO'">
               <video width="250" controls>
                 <source [src]="content.fileUrl" type="video/mp4" />
                 Tu navegador no soporta video.
               </video>
             </div>
-
-            <!-- Audio -->
             <div *ngSwitchCase="'AUDIO'">
               <audio controls>
                 <source [src]="content.fileUrl" type="audio/mpeg" />
                 Tu navegador no soporta audio.
               </audio>
             </div>
-
-            <!-- Documento -->
             <div *ngSwitchCase="'DOCUMENT'">
               <a [href]="content.fileUrl" target="_blank" class="btn btn-link">
                 📄 Ver Documento
               </a>
             </div>
-
-            <!-- Link genérico -->
             <div *ngSwitchDefault>
               <a [href]="content.fileUrl" target="_blank" class="btn btn-link">
                 🔗 Abrir enlace
@@ -80,9 +77,10 @@
   <!-- Columna derecha -->
   <div class="lesson-actions">
     <h3>Acciones</h3>
-    <button [routerLink]="['/lessons', lessonId, 'contents', 'create']">
+
+    <!-- Botón Crear Documento -->
+    <button class="btn btn-primary" [routerLink]="['/lessons', lessonId, 'contents', 'create']">
       ➕ Crear Documento
     </button>
-
   </div>
 </div>

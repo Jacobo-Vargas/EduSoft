@@ -83,6 +83,10 @@
   font-size: 14px;
 }
 
+.lesson-actions button {
+  margin-bottom: 8px;
+}
+
 .error {
   color: red;
   font-weight: bold;
