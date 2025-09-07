@@ -19,8 +19,6 @@ import { ModuleComponent } from './module/module.component';
 import { LessonComponent } from './lesson/lesson';
 import { CreateLessonComponent } from './create-lesson-component/create-lesson-component';
 import { History } from './history/history';
-import { ContentComponent } from './content/content';
-import { CreateContentComponent } from './create-content-component/create-content-component';
 
 @NgModule({
   declarations: [
@@ -38,9 +36,7 @@ import { CreateContentComponent } from './create-content-component/create-conten
     ModuleComponent,
     LessonComponent,
     CreateLessonComponent,
-    History,
-    ContentComponent,
-    CreateContentComponent
+    History
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
@@ -65,9 +61,7 @@ import { CreateContentComponent } from './create-content-component/create-conten
     ModuleComponent,
     LessonComponent,
     CreateLessonComponent,
-    History,
-    ContentComponent,
-    CreateContentComponent
+    History
   ]
 })
 export class MooduleModule { }

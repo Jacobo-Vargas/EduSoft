@@ -18,6 +18,9 @@ import lombok.EqualsAndHashCode;
                 @Index(name = "idx_content_course", columnList = "course_id"),
                 @Index(name = "idx_content_lesson", columnList = "lesson_id"),
                 @Index(name = "idx_content_order", columnList = "lesson_id, display_order")
+        },
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_content_order_lesson", columnNames = {"display_order", "lesson_id"})
         }
 )
 public class Content extends BaseEntity {
