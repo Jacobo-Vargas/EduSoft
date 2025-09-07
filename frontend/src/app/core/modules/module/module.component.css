@@ -1,9 +1,43 @@
-.module-container {
+.course-page-container {
   display: flex;
   gap: 20px;
   padding: 1rem;
+  flex-wrap: wrap; /* ✅ que baje a otra línea si no cabe */
+ align-items: flex-start; /* 👈 fuerza a que ambos empiecen arriba */
 }
 
+/* Izquierda formulario, derecha módulos */
+.course-form {
+  flex: 2; /* ocupa más espacio */
+  min-width: 350px;
+}
+
+.course-modules {
+  flex: 1; /* ocupa menos espacio */
+  min-width: 300px;
+}
+
+/* Interno del módulo */
+.module-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 📱 Responsividad */
+@media (max-width: 992px) {
+  .course-page-container {
+    flex-direction: column;
+  }
+
+  .course-form,
+  .course-modules {
+    width: 100%;
+  }
+}
+
+
+/* Cada columna por defecto ocupa lo mismo en desktop */
 .module-list,
 .module-actions {
   flex: 1;
@@ -11,8 +45,34 @@
   padding: 1rem;
   border-radius: 8px;
   background-color: #fafafa;
+  min-width: 300px; /* ✅ asegura que no se encoja demasiado */
+}
+/* Responsividad */
+@media (max-width: 992px) { /* Tablets */
+  .module-container {
+    flex-direction: column; /* ✅ apilado vertical */
+  }
+
+  .module-list,
+  .module-actions {
+    width: 100%;
+  }
 }
 
+@media (max-width: 576px) { /* Celulares */
+  .module-container {
+    padding: 0.5rem;
+  }
+}
+ .module-list li {
+    flex-direction: column; /* ✅ info + botón uno debajo del otro */
+    gap: 10px;
+  }
+
+  .module-actions .btn {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
 .module-list ul {
   list-style: none;
   padding: 0;

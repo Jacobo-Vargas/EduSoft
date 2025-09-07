@@ -189,6 +189,7 @@ public class CourseServiceImpl implements CourseService {
         course.setSemester(courseRequestDto.getSemester());
         course.setPriorKnowledge(courseRequestDto.getPriorKnowledge());
         course.setEstimatedDurationMinutes(courseRequestDto.getEstimatedDurationMinutes());
+        course.setCoverUrl(String.valueOf(courseRequestDto.getCoverUrl()));
 
         // Actualizar relaciones
         if (courseRequestDto.getCategoryId() != null) {

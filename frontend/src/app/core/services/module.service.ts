@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CourseService } from './course-service';
 
@@ -25,7 +25,7 @@ export interface courseResponseDTO {
   title: string;
   description: String;
   price: number;
-  coverUrl: String;
+  coverUrl: string;
   semester: number;
   priorKnowledge: String;
   estimatedDurationMinutes: number;
@@ -78,8 +78,13 @@ export class ModuleService {
   getCategories(): Observable<CategorieResponseDTO[]> {
     return this.http.get<CategorieResponseDTO[]>(`${API}/categories`, { withCredentials: true });
   }
+
   getCourseById(id: number): Observable<courseResponseDTO> {
-  return this.http.get<courseResponseDTO>(`${API}/course/${id}`, { withCredentials: true });
-}
+    return this.http
+      .get<any>(`${API}/course/${id}`, { withCredentials: true })
+      .pipe(
+        map(response => response.body as courseResponseDTO)
+      );
+  }
 
 }

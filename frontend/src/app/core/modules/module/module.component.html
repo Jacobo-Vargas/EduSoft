@@ -1,19 +1,23 @@
- <!-- <app-create-courses 
+<div class="course-page-container">
+  <!-- Columna izquierda: formulario -->
+  <div class="course-form">
+<app-create-courses 
   [tituloFormulario]="'Editar Curso'"
-  [textoBoton]="'Actualizar Curso'">
-</app-create-courses> -->
+  [textoBoton]="'Actualizar Curso'"
+  [usarFondo]="false"
+  [cursoEditar]="courseData">
+</app-create-courses> 
+ </div>
 
 
 
 
+<div class="course-modules">
 <div class="module-container">
   <!-- Columna izquierda -->
   <div class="module-list">
 
-    <!-- Botón de regresar arriba a la izquierda -->
-    <button type="button" class="btn btn-link p-0 mb-2" (click)="goBack()" title="Regresar">
-      <i class="bi bi-arrow-left" style="font-size: 1.5rem;"></i>
-    </button>
+  
 
     <h3>Mis Módulos</h3>
 
@@ -62,4 +66,7 @@
       </button>
     </div>
   </div>
+</div>
+
+
 </div>

@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CourseService } from '../../services/course-service';
+import { courseResponseDTO, CourseService } from '../../services/course-service';
 import { Router } from '@angular/router';
 import { AlertService } from '../../services/alert.service';
 
@@ -17,9 +17,12 @@ export interface CategorieResponseDTO {
   styleUrls: ['./create-courses.css'],
   standalone: false
 })
-export class CreateCourses implements OnInit {
+export class CreateCourses implements OnInit, OnChanges {
   @Input() tituloFormulario: string = 'Registrar Curso';
   @Input() textoBoton: string = 'Registrar Curso';
+  @Input() usarFondo: boolean = true;
+  @Input() cursoEditar: courseResponseDTO | null = null;
+
 
   courseForm!: FormGroup;
   categories: CategorieResponseDTO[] = [];
@@ -27,16 +30,49 @@ export class CreateCourses implements OnInit {
   imageError: string | null = null;
   isLoading: boolean = false;
   previewUrl: string | ArrayBuffer | null = null;
+  userData: any = null;
 
   constructor(
     public fb: FormBuilder,
     public courseService: CourseService,
     private router: Router,
     private alertService: AlertService
-  ) { }
+  ) {  const navigation = this.router.getCurrentNavigation();
+    this.userData = navigation?.extras.state?.['username'] || '';}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['cursoEditar'] && this.cursoEditar) {
+      console.log('📌 Detectado cursoEditar:', this.cursoEditar);
+
+      // ✅ Parchar los valores al formulario
+      this.courseForm.patchValue({
+        title: this.cursoEditar.title,
+        description: this.cursoEditar.description,
+        price: this.cursoEditar.price,
+        semester: this.cursoEditar.semester,
+        priorKnowledge: this.cursoEditar.priorKnowledge,
+        estimatedDurationMinutes: this.cursoEditar.estimatedDurationMinutes,
+        categoryId: this.cursoEditar.categoryId,
+        coverUrl: this.cursoEditar.coverUrl,
+        id: this.cursoEditar.id,
+        userId : this.cursoEditar.userId,
+
+      });
+ 
+
+      if (this.cursoEditar?.coverUrl) {
+        this.previewUrl = this.cursoEditar.coverUrl; // ✅ muestra portada existente
+      }
+
+
+    }
+  }
 
   ngOnInit(): void {
+    const navigation = this.router.getCurrentNavigation();
+    
     this.loadCategories();
+
 
     this.courseForm = this.fb.group({
       title: ['', Validators.required],
@@ -45,7 +81,9 @@ export class CreateCourses implements OnInit {
       semester: [null, [Validators.required, Validators.min(0), Validators.max(13)]],
       priorKnowledge: [''],
       estimatedDurationMinutes: [null, [Validators.required, Validators.min(1)]],
-      categoryId: [null, Validators.required]
+      categoryId: [null, Validators.required],
+      coverUrl: [null],
+      formFile: ['']
     });
 
     const semesterCtrl = this.courseForm.get('semester')!;
@@ -80,6 +118,7 @@ export class CreateCourses implements OnInit {
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
+
     if (!file) {
       this.selectedFile = null;
       this.previewUrl = null;
@@ -106,8 +145,8 @@ export class CreateCourses implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  onSubmit(): void {
-    if (this.courseForm.invalid || !this.selectedFile) {
+  async onSubmit(): Promise<void> {
+    if (this.courseForm.invalid) {
       Object.values(this.courseForm.controls).forEach(c => c.markAsTouched());
       this.alertService.createAlert('Formulario inválido o falta imagen', 'warning', false);
       return;
@@ -122,9 +161,36 @@ export class CreateCourses implements OnInit {
     formData.append('priorKnowledge', this.courseForm.value.priorKnowledge);
     formData.append('estimatedDurationMinutes', this.courseForm.value.estimatedDurationMinutes);
     formData.append('categoryId', this.courseForm.value.categoryId);
-    formData.append('userId', '1'); // ⚡ cambiar por usuario real
+    formData.append('userId', this.userData.id); // ⚡ cambiar por usuario real
+    if (this.selectedFile) {
+    // ✅ Usuario seleccionó un nuevo archivo
     formData.append('coverUrl', this.selectedFile);
+  } else if (this.cursoEditar?.coverUrl) {
+    // ✅ Convertir la URL en un File para que el backend lo acepte
+    const file = await this.urlToFile(this.cursoEditar.coverUrl, "portada.jpg");
+    formData.append('coverUrl', file);
+  }
 
+   if (this.cursoEditar) {
+    // 🔄 Actualizar curso
+    this.courseService.updateCourse(this.cursoEditar.id!, formData).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.alertService.createAlert('✅ Curso actualizado con éxito', 'success', false).then(() => {
+          this.courseForm.reset();
+          this.selectedFile = null;
+          this.router.navigate(['/teacher']);
+        });
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Error al actualizar curso:', err);
+        const msg = err?.error?.message || 'Error inesperado al actualizar el curso';
+        this.alertService.createAlert(`❌ ${msg}`, 'error', false);
+      }
+    });
+  } else {
+    // 🆕 Crear curso
     this.courseService.createCourse(formData).subscribe({
       next: () => {
         this.isLoading = false;
@@ -143,7 +209,23 @@ export class CreateCourses implements OnInit {
     });
   }
 
+  }
   goBack(): void {
     this.router.navigate(['/teacher']);
   }
+  get canSave(): boolean {
+    // Si el formulario es inválido, nunca habilitar
+    if (this.courseForm.invalid) return false;
+
+    // Si es edición y ya existe curso, no exigir archivo nuevo
+    if (this.cursoEditar) return true;
+
+    // Si es creación, exigir archivo seleccionado
+    return !!this.selectedFile;
+  }
+  async urlToFile(url: string, filename: string): Promise<File> {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return new File([blob], filename, { type: blob.type });
+}
 }

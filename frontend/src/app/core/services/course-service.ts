@@ -43,7 +43,7 @@ export interface courseResponseDTO {
   title: string;
   description: String;
   price: number;
-  coverUrl: String;
+  coverUrl: string;
   semester: number;
   priorKnowledge: String;
   estimatedDurationMinutes: number;
@@ -57,6 +57,7 @@ export interface courseResponseDTO {
 })
 
 export class CourseService {
+  
   constructor(private http: HttpClient) { }
 
 
@@ -106,6 +107,13 @@ export class CourseService {
         null,  // body vacío
         { withCredentials: true }  // opciones
     );
+
+  }
+
+ 
+
+updateCourse(courseId: number, body: FormData): Observable<courseResponseDTO> {
+  return this.http.put<courseResponseDTO>(`${API}/course/update/${courseId}`, body, { withCredentials: true });
 }
 
 }

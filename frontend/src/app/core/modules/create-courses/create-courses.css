@@ -1,14 +1,26 @@
-/* Estilo para el contenedor con fondo verde claro y caja */
-.form-container-bg {
-  background-color: rgba(144, 238, 144, 0.1);
-  /* Fondo verde claro muy suave y transparente */
-  padding: 30px;
-  /* Añade algo de espacio interno */
-  border-radius: 12px;
-  /* Bordes redondeados */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* Sombra suave para darle énfasis */
+.image-background {
+  position: relative;
+  min-height: 100vh;
+  display: block;   /* ✅ deja que el contenido fluya */
+  padding: 2rem 0;  /* para dar aire arriba y abajo */
 }
+.image-background::before {
+  content: "";
+  position: fixed;   /* ✅ lo fijamos a la pantalla */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: url('/assets/img/fondo-cafe.avif') no-repeat center center/cover;
+
+  filter: blur(12px);
+  -webkit-filter: blur(12px);
+
+  z-index: -1; /* siempre detrás */
+}
+/* Estilo para el contenedor con fondo verde claro y caja */
+
 
 h2 {
   color: black !important;
@@ -17,7 +29,7 @@ h2 {
 
 /* Estilo para el formulario */
 .form-container {
-  background-color: rgba(212, 255, 212, 0.2);
+ 
   /* Fondo verde claro con algo más de opacidad para el formulario */
   padding: 20px;
   border-radius: 8px;
@@ -71,12 +83,7 @@ button {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-container-bg {
-  background-color: rgba(144, 238, 144, 0.1);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+
 
 .btn-custom-outline-sm {
   color: #198754;

@@ -1,3 +1,4 @@
+<section class="vh-100" [ngClass]="{ 'image-background': usarFondo }">
 <div class="container mt-5 form-container-bg">
   <!-- Cuadro del formulario -->
   <div class="form-box p-4 rounded shadow-sm bg-white">
@@ -21,7 +22,7 @@
 
     <div class="text-danger mt-1" *ngIf="imageError">{{ imageError }}</div>
 
-    <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
+    <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" autocomplete="off">
       <div class="row">
         <!-- Columna izquierda -->
         <div class="col-md-6">
@@ -106,10 +107,10 @@
       <!-- Botón centrado -->
       <div class="row">
         <div class="col-12 text-center mb-4">
-          <button type="submit" [disabled]="courseForm.invalid || !selectedFile"
-                  class="btn btn-success w-50">
-            {{ textoBoton }}
-          </button>
+        <button type="submit" [disabled]="!canSave || isLoading"
+        class="btn btn-success w-50">
+  {{ textoBoton }}
+</button>
           <span *ngIf="isLoading">
             <span class="spinner-border spinner-border-sm me-2"></span>
             Procesando...
@@ -119,3 +120,4 @@
     </form>
   </div>
 </div>
+</section>

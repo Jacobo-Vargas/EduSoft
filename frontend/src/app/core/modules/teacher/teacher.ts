@@ -88,9 +88,7 @@ export class TeacherComponent implements OnInit, OnDestroy {
   }
 
   crearCurso() {
-    this.router.navigate(['/app-create-courses'], {
-      state: { userData: this.userData }
-    });
+      this.router.navigate(['/recover-password'], { state: { username: this.userData } });
   }
 
   editarCurso(curso: courseResponseDTO) {

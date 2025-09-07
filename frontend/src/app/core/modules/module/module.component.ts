@@ -36,13 +36,15 @@ export class ModuleComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loading = true;
 
+ const navigation = this.router.getCurrentNavigation();
+
     // Obtener courseId de la URL
     this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
 
     // Cargar categorías
     const catSub = this.moduleService.getCategories().subscribe({
       next: (cats) => this.categories = cats,
-      error: () => { "Error la cargar categorías"}
+      error: () => { "Error la cargar categorías" }
     });
     this.subscriptions.push(catSub);
 
@@ -50,15 +52,19 @@ export class ModuleComponent implements OnInit, OnDestroy {
     const courseSub = this.moduleService.getCourseById(this.courseId).subscribe({
       next: (course) => {
         this.courseData = course;
+         console.log("📌 Curso recuperado:", this.courseData);
       },
       error: (err) => this.handleError('Error obteniendo curso', err)
     });
     this.subscriptions.push(courseSub);
 
+    
+
     // Cargar datos del usuario autenticado
     const userDataSub = this.authService.getUserData().subscribe({
       next: (userData) => {
         this.userData = userData;
+        
 
         if (userData) {
           this.loadModules();
@@ -111,9 +117,8 @@ export class ModuleComponent implements OnInit, OnDestroy {
   }
 
   submitForAudit() {
-    this.alertService.confirmCustomAlert(
-      `¿Deseas enviar el curso a auditoría?`,
-      'question',
+    this.alertService.createSimpleAlert(
+      '¿Deseas enviar el curso a auditoría?',
       this.alertService.jsonData['alert']?.['btnAccept'] || 'Aceptar',
       this.alertService.jsonData['alert']?.['btnCancel'] || 'Cancelar'
     ).then(result => {
@@ -121,8 +126,13 @@ export class ModuleComponent implements OnInit, OnDestroy {
 
       this.loading = true;
       this.courseService.setStatusAudit(this.courseId).subscribe({
-        next: (res) => {
-          this.alertService.createAlert('Curso enviado a auditoría exitosamente', 'success', false)
+        next: () => {
+          this.alertService.createCustomAlert(
+            'Curso enviado a auditoría exitosamente',
+            'success',
+            undefined,
+            this.alertService.jsonData['alert']?.['btnAccept'] || 'Aceptar'
+          );
           this.loading = false;
         },
         error: (err) => this.handleError('No se pudo enviar el curso a auditoría', err)
@@ -134,7 +144,6 @@ export class ModuleComponent implements OnInit, OnDestroy {
     const errorMessage = err?.error?.message || msg;
     this.error = errorMessage;
     this.alertService.createAlert(errorMessage, 'error', false);
-    console.error('❌', errorMessage, err);
     this.loading = false;
   }
 
