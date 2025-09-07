@@ -16,7 +16,6 @@ public class ContentRequestDto {
     @Size(max = 500)
     private String description;
 
-    @NotBlank
     @Size(max = 1000)
     private String fileUrl;
 

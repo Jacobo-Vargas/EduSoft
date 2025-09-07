@@ -4,12 +4,13 @@ import com.uniquindio.edu.edusoft.model.dto.content.ContentRequestDto;
 import com.uniquindio.edu.edusoft.model.dto.content.ContentResponseDto;
 import com.uniquindio.edu.edusoft.model.dto.content.ContentAssignmentDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface ContentService {
 
-    ResponseEntity<ContentResponseDto> createContent(ContentRequestDto dto, String userEmail) throws Exception;
+    ResponseEntity<ContentResponseDto> createContent(ContentRequestDto dto, MultipartFile file, String userEmail) throws Exception;
 
     ResponseEntity<List<ContentResponseDto>> getContentsByCourse(Long courseId) throws Exception;
 

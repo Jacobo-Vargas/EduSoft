@@ -17,8 +17,9 @@ public class CloudinaryService {
         this.cloudinary = cloudinary;
     }
 
-    public Map uploadFile(MultipartFile file) throws IOException {
-        return cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+    public Map<String, Object> uploadFile(MultipartFile file) throws IOException {
+        return cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
+                "resource_type", "auto"
+        ));
     }
-
 }

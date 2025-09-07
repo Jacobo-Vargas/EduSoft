@@ -1,0 +1,88 @@
+<div class="lesson-container">
+  <!-- Columna izquierda -->
+  <div class="lesson-list">
+    <h3>Mis Documentos</h3>
+
+    <div *ngIf="loading">Cargando documentos...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+
+    <ul *ngIf="!loading && contents.length > 0">
+      <li *ngFor="let content of contents" class="lesson-item">
+        <!-- Info + preview -->
+        <div class="lesson-info">
+          <strong>{{ content.title }}</strong>
+          <p>{{ content.description }}</p>
+
+          <!-- Renderizado dinámico -->
+          <ng-container [ngSwitch]="content.fileType">
+            <!-- Imagen -->
+            <div *ngSwitchCase="'IMAGE'">
+              <img [src]="content.fileUrl" alt="{{ content.title }}" style="max-width:200px; border-radius:5px;">
+            </div>
+
+            <!-- Video -->
+            <div *ngSwitchCase="'VIDEO'">
+              <video width="250" controls>
+                <source [src]="content.fileUrl" type="video/mp4" />
+                Tu navegador no soporta video.
+              </video>
+            </div>
+
+            <!-- Audio -->
+            <div *ngSwitchCase="'AUDIO'">
+              <audio controls>
+                <source [src]="content.fileUrl" type="audio/mpeg" />
+                Tu navegador no soporta audio.
+              </audio>
+            </div>
+
+            <!-- Documento -->
+            <div *ngSwitchCase="'DOCUMENT'">
+              <a [href]="content.fileUrl" target="_blank" class="btn btn-link">
+                📄 Ver Documento
+              </a>
+            </div>
+
+            <!-- Link genérico -->
+            <div *ngSwitchDefault>
+              <a [href]="content.fileUrl" target="_blank" class="btn btn-link">
+                🔗 Abrir enlace
+              </a>
+            </div>
+          </ng-container>
+
+          <!-- Metadatos -->
+          <div class="content-meta">
+            <small><b>Curso:</b> {{ content.courseName }}</small>
+            <small><b>Lección:</b> {{ content.lessonName }}</small>
+            <small><b>Orden:</b> {{ content.displayOrder }}</small>
+            <small><b>Estado:</b> {{ content.lifecycleStatus }}</small>
+            <small><b>Visible:</b> {{ content.isVisible ? 'Sí' : 'No' }}</small>
+            <small><b>Creado:</b> {{ content.createdAt | date:'short' }}</small>
+            <small><b>Actualizado:</b> {{ content.updatedAt | date:'short' }}</small>
+          </div>
+        </div>
+
+        <!-- Botón eliminar -->
+        <div class="lesson-actions-btn">
+          <button class="btn btn-danger" (click)="deleteContent(content)">
+            🗑 Eliminar
+          </button>
+        </div>
+      </li>
+    </ul>
+
+    <div *ngIf="!loading && contents.length === 0">
+      <p>No tienes documentos creados.</p>
+    </div>
+  </div>
+
+  <!-- Columna derecha -->
+  <div class="lesson-actions">
+    <h3>Acciones</h3>
+    <button [routerLink]="['/lessons', lessonId, 'contents', 'create']">
+      ➕ Crear Documento
+    </button>
+
+  </div>
+</div>

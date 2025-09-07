@@ -34,7 +34,6 @@ public class Content extends BaseEntity {
     @Column(name = "description", length = 500)
     private String description;
 
-    @NotBlank
     @Size(max = 1000)
     @Column(name = "file_url", length = 1000, nullable = false)
     private String fileUrl;

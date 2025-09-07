@@ -7,6 +7,8 @@ import com.uniquindio.edu.edusoft.model.entities.Content;
 import com.uniquindio.edu.edusoft.model.entities.Lesson;
 import com.uniquindio.edu.edusoft.model.entities.User;
 import com.uniquindio.edu.edusoft.model.enums.EnumCourseEventType;
+import com.uniquindio.edu.edusoft.model.enums.EnumFileType;
+import com.uniquindio.edu.edusoft.model.enums.EnumLifecycleStatus;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.repository.ContentRepository;
 import com.uniquindio.edu.edusoft.repository.LessonRepository;
@@ -19,8 +21,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,12 +37,15 @@ public class ContentServiceImpl implements ContentService {
     private final UserRepository userRepository;
     private final ContentMapper contentMapper;
     private final CourseEventUtil courseEventUtil;
+    private final CloudinaryService cloudinaryService;
 
 
     @Override
     @Transactional
-    public ResponseEntity<ContentResponseDto> createContent(ContentRequestDto request, String userEmail) throws Exception {
-        Lesson lesson = lessonRepository.findById(request.getLessonId())
+    public ResponseEntity<ContentResponseDto> createContent(ContentRequestDto dto,
+                                                            MultipartFile file,
+                                                            String userEmail) throws Exception {
+        Lesson lesson = lessonRepository.findById(dto.getLessonId())
                 .orElseThrow(() -> new IllegalArgumentException("Lección no encontrada"));
 
         // Validar que el profesor dueño del curso es el que crea el contenido
@@ -45,9 +53,31 @@ public class ContentServiceImpl implements ContentService {
             throw new IllegalArgumentException("No tiene permisos para agregar contenido en esta lección");
         }
 
-        Content content = contentMapper.toEntity(request);
+        Content content = contentMapper.toEntity(dto);
         content.setLesson(lesson);
         content.setCourse(lesson.getModule().getCourse());
+
+        if (file != null && !file.isEmpty()) {
+            Map uploadResult = cloudinaryService.uploadFile(file);
+
+            String fileUrl = (String) uploadResult.get("secure_url");
+            String resourceType = (String) uploadResult.get("resource_type");
+            content.setFileUrl(fileUrl);
+
+            EnumFileType enumFileType;
+            switch (resourceType.toLowerCase()) {
+                case "image":
+                    enumFileType = EnumFileType.IMAGE;
+                    break;
+                case "video":
+                    enumFileType = EnumFileType.VIDEO;
+                    break;
+                default:
+                    enumFileType = EnumFileType.DOCUMENT; // o RAW, según como definiste tu enum
+                    break;
+            }
+            content.setFileType(enumFileType);
+        }
 
         Content saved = contentRepository.save(content);
         courseEventUtil.registerEvent(
@@ -133,11 +163,15 @@ public class ContentServiceImpl implements ContentService {
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(() -> new IllegalArgumentException("Contenido no encontrado"));
 
-        contentRepository.delete(content);
+        content.setLifecycleStatus(EnumLifecycleStatus.ELIMINADO);
+        content.setDeletedAt(new Date());
+        content.setUpdatedAt(new Date());
+        contentRepository.save(content);
+
         courseEventUtil.registerEvent(
                 content.getCourse(),
-                null,
-                null,
+                content.getLesson() != null ? content.getLesson().getModule() : null,
+                content.getLesson(),
                 content,
                 content.getCourse().getUser(),
                 EnumCourseEventType.CONTENT_DELETED,

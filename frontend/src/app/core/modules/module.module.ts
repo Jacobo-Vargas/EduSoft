@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
-
 import { CreateCourses } from './create-courses/create-courses';
 import { CreateAuditStatus } from './create-audit-status/create-audit-status';
 import { CreateCategories } from './create-categories/create-categories';
@@ -19,6 +18,8 @@ import { ModuleComponent } from './module/module.component';
 import { LessonComponent } from './lesson/lesson';
 import { CreateLessonComponent } from './create-lesson-component/create-lesson-component';
 import { History } from './history/history';
+import { ContentComponent } from './content/content';
+import { CreateContentComponent } from './create-content-component/create-content-component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,9 @@ import { History } from './history/history';
     ModuleComponent,
     LessonComponent,
     CreateLessonComponent,
-    History
+    History,
+    ContentComponent,
+    CreateContentComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
@@ -61,7 +64,9 @@ import { History } from './history/history';
     ModuleComponent,
     LessonComponent,
     CreateLessonComponent,
-    History
+    History,
+    ContentComponent,
+    CreateContentComponent
   ]
 })
 export class MooduleModule { }

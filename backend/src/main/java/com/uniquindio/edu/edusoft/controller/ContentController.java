@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,10 +20,14 @@ public class ContentController {
 
     private final ContentService contentService;
 
-    @PostMapping
-    public ResponseEntity<ContentResponseDto> createContent(@RequestBody @Valid ContentRequestDto dto, Authentication authentication) throws Exception {
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<ContentResponseDto> createContent(
+            @RequestPart("content") @Valid ContentRequestDto dto,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            Authentication authentication) throws Exception {
+
         String userEmail = authentication.getName();
-        return contentService.createContent(dto, userEmail);
+        return contentService.createContent(dto, file, userEmail);
     }
 
     @GetMapping("/course/{courseId}")

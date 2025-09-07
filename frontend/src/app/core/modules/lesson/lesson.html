@@ -8,14 +8,22 @@
 
     <ul *ngIf="!loading && lessons.length > 0">
       <li *ngFor="let lesson of lessons" class="lesson-item">
+        <!-- Info -->
         <div class="lesson-info">
           <strong>{{ lesson.name }}</strong>
           <p>{{ lesson.description }}</p>
+
+          <!-- Botón Ver Documentos debajo -->
+          <div class="lesson-documents-btn">
+            <button class="btn btn-primary" [routerLink]="['/lessons', lesson.id, 'contents']">
+              📂 Ver Documentos
+            </button>
+          </div>
         </div>
-        <!-- Botón a la derecha -->
+
+        <!-- Botón eliminar a la derecha -->
         <div class="lesson-actions-btn">
-          <button class="btn btn-danger" 
-                  (click)="deleteLesson(lesson)">
+          <button class="btn btn-danger" (click)="deleteLesson(lesson)">
             🗑 Eliminar
           </button>
         </div>
@@ -30,8 +38,10 @@
   <!-- Columna derecha -->
   <div class="lesson-actions">
     <h3>Acciones</h3>
-    <button [routerLink]="['/modules', moduleId, 'lessons', 'create']">
-      ➕ Crear Lección
-    </button>
+    <div class="d-grid gap-2">
+      <button class="btn btn-primary" [routerLink]="['/modules', moduleId, 'lessons', 'create']">
+        ➕ Crear Lección
+      </button>
+    </div>
   </div>
 </div>
