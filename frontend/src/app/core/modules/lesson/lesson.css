@@ -2,53 +2,51 @@
   display: flex;
   gap: 20px;
   padding: 1rem;
+  align-items: flex-start; /* columnas alineadas arriba */
 }
 
-.lesson-list,
-.lesson-actions {
-  flex: 1;
+/* Columna izquierda (lista de lecciones) */
+.lesson-list {
+  flex: 1; /* mismo espacio que la derecha */
   border: 1px solid #ddd;
   padding: 1rem;
   border-radius: 8px;
   background-color: #fafafa;
 }
 
-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.3s;
+/* Columna derecha (acciones) */
+.lesson-actions {
+  flex: 1; /* mismo espacio que la izquierda */
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #fafafa;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-button:hover {
-  opacity: 0.8;
-}
-
-.btn-danger {
-  background-color: #d32f2f;
-  color: white;
-}
-
-.lesson-list ul {
-  list-style: none;
-  padding: 0;
-}
-
+/* Items de la lista */
 .lesson-list li {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: space-between; /* info izquierda, eliminar derecha */
+  align-items: flex-start;
   margin-bottom: 15px;
   padding: 10px;
   border-bottom: 1px solid #ddd;
   border-radius: 5px;
-  background-color: #fff;
+  background-color: #ffffff;
+}
+
+/* Info de la lección */
+.lesson-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .lesson-info strong {
-  display: block;
   font-size: 16px;
   color: #333;
 }
@@ -59,19 +57,38 @@ button:hover {
   color: #555;
 }
 
-.lesson-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* Botón azul debajo de la descripción */
+.lesson-documents-btn button {
+  margin-top: 6px;
+  background-color: #1976d2;
+  color: white;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+  align-self: flex-start;
 }
 
+.lesson-documents-btn button:hover {
+  opacity: 0.85;
+}
+
+/* Botón rojo eliminar */
 .lesson-actions-btn {
   display: flex;
   align-items: flex-start;
 }
 
-
-.error {
-  color: red;
+.btn-danger {
+  background-color: #d32f2f;
+  color: white;
   font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
 }

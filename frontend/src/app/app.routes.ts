@@ -13,27 +13,32 @@ import { TeacherGuard } from './core/guards/TeacherGuard';
 import { ModuleComponent } from './core/modules/module/module.component';
 import { CreateModuleComponent } from './core/modules/create-module-component/create-module-component';
 import { LessonComponent } from './core/modules/lesson/lesson';
-import { CreateLessonComponent } from './core/modules//create-lesson-component/create-lesson-component';
+import { CreateLessonComponent } from './core/modules/create-lesson-component/create-lesson-component';
 import { AuditGuard } from './core/guards/AuditGuard';
 import { AuthGuard } from './core/guards/AuthGuard';
 import { History } from './core/modules/history/history';
 import { StudentGuard } from './core/guards/StudentGuard';
+import { ContentComponent } from './core/modules/content/content';
+import { CreateContentComponent } from './core/modules/create-content-component/create-content-component';
 
 export const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'recover-password', component: RecoverPassword },
   { path: 'send-code-email', component: SendEmail },
-  { path: 'app-create-courses', component: CreateCourses, canActivate: [AuthGuard, TeacherGuard]},
+  { path: 'app-create-courses', component: CreateCourses, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'app-create-categories', component: CreateCategories, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'createStatusCourse', component: CreateStatusCourse, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'createAuditStatus', component: CreateAuditStatus, canActivate: [AuthGuard, AuditGuard] },
   { path: 'teacher', component: TeacherComponent, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'modules/:moduleId/lessons', component: LessonComponent, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'modules/:moduleId/lessons/create', component: CreateLessonComponent, canActivate: [AuthGuard, TeacherGuard] },
-  { path: 'modules/:courseId', component: ModuleComponent, canActivate: [AuthGuard, TeacherGuard]},
-  { path: 'modules/:courseId/create', component: CreateModuleComponent, canActivate: [AuthGuard,TeacherGuard] },
+  { path: 'modules/:courseId', component: ModuleComponent, canActivate: [AuthGuard, TeacherGuard] },
+  { path: 'modules/:courseId/create', component: CreateModuleComponent, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'history/:courseId', component: History, canActivate: [AuthGuard, TeacherGuard] },
-  { path: '', component: LoginComponent},
+  { path: '', component: LoginComponent },
+  { path: 'lessons/:lessonId/contents', component: ContentComponent },
+  { path: 'lessons/:lessonId/contents/create', component: CreateContentComponent },
+
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];

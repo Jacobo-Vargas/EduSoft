@@ -7,6 +7,7 @@ import com.uniquindio.edu.edusoft.model.entities.Content;
 import com.uniquindio.edu.edusoft.model.entities.Lesson;
 import com.uniquindio.edu.edusoft.model.entities.User;
 import com.uniquindio.edu.edusoft.model.enums.EnumCourseEventType;
+import com.uniquindio.edu.edusoft.model.enums.EnumLifecycleStatus;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.repository.ContentRepository;
 import com.uniquindio.edu.edusoft.repository.LessonRepository;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -133,18 +135,25 @@ public class ContentServiceImpl implements ContentService {
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(() -> new IllegalArgumentException("Contenido no encontrado"));
 
-        contentRepository.delete(content);
+        // Soft delete
+        content.setLifecycleStatus(EnumLifecycleStatus.ELIMINADO);
+        content.setDeletedAt(new Date());
+        content.setUpdatedAt(new Date());
+        contentRepository.save(content);
+
         courseEventUtil.registerEvent(
                 content.getCourse(),
-                null,
-                null,
+                content.getLesson() != null ? content.getLesson().getModule() : null,
+                content.getLesson(),
                 content,
                 content.getCourse().getUser(),
                 EnumCourseEventType.CONTENT_DELETED,
                 "Se eliminó el contenido: " + content.getTitle()
         );
+
         return BaseResponse.response("Contenido eliminado correctamente", "SUCCESS");
     }
+
 
     private User validateTeacher(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
