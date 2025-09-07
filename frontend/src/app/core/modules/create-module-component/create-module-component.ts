@@ -27,6 +27,14 @@ export class CreateModuleComponent implements OnInit {
   ngOnInit(): void {
     // obtener el courseId desde la URL
     this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
+    console.log("🔍 courseId capturado desde ruta:", this.courseId);
+
+    if (!this.courseId || isNaN(this.courseId)) {
+      this.alertService.createAlert('⚠️ No se encontró courseId en la URL', 'warning', false).then(() => {
+        this.router.navigate(['/courses']);
+      });
+      return;
+    }
 
     // inicializar formulario
     this.moduleForm = this.fb.group({
@@ -37,9 +45,14 @@ export class CreateModuleComponent implements OnInit {
     });
   }
 
+  get f() {
+    return this.moduleForm.controls;
+  }
+
   onSubmit(): void {
     if (this.moduleForm.invalid) {
       this.moduleForm.markAllAsTouched();
+      this.alertService.createAlert('⚠️ Formulario inválido, verifica los campos', 'warning', false);
       return;
     }
 
@@ -54,19 +67,23 @@ export class CreateModuleComponent implements OnInit {
       next: () => {
         this.loading = false;
         this.alertService.createAlert(
-          'Módulo creado con éxito',
+          '✅ Módulo creado con éxito',
           'success',
           false
         ).then(() => {
-          this.router.navigate(['/modules', this.courseId]);
+          this.goBack();
         });
       },
       error: (err) => {
         this.loading = false;
         const errorMsg = err?.error?.message || 'Error al crear el módulo';
-        this.alertService.createAlert(errorMsg, 'error', false);
+        this.alertService.createAlert(`❌ ${errorMsg}`, 'error', false);
         console.error('❌ Error al crear módulo:', err);
       }
     });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/modules', this.courseId]);
   }
 }
