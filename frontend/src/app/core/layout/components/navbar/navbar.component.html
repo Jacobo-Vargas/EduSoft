@@ -23,27 +23,29 @@
           <li class="nav-item">
             <a class="nav-link" [routerLink]="['/app-create-courses']">Crear Cursos</a>
           </li>
+
+          <!-- crear categorias
            <li class="nav-item">
             <a class="nav-link" [routerLink]="['/app-create-categories']">Categorias</a>
-          </li>
+          </li>      -->
 
         </ul>
       </div>
 
-      <!-- CENTRO: BUSCADOR -->
+      <!-- CENTRO: BUSCADOR 
       <form class="d-flex mx-auto" role="search" style="max-width: 400px; flex: 1;">
         <input class="form-control me-2" type="search" placeholder="Buscar mis cursos" aria-label="Search" />
         <button class="btn btn-outline-success btnColor" type="submit">Buscar</button>
-      </form>
+      </form>  -->
 
       <!-- DERECHA: Idioma + Usuario -->
       <div class="d-flex align-items-center">
-        <!-- Selector de idioma -->
+        <!-- Selector de idioma 
         <select class="form-select form-select-sm me-2" style="width: auto;" [ngModel]="currentLang"
           (ngModelChange)="changeLang($event)">
           <option value="es">Español</option>
           <option value="en">English</option>
-        </select>
+        </select>        -->
 
         <!-- Perfil de usuario -->
         <ul class="navbar-nav" *ngIf="authService.isAuthenticated()">
