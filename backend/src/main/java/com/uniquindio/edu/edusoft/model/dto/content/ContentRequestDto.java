@@ -22,7 +22,6 @@ public class ContentRequestDto {
     @NotNull
     private Long lessonId;
 
-    @NotNull
     private Integer displayOrder;
 
     private Boolean isVisible = false;
