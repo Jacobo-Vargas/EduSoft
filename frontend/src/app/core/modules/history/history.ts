@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HistoryService, CourseEventResponseDto } from '../../services/history.service';
 import { AlertService } from '../../services/alert.service';
 
@@ -18,7 +18,8 @@ export class History implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private historyService: HistoryService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -41,5 +42,9 @@ export class History implements OnInit {
         console.error('❌ Error cargando historial:', err);
       }
     });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/modules', this.courseId]);
   }
 }

@@ -92,20 +92,25 @@
   margin-bottom: 0.75rem;
 }
 
-/* Para navegadores que no soportan -webkit-line-clamp */
-.card-text:not(:nth-child(n)) {
-  max-height: 4.2em; /* 3 líneas × 1.4em */
-  overflow: hidden;
-  position: relative;
+/* Forzar fondo consistente en todos los elementos del layout */
+body,
+.container,
+.container-fluid,
+.row,
+.col,
+.col-md-4,
+.col-sm-6,
+[class*="col-"] {
+  background-color: #f4f6f9 !important;
 }
 
-.card-text:not(:nth-child(n)):after {
-  content: "...";
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: white;
-  padding-left: 10px;
+/* Excepto las tarjetas que deben ser blancas */
+.card,
+.card-body,
+.card-header,
+.card-footer {
+  background-color: #ffffff !important;
+  color: #212529 !important;
 }
 
 /* Contenedor de botones */
@@ -120,8 +125,8 @@
 .btn-card {
   flex: 1;
   min-width: 0;
-  padding: 0.375rem 0.5rem;
-  font-size: 0.875rem;
+  padding: 0.25rem 0.4rem; /* Reducido el padding */
+  font-size: 0.8rem; /* Reducido de 0.875rem a 0.8rem */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

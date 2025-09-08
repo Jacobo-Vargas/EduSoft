@@ -43,6 +43,30 @@
   margin-bottom: 5px;
 }
 
+.history-header {
+  margin-bottom: 0.5rem;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1976d2; /* Azul igual */
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+}
+
+.back-btn .material-icons {
+  font-size: 28px; /* un poco más grande */
+  transition: transform 0.2s, color 0.2s;
+}
+
+.back-btn:hover .material-icons {
+  transform: scale(1.1);
+  color: #125ca1; /* azul más oscuro al hover */
+}
+
 .error {
   color: red;
   font-weight: bold;
