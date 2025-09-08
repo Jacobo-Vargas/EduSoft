@@ -13,6 +13,7 @@ import imageCompression from 'browser-image-compression';
 })
 export class CreateContentComponent implements OnInit {
   contentForm!: FormGroup;
+  moduleId!: number;
   lessonId!: number;
   selectedFile: File | null = null;
   fileError = false;
@@ -28,7 +29,9 @@ export class CreateContentComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.moduleId = Number(this.route.snapshot.paramMap.get('moduleId'));
     this.lessonId = Number(this.route.snapshot.paramMap.get('lessonId'));
+
     if (!this.lessonId || isNaN(this.lessonId)) {
       this.alertService.createAlert('⚠️ No se encontró lessonId en la URL', 'warning', false)
         .then(() => this.router.navigate(['/modules']));
@@ -38,7 +41,6 @@ export class CreateContentComponent implements OnInit {
     this.contentForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(5)]],
       description: ['', [Validators.required, Validators.minLength(10)]]
-      // ❌ quitamos displayOrder
     });
 
     this.loadContents();
@@ -67,7 +69,7 @@ export class CreateContentComponent implements OnInit {
       return;
     }
 
-    if (file.size > 20 * 1024 * 1024) { // 20 MB
+    if (file.size > 20 * 1024 * 1024) {
       this.alertService.createAlert('⚠️ El archivo es demasiado grande. Máximo 20 MB', 'warning', false);
       this.selectedFile = null;
       this.fileError = true;
@@ -104,18 +106,17 @@ export class CreateContentComponent implements OnInit {
       title: this.contentForm.value.title,
       description: this.contentForm.value.description,
       lessonId: this.lessonId
-      // ❌ ya no enviamos displayOrder
     };
 
     this.loading = true;
 
     this.contentService.createContent(dto, this.selectedFile || undefined)
       .subscribe({
-        next: (res) => {
+        next: () => {
           this.loading = false;
           this.alertService.createAlert('✅ Contenido creado con éxito', 'success', false).then(() => {
-            this.loadContents(); // recargar lista
-            this.contentForm.reset(); // reset sin orden
+            this.loadContents();
+            this.contentForm.reset();
             this.selectedFile = null;
             this.fileError = false;
           });
@@ -130,6 +131,6 @@ export class CreateContentComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/lessons', this.lessonId, 'contents']);
+    this.router.navigate(['/modules', this.moduleId, 'lessons', this.lessonId, 'contents']);
   }
 }

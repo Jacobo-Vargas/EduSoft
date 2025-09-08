@@ -15,6 +15,7 @@ export class LessonComponent implements OnInit, OnDestroy {
   loading = false;
   error: string | null = null;
   moduleId!: number;
+  lessonId!: number;
 
   private subscriptions: Subscription[] = [];
 
@@ -27,7 +28,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.moduleId = Number(this.route.snapshot.paramMap.get('moduleId'));
-
+    this.lessonId = Number(this.route.snapshot.paramMap.get('lessonId'));
     this.loadLessons();
   }
 
@@ -55,7 +56,7 @@ export class LessonComponent implements OnInit, OnDestroy {
       this.alertService.jsonData['alert']?.['btnAccept'] || 'Aceptar',
       this.alertService.jsonData['alert']?.['btnCancel'] || 'Cancelar'
     ).then(result => {
-      if (!result.isConfirmed) return; // El usuario canceló
+      if (!result.isConfirmed) return;
 
       this.loading = true;
       const sub = this.lessonService.deleteLesson(lesson.id).subscribe({

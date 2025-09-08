@@ -15,6 +15,7 @@ export class ContentComponent implements OnInit, OnDestroy {
   contents: ContentResponseDto[] = [];
   loading = false;
   error: string | null = null;
+  moduleId!: number;
   lessonId!: number;
   private subscriptions: Subscription[] = [];
 
@@ -26,6 +27,7 @@ export class ContentComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.moduleId = Number(this.route.snapshot.paramMap.get('moduleId'));
     this.lessonId = Number(this.route.snapshot.paramMap.get('lessonId'));
     this.loadContents();
   }
@@ -81,6 +83,6 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/modules', this.lessonId, 'lessons']);
+    this.router.navigate(['/modules', this.moduleId, 'lessons',]);
   }
 }

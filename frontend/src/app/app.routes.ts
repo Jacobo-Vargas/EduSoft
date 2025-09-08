@@ -36,8 +36,8 @@ export const routes: Routes = [
   { path: 'modules/:courseId/create', component: CreateModuleComponent, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'modules/:moduleId/lessons', component: LessonComponent, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'modules/:moduleId/lessons/create', component: CreateLessonComponent, canActivate: [AuthGuard, TeacherGuard] },
-  { path: 'lessons/:lessonId/contents', component: ContentComponent, canActivate: [AuthGuard] },
-  { path: 'lessons/:lessonId/contents/create', component: CreateContentComponent, canActivate: [AuthGuard, TeacherGuard] },
+  { path: 'modules/:moduleId/lessons/:lessonId/contents', component: ContentComponent, canActivate: [AuthGuard] },
+  { path: 'modules/:moduleId/lessons/:lessonId/contents/create', component: CreateContentComponent, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'history/:courseId', component: History, canActivate: [AuthGuard, TeacherGuard] },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];
