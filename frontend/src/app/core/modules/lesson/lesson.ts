@@ -14,8 +14,8 @@ export class LessonComponent implements OnInit, OnDestroy {
   lessons: LessonResponseDto[] = [];
   loading = false;
   error: string | null = null;
+  courseId!: number;
   moduleId!: number;
-  lessonId!: number;
 
   private subscriptions: Subscription[] = [];
 
@@ -27,8 +27,8 @@ export class LessonComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
     this.moduleId = Number(this.route.snapshot.paramMap.get('moduleId'));
-    this.lessonId = Number(this.route.snapshot.paramMap.get('lessonId'));
     this.loadLessons();
   }
 
@@ -91,6 +91,6 @@ export class LessonComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/modules', this.moduleId]);
+     this.router.navigate(['/modules', this.courseId]);
   }
 }
