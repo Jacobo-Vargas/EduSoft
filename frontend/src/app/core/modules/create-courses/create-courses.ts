@@ -113,6 +113,15 @@ export class CreateCourses implements OnInit {
       return;
     }
 
+    const id = localStorage.getItem('userData');
+
+
+if (!id) {
+  console.error('No hay usuario en localStorage');
+  // opcional: mostrar alerta o bloquear envío
+  return;
+}
+
     this.isLoading = true;
     const formData = new FormData();
     formData.append('title', this.courseForm.value.title);
@@ -122,7 +131,7 @@ export class CreateCourses implements OnInit {
     formData.append('priorKnowledge', this.courseForm.value.priorKnowledge);
     formData.append('estimatedDurationMinutes', this.courseForm.value.estimatedDurationMinutes);
     formData.append('categoryId', this.courseForm.value.categoryId);
-    formData.append('userId', '1'); // ⚡ cambiar por usuario real
+    formData.append('userId', id); // ⚡ cambiar por usuario real
     formData.append('coverUrl', this.selectedFile);
 
     this.courseService.createCourse(formData).subscribe({
