@@ -13,6 +13,7 @@ import imageCompression from 'browser-image-compression';
 })
 export class CreateContentComponent implements OnInit {
   contentForm!: FormGroup;
+  courseId!: number;
   moduleId!: number;
   lessonId!: number;
   selectedFile: File | null = null;
@@ -29,6 +30,7 @@ export class CreateContentComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
     this.moduleId = Number(this.route.snapshot.paramMap.get('moduleId'));
     this.lessonId = Number(this.route.snapshot.paramMap.get('lessonId'));
 
@@ -102,7 +104,7 @@ export class CreateContentComponent implements OnInit {
       return;
     }
 
-    const dto = { 
+    const dto = {
       title: this.contentForm.value.title,
       description: this.contentForm.value.description,
       lessonId: this.lessonId
@@ -115,12 +117,17 @@ export class CreateContentComponent implements OnInit {
         next: () => {
           this.loading = false;
           this.alertService.createAlert('✅ Contenido creado con éxito', 'success', false).then(() => {
-            this.loadContents();
-            this.contentForm.reset();
-            this.selectedFile = null;
-            this.fileError = false;
+            this.router.navigate([
+              '/modules',
+              this.courseId,
+              'lessons',
+              this.moduleId,
+              'contents',
+              this.lessonId
+            ]);
           });
         },
+
         error: (err) => {
           this.loading = false;
           const msg = err?.error?.message || 'Error al crear el contenido';
@@ -131,6 +138,6 @@ export class CreateContentComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/modules', this.moduleId, 'lessons', this.lessonId, 'contents']);
+    this.router.navigate(['/modules', this.courseId, 'lessons', this.moduleId, 'contents', this.lessonId]);
   }
 }

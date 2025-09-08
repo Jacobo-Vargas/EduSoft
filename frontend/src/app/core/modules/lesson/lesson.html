@@ -21,7 +21,8 @@
 
           <!-- Botón Ver Documentos debajo -->
           <div class="lesson-documents-btn">
-            <button class="btn btn-primary" [routerLink]="['/modules', moduleId, 'lessons', lesson.id, 'contents']">
+            <button class="btn btn-primary"
+              [routerLink]="['/modules', courseId, 'lessons', moduleId, 'contents', lesson.id]">
               📂 Ver Documentos
             </button>
 
