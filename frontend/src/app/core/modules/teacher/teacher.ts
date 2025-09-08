@@ -45,6 +45,7 @@ export class TeacherComponent implements OnInit, OnDestroy {
         this.userData = userData;
         if (userData) {
           this.loadUserCourses();
+          localStorage.setItem('userData', userData.id.toString());
         } else {
           console.warn('⚠ No hay datos de usuario, redirigiendo al login');
           this.router.navigate(['']);
