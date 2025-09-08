@@ -37,7 +37,6 @@ export class CreateLessonComponent implements OnInit {
     this.lessonForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
-      displayOrder: [1, [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -56,7 +55,6 @@ export class CreateLessonComponent implements OnInit {
       name: this.lessonForm.value.name,
       description: this.lessonForm.value.description,
       moduleId: this.moduleId,
-      displayOrder: this.lessonForm.value.displayOrder
     };
 
     this.loading = true;

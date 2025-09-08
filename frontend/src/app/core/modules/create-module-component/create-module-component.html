@@ -3,67 +3,53 @@
 
 <div class="container mt-5 form-container-bg">
   <div class="form-container">
-    <!-- Botón de regresar movido dentro del formulario -->
-    <button type="button" class="btn btn-custom-outline-sm me-2" (click)="goBack()">
-      <i class="bi bi-arrow-left"></i>
-    </button>
+    <!-- Botón de regresar -->
+    <div class="text-start mb-3">
+      <button type="button" class="btn btn-custom-outline-sm" (click)="goBack()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+    </div>
 
+    <!-- Título -->
     <div class="row align-items-center">
       <div class="col-12 text-center mb-4">
         <h2 class="text-black">Crear nuevo módulo</h2>
       </div>
     </div>
 
-    <!-- Formulario -->
-    <form [formGroup]="moduleForm" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
-      <div class="row">
-        <!-- Columna izquierda -->
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="name" class="form-label text-black">Nombre*</label>
-            <input type="text" id="name" formControlName="name" class="form-control"
-              placeholder="Ej: Fundamentos de Programación" />
-            <div class="text-danger" *ngIf="f['name']?.touched && f['name']?.invalid">
-              <small *ngIf="f['name']?.errors?.['required']">⚠️ El nombre es obligatorio.</small>
-              <small *ngIf="f['name']?.errors?.['maxlength']">⚠️ El nombre debe tener máximo 120 caracteres.</small>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="description" class="form-label text-black">Descripción</label>
-            <textarea id="description" formControlName="description" class="form-control"
-              placeholder="Explica brevemente el contenido del módulo (opcional)"></textarea>
-            <div class="text-danger" *ngIf="f['description']?.touched && f['description']?.invalid">
-              <small *ngIf="f['description']?.errors?.['maxlength']">⚠️ La descripción debe tener máximo 800 caracteres.</small>
-            </div>
+    <!-- Formulario centrado -->
+    <div class="col-8 mx-auto">
+      <form [formGroup]="moduleForm" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
+        <div class="mb-3">
+          <label for="name" class="form-label text-black">Nombre*</label>
+          <input type="text" id="name" formControlName="name" class="form-control"
+            placeholder="Ej: Fundamentos de Programación" />
+          <div class="text-danger" *ngIf="f['name']?.touched && f['name']?.invalid">
+            <small *ngIf="f['name']?.errors?.['required']">⚠️ El nombre es obligatorio.</small>
+            <small *ngIf="f['name']?.errors?.['maxlength']">⚠️ El nombre debe tener máximo 120 caracteres.</small>
           </div>
         </div>
 
-        <!-- Columna derecha -->
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="displayOrder" class="form-label text-black">Orden de visualización*</label>
-            <input type="number" id="displayOrder" formControlName="displayOrder" class="form-control"
-              placeholder="Ej: 1" min="1" />
-            <div class="text-danger" *ngIf="f['displayOrder']?.touched && f['displayOrder']?.invalid">
-              <small *ngIf="f['displayOrder']?.errors?.['required']">⚠️ El orden es obligatorio.</small>
-            </div>
+        <div class="mb-3">
+          <label for="description" class="form-label text-black">Descripción</label>
+          <textarea id="description" formControlName="description" class="form-control"
+            placeholder="Explica brevemente el contenido del módulo (opcional)"></textarea>
+          <div class="text-danger" *ngIf="f['description']?.touched && f['description']?.invalid">
+            <small *ngIf="f['description']?.errors?.['maxlength']">⚠️ La descripción debe tener máximo 800 caracteres.</small>
           </div>
         </div>
-      </div>
 
-      <!-- Botón centrado -->
-      <div class="row">
-        <div class="col-12 text-center mb-4">
+        <!-- Botón centrado -->
+        <div class="text-center mt-4">
           <button type="submit" [disabled]="moduleForm.invalid || loading" class="btn btn-success w-50">
             <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
             {{ loading ? 'Creando...' : 'Crear Módulo' }}
           </button>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
 
     <!-- Mensaje de respuesta -->
-    <div *ngIf="message" class="alert alert-info text-center">{{ message }}</div>
+    <div *ngIf="message" class="alert alert-info text-center mt-3">{{ message }}</div>
   </div>
 </div>

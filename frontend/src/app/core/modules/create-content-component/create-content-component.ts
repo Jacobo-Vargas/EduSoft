@@ -37,8 +37,8 @@ export class CreateContentComponent implements OnInit {
 
     this.contentForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(5)]],
-      description: ['', [Validators.required, Validators.minLength(10)]],
-      displayOrder: [1, [Validators.required, Validators.min(1)]]
+      description: ['', [Validators.required, Validators.minLength(10)]]
+      // ❌ quitamos displayOrder
     });
 
     this.loadContents();
@@ -100,7 +100,13 @@ export class CreateContentComponent implements OnInit {
       return;
     }
 
-    const dto = { ...this.contentForm.value, lessonId: this.lessonId };
+    const dto = { 
+      title: this.contentForm.value.title,
+      description: this.contentForm.value.description,
+      lessonId: this.lessonId
+      // ❌ ya no enviamos displayOrder
+    };
+
     this.loading = true;
 
     this.contentService.createContent(dto, this.selectedFile || undefined)
@@ -109,7 +115,7 @@ export class CreateContentComponent implements OnInit {
           this.loading = false;
           this.alertService.createAlert('✅ Contenido creado con éxito', 'success', false).then(() => {
             this.loadContents(); // recargar lista
-            this.contentForm.reset({ displayOrder: 1 });
+            this.contentForm.reset(); // reset sin orden
             this.selectedFile = null;
             this.fileError = false;
           });
