@@ -19,6 +19,7 @@ export class ModuleComponent implements OnInit, OnDestroy {
   error: string | null = null;
   userData: UserData | null = null;
   courseId!: number;
+  lessonId!: number;
   categories: CategorieResponseDTO[] = [];
   courseData: courseResponseDTO | null = null;
 
@@ -38,7 +39,7 @@ export class ModuleComponent implements OnInit, OnDestroy {
 
     // Obtener courseId de la URL
     this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
-
+    this.lessonId = Number(this.route.snapshot.paramMap.get('lessonId'));
     // Cargar categorías
     const catSub = this.moduleService.getCategories().subscribe({
       next: (cats) => this.categories = cats,

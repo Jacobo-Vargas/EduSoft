@@ -1,4 +1,4 @@
- <!-- <app-create-courses 
+<!-- <app-create-courses 
   [tituloFormulario]="'Editar Curso'"
   [textoBoton]="'Actualizar Curso'">
 </app-create-courses> -->
@@ -27,7 +27,7 @@
           <strong>{{ module.name }}</strong>
           <p>{{ module.description }}</p>
 
-          <button [routerLink]="['/modules', module.id, 'lessons']">
+          <button [routerLink]="['/modules', courseId, 'lessons', module.id]">
             Ver lecciones
           </button>
         </div>

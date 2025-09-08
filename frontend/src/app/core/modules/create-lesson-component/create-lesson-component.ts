@@ -12,6 +12,7 @@ import { AlertService } from '../../services/alert.service';
 })
 export class CreateLessonComponent implements OnInit {
   lessonForm!: FormGroup;
+  courseId!: number;
   moduleId!: number;
   loading = false;
 
@@ -24,8 +25,9 @@ export class CreateLessonComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.courseId = Number(this.route.snapshot.paramMap.get('courseId'));
     this.moduleId = Number(this.route.snapshot.paramMap.get('moduleId'));
-    console.log("🔍 moduleId capturado desde ruta:", this.moduleId);
+
 
     if (!this.moduleId || isNaN(this.moduleId)) {
       this.alertService.createAlert('⚠️ No se encontró moduleId en la URL', 'warning', false).then(() => {
@@ -37,7 +39,6 @@ export class CreateLessonComponent implements OnInit {
     this.lessonForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
-      displayOrder: [1, [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -56,7 +57,6 @@ export class CreateLessonComponent implements OnInit {
       name: this.lessonForm.value.name,
       description: this.lessonForm.value.description,
       moduleId: this.moduleId,
-      displayOrder: this.lessonForm.value.displayOrder
     };
 
     this.loading = true;
@@ -78,6 +78,7 @@ export class CreateLessonComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/modules', this.moduleId, 'lessons']);
-  }
+  this.router.navigate(['/modules', this.courseId, 'lessons', this.moduleId]);
+}
+
 }

@@ -27,4 +27,6 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
    """)
     List<Content> findActiveByLessonId(@Param("lessonId") Long lessonId);
 
+    List<Content> findByLessonIdOrderByDisplayOrderDesc(Long lessonId);
+
 }

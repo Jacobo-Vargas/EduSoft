@@ -19,7 +19,6 @@ public class LessonRequestDto {
     @NotNull(message = "Debe especificar el módulo")
     private Long moduleId;
 
-    @NotNull(message = "El orden es obligatorio")
     private Integer displayOrder;
 
     private EnumLifecycleStatus lifecycleStatus = EnumLifecycleStatus.BORRADOR;

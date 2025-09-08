@@ -39,7 +39,6 @@ public class ContentServiceImpl implements ContentService {
     private final CourseEventUtil courseEventUtil;
     private final CloudinaryService cloudinaryService;
 
-
     @Override
     @Transactional
     public ResponseEntity<ContentResponseDto> createContent(ContentRequestDto dto,
@@ -57,6 +56,17 @@ public class ContentServiceImpl implements ContentService {
         content.setLesson(lesson);
         content.setCourse(lesson.getModule().getCourse());
 
+        // ✅ Auto-incremento de displayOrder
+        if (content.getDisplayOrder() == null) {
+            Integer maxOrder = contentRepository.findByLessonIdOrderByDisplayOrderDesc(lesson.getId())
+                    .stream()
+                    .map(Content::getDisplayOrder)
+                    .filter(o -> o != null)
+                    .findFirst()
+                    .orElse(0);
+            content.setDisplayOrder(maxOrder + 1);
+        }
+
         if (file != null && !file.isEmpty()) {
             Map uploadResult = cloudinaryService.uploadFile(file);
 
@@ -73,13 +83,14 @@ public class ContentServiceImpl implements ContentService {
                     enumFileType = EnumFileType.VIDEO;
                     break;
                 default:
-                    enumFileType = EnumFileType.DOCUMENT; // o RAW, según como definiste tu enum
+                    enumFileType = EnumFileType.DOCUMENT;
                     break;
             }
             content.setFileType(enumFileType);
         }
 
         Content saved = contentRepository.save(content);
+
         courseEventUtil.registerEvent(
                 lesson.getModule().getCourse(),
                 lesson.getModule(),
@@ -89,6 +100,7 @@ public class ContentServiceImpl implements ContentService {
                 EnumCourseEventType.CONTENT_CREATED,
                 "Se creó el contenido: " + saved.getTitle()
         );
+
         return ResponseEntity.ok(contentMapper.toResponseDto(saved));
     }
 
