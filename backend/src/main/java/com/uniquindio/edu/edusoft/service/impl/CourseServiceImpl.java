@@ -22,6 +22,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
@@ -294,6 +295,7 @@ public class CourseServiceImpl implements CourseService {
                     .body("No se encontró el curso proporcionado");
         }
         Course course = isExintgCourse.get();
+
         return ResponseEntity.ok(courseMapper.toResponseDto(course));
     }
 

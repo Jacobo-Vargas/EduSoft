@@ -28,27 +28,27 @@ export interface CategorieResponseDTO {
 export interface courseRequestDTO {
   id: number;
   title: string;
-  description: String;
+  description: string; // <-- Corregido
   price: number;
-  coverUrl: String;
+  coverUrl: string;
   semester: number;
-  priorKnowledge: String;
+  priorKnowledge: string; // <-- Corregido
   estimatedDurationMinutes: number;
   categoryId: number;
-  userId: number;
+  userId: string;
 }
 
 export interface courseResponseDTO {
   id: number;
   title: string;
-  description: String;
+  description: string; // <-- Corregido
   price: number;
-  coverUrl: String;
+  coverUrl: string;
   semester: number;
-  priorKnowledge: String;
+  priorKnowledge: string; // <-- Corregido
   estimatedDurationMinutes: number;
   categoryId: number;
-  userId: number;
+  userId: string; // <-- Mantener como string para que coincida con el backend y evitar errores de mapeo
   auditStatusName: string;
 }
 
@@ -106,6 +106,9 @@ export class CourseService {
         null,  // body vacío
         { withCredentials: true }  // opciones
     );
+}
+updateCourse(courseId: number, body: FormData): Observable<courseResponseDTO> {
+  return this.http.put<courseResponseDTO>(`${API}/course/update/${courseId}`, body, { withCredentials: true });
 }
 
 }

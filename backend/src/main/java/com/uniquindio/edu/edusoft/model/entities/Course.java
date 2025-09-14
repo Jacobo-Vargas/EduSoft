@@ -54,12 +54,12 @@ public class Course extends BaseEntity {
     private int semester; //Semestre
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "current_status_id", nullable = false)
     private CurrentStatus currentStatus; //Estado del curso
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -72,7 +72,7 @@ public class Course extends BaseEntity {
     private int estimatedDurationMinutes;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "audit_status_id", nullable = false)
     private AuditStatus auditStatus;//Estados de auditoria
 

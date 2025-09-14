@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CourseService } from './course-service';
 
@@ -21,16 +21,16 @@ export interface CategorieResponseDTO {
   createdAt: string;
 }
 export interface courseResponseDTO {
-  id: number;
+ id: number;
   title: string;
-  description: String;
+  description: string; // <-- Corregido
   price: number;
-  coverUrl: String;
+  coverUrl: string;
   semester: number;
-  priorKnowledge: String;
+  priorKnowledge: string; // <-- Corregido
   estimatedDurationMinutes: number;
   categoryId: number;
-  userId: number;
+  userId: string; // <-- Mantener como string para que coincida con el backend y evitar errores de mapeo
   auditStatusName: string;
 }
 
@@ -78,8 +78,12 @@ export class ModuleService {
   getCategories(): Observable<CategorieResponseDTO[]> {
     return this.http.get<CategorieResponseDTO[]>(`${API}/categories`, { withCredentials: true });
   }
-  getCourseById(id: number): Observable<courseResponseDTO> {
-  return this.http.get<courseResponseDTO>(`${API}/course/${id}`, { withCredentials: true });
-}
+    getCourseById(id: number): Observable<courseResponseDTO> {
+    // El endpoint real está en courseController, no en moduleController
+    // Y el DTO de respuesta que te está devolviendo es CourseResponseDto, no el que tienes en module.service
+    return this.http.get<courseResponseDTO>(`${API}/course/${id}`, { withCredentials: true }).pipe(
+      map(res => res)
+    );
+  }
 
 }

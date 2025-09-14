@@ -106,10 +106,10 @@
       <!-- Botón centrado -->
       <div class="row">
         <div class="col-12 text-center mb-4">
-          <button type="submit" [disabled]="courseForm.invalid || !selectedFile"
-                  class="btn btn-success w-50">
-            {{ textoBoton }}
-          </button>
+        <button type="submit" [disabled]="!canSave || isLoading"
+        class="btn btn-success w-50">
+  {{ textoBoton }}
+</button>
           <span *ngIf="isLoading">
             <span class="spinner-border spinner-border-sm me-2"></span>
             Procesando...

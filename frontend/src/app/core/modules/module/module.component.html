@@ -1,13 +1,9 @@
-<!-- <app-create-courses 
-  [tituloFormulario]="'Editar Curso'"
-  [textoBoton]="'Actualizar Curso'">
-</app-create-courses> -->
-
-
-
-
 <div class="module-container">
-  <!-- Columna izquierda -->
+  <div class="course-form">
+    <app-create-courses [tituloFormulario]="'Editar Curso'" [textoBoton]="'Actualizar Curso'" [usarFondo]="false"
+      [cursoEditar]="courseData">
+    </app-create-courses>
+  </div>
   <div class="module-list">
 
     <!-- Botón de regresar arriba a la izquierda -->

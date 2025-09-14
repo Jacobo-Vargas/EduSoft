@@ -47,14 +47,16 @@ export class ModuleComponent implements OnInit, OnDestroy {
     });
     this.subscriptions.push(catSub);
 
-    // Obtener datos del curso
-    const courseSub = this.moduleService.getCourseById(this.courseId).subscribe({
-      next: (course) => {
-        this.courseData = course;
-      },
-      error: (err) => this.handleError('Error obteniendo curso', err)
-    });
-    this.subscriptions.push(courseSub);
+   const courseSub = this.moduleService.getCourseById(this.courseId).subscribe({
+  next: (response: any) => { // Recibe el objeto completo de respuesta
+    this.courseData = response.body; // Accede a la propiedad body
+    console.log('📌 Datos del curso obtenidos:', this.courseData);
+    // Ahora this.courseData tiene el objeto que esperas: {auditStatusId: 2, ...}
+  },
+  error: (err) => this.handleError('Error obteniendo curso', err)
+});
+this.subscriptions.push(courseSub);
+   
 
     // Cargar datos del usuario autenticado
     const userDataSub = this.authService.getUserData().subscribe({
