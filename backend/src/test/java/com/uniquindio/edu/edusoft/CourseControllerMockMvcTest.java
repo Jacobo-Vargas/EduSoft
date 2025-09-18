@@ -43,6 +43,7 @@ class CourseControllerMockMvcTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+
     @Test
     void testCreateCourse() throws Exception {
         CourseResponseDto responseDto = new CourseResponseDto();
@@ -60,7 +61,7 @@ class CourseControllerMockMvcTest {
         dto.setCategoryId(1L);
         dto.setUserId("user123");
 
-        when(courseService.createCourse(any(CourseRequestDto.class)))
+        when(courseService.createCourse(any(CourseRequestDto.class),""))
                 .thenReturn((ResponseEntity) ResponseEntity.ok(responseDto));
 
         MockMultipartFile cover = new MockMultipartFile(
@@ -84,6 +85,8 @@ class CourseControllerMockMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.title").value(dto.getTitle()));
+
+
     }
 
     @Test
@@ -112,7 +115,7 @@ class CourseControllerMockMvcTest {
         responseDto.setTitle(dto.getTitle());
         responseDto.setDescription(dto.getDescription());
 
-        when(courseService.updateCourse(anyLong(), any(CourseRequestDto.class)))
+        when(courseService.updateCourse(anyLong(), any(CourseRequestDto.class), ""))
                 .thenReturn((ResponseEntity) ResponseEntity.ok(responseDto));
 
         MockMultipartFile cover = new MockMultipartFile(

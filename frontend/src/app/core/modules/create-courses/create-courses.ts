@@ -161,7 +161,8 @@ export class CreateCourses implements OnInit, OnChanges {
     formData.append('priorKnowledge', this.courseForm.value.priorKnowledge);
     formData.append('estimatedDurationMinutes', this.courseForm.value.estimatedDurationMinutes);
     formData.append('categoryId', this.courseForm.value.categoryId);
-    formData.append('userId', this.cursoEditar ? String(this.cursoEditar.id) : ''); // ⚡ cambiar por usuario real
+    formData.append('userId', this.cursoEditar ? String(this.cursoEditar.id) :  ''); 
+    localStorage.clear();
     if (this.selectedFile) {
     // ✅ Usuario seleccionó un nuevo archivo
     formData.append('coverUrl', this.selectedFile);

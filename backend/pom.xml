@@ -112,8 +112,6 @@
             <version>1.5.5.Final</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- Lombok binding para MapStruct -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok-mapstruct-binding</artifactId>
@@ -125,8 +123,11 @@
             <artifactId>cloudinary-http44</artifactId>
             <version>1.29.0</version>
         </dependency>
-
-        <!-- swagger -->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.27.0</version>
+        </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>

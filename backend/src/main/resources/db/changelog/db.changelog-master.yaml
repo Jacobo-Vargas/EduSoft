@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/juan/db.changelog-01-01-add-user-juan.yaml
+      relativeToChangelogFile: false
+  - include:
+      file: db/changelog/juan/db.changelog-01-02-delete-user-juan.yaml
+      relativeToChangelogFile: false
+
+
+  # ... Agregar  más archivos de changelog aquí

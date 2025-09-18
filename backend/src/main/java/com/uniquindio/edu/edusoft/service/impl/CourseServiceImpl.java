@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -35,9 +36,16 @@ public class CourseServiceImpl implements CourseService {
     private final CourseEventUtil courseEventUtil;
 
     @Override
-    public ResponseEntity<?> createCourse(CourseRequestDto courseRequestDto) throws Exception {
+    public ResponseEntity<?> createCourse(CourseRequestDto courseRequestDto, String userEmail) throws Exception {
+
         // Validar campos
         String messageValidate = validateFilds(courseRequestDto);
+        User profesor;
+        if (courseRequestDto.getUserId() == null || courseRequestDto.getUserId().isBlank()) {
+            profesor = userRepository.findByEmail(userEmail)
+                    .orElseThrow(() -> new IllegalArgumentException("Profesor no encontrado"));
+            courseRequestDto.setUserId(String.valueOf(profesor.getId()));
+        }
         if (!messageValidate.isEmpty()) {
             return ResponseEntity.badRequest().body(messageValidate);
         }
@@ -46,18 +54,18 @@ public class CourseServiceImpl implements CourseService {
         if (courseRepository.existsByTitleIgnoreCase(course.getTitle())) {
             throw new IllegalArgumentException("El título ingresado ya ha sido registrado en otro curso");
         }
-        // Validar FK category
+
+        // Validar FK
+        profesor = userRepository.findById(courseRequestDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("Profesor no encontrado"));
+        course.setUser(profesor);
         Category category = categoryRepository.findById(courseRequestDto.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
         course.setCategory(category);
-        // Validar FK profesor
-        User profesor = userRepository.findById(courseRequestDto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Profesor no encontrado"));
-        course.setUser(profesor);
-       Optional<CurrentStatus> existCurrentStatus = currentStatusRepository.findByName("borrador");
-        if(existCurrentStatus.isPresent()){
+        Optional<CurrentStatus> existCurrentStatus = currentStatusRepository.findByName("borrador");
+        if (existCurrentStatus.isPresent()) {
             course.setCurrentStatus(existCurrentStatus.get());
-        }else {
+        } else {
             CurrentStatus currentStatus = new CurrentStatus();
             currentStatus.setName("borrador");
             currentStatus.setDescription("Estado  en el cual los cursos se encontran si no han sido publicados");
@@ -65,9 +73,9 @@ public class CourseServiceImpl implements CourseService {
             course.setCurrentStatus(currentStatus);
         }
         Optional<AuditStatus> existAudiStatus = auditStatusRepository.findByName("sin-revision");
-        if(existAudiStatus.isPresent()){
+        if (existAudiStatus.isPresent()) {
             course.setAuditStatus(existAudiStatus.get());
-        }else {
+        } else {
             AuditStatus auditStatus = new AuditStatus();
             auditStatus.setName("sin-revision");
             auditStatus.setDescription("Estado  en el cual los cursos se encontran si no han sido revisados por auditoria");
@@ -79,7 +87,7 @@ public class CourseServiceImpl implements CourseService {
             String imageUrl = (String) uploadResult.get("secure_url");
             course.setCoverUrl(imageUrl); // asume que Course tiene campo coverUrl
         }
-        if(course.getPrice()==null){
+        if (course.getPrice() == null) {
             course.setPrice(BigDecimal.ZERO);
         }
         // Guardar curso
@@ -93,9 +101,8 @@ public class CourseServiceImpl implements CourseService {
                 EnumCourseEventType.COURSE_CREATED,
                 "Se creó el curso: " + saved.getTitle()
         );
-
-        // Retornar respuesta con DTO enriquecido
         return ResponseEntity.ok(courseMapper.toResponseDto(saved));
+
     }
 
     @Override
@@ -112,7 +119,7 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.findByTitleContainingIgnoreCase(title);
     }
 
-    public String validateFilds(CourseRequestDto courseRequestDto){
+    public String validateFilds(CourseRequestDto courseRequestDto) {
         StringBuilder message = new StringBuilder();
 
         // Validar título
@@ -135,14 +142,14 @@ public class CourseServiceImpl implements CourseService {
         }
 
         // Validar precio
-        if(courseRequestDto.getPrice()!= null) {
+        if (courseRequestDto.getPrice() != null) {
             if (courseRequestDto.getPrice().compareTo(BigDecimal.ZERO) < 0) {
                 message.append("El precio no puede ser negativo. ");
             }
         }
 
         // Validar portada
-        if (courseRequestDto.getCoverUrl() == null ) {
+        if (courseRequestDto.getCoverUrl() == null) {
             message.append("Debe seleccionar una portada. ");
         }
         // Validar semestre recomendado
@@ -169,12 +176,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public ResponseEntity<?> updateCourse(Long courseId, CourseRequestDto courseRequestDto) throws Exception {
+    public ResponseEntity<?> updateCourse(Long courseId, CourseRequestDto courseRequestDto, String userEmail) throws Exception {
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
         if (optionalCourse.isEmpty()) {
             return ResponseEntity.badRequest().body("El curso con id " + courseId + " no existe.");
         }
-
         Course course = optionalCourse.get();
 
         // Validar campos
@@ -197,9 +203,8 @@ public class CourseServiceImpl implements CourseService {
                     .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
             course.setCategory(category);
         }
-
         if (courseRequestDto.getUserId() != null) {
-            User profesor = userRepository.findById(courseRequestDto.getUserId())
+            User profesor = userRepository.findByEmail(userEmail)
                     .orElseThrow(() -> new IllegalArgumentException("Profesor no encontrado"));
             course.setUser(profesor);
         }

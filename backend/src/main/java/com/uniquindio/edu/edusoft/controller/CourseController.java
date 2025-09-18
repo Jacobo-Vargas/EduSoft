@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +21,9 @@ public class CourseController {
     private final CourseService courseService;
 
     @PostMapping(value = "/save",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createCourse(@ModelAttribute CourseRequestDto courseRequestDto) throws Exception {
-        return courseService.createCourse(courseRequestDto);
+    public ResponseEntity<?> createCourse(@ModelAttribute CourseRequestDto courseRequestDto, Authentication authentication) throws Exception {
+        // Aquí obtienes el usuario logueado
+        return courseService.createCourse(courseRequestDto,authentication.getName().toLowerCase());
     }
 
     @GetMapping("/user/{userId}")
@@ -32,8 +34,8 @@ public class CourseController {
     @PutMapping(value = "/update/{courseId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateCourse(
             @PathVariable Long courseId,
-            @ModelAttribute CourseRequestDto courseRequestDto) throws Exception {
-        return courseService.updateCourse(courseId, courseRequestDto);
+            @ModelAttribute CourseRequestDto courseRequestDto, Authentication authentication) throws Exception {
+        return courseService.updateCourse(courseId, courseRequestDto, authentication.getName().toLowerCase());
     }
 
     @DeleteMapping("/delete/{courseId}")
