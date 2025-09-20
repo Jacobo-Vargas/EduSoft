@@ -22,6 +22,7 @@ export class CreateCourses implements OnInit, OnChanges {
   @Input() textoBoton: string = 'Registrar Curso';
   @Input() usarFondo: boolean = true;
   @Input() cursoEditar: courseResponseDTO | null = null;
+  @Input() conFondo: boolean = true;
 
 
   courseForm!: FormGroup;

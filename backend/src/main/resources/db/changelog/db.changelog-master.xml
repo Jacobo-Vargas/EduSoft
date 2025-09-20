@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+        <include file="db/changelog/juan/db.changelog-01-create-users-table.xml" relativeToChangelogFile="false"/>
+        <include file="db/changelog/juan/db.changelog-02-create-categories-table.xml" relativeToChangelogFile="false"/>
+        <include file="db/changelog/juan/db.changelog-03-create-audit-status-table.xml" relativeToChangelogFile="false"/>
+        <include file="db/changelog/juan/db.changelog-04-create-current-status-table.xml" relativeToChangelogFile="false"/>
+        <include file="db/changelog/juan/db.changelog-05-create-courses-table.xml" relativeToChangelogFile="false"/>
+        <include file="db/changelog/juan/db.changelog-06-create-modules-table.xml" relativeToChangelogFile="false"/>
+        <include file="db/changelog/juan/db.changelog-07-create-lessons-table.xml" relativeToChangelogFile="false"/>
+        <include file="db/changelog/juan/db.changelog-08-create-contents-table.xml" relativeToChangelogFile="false"/>
+        <include file="db/changelog/juan/db.changelog-09-create-course-events-table.xml" relativeToChangelogFile="false"/>
+        <include file="db/changelog/juan/db.changelog-10-create-code-change-password-table.xml" relativeToChangelogFile="false"/>
+
+</databaseChangeLog>

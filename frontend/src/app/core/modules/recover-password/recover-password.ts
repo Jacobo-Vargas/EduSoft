@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validatio
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-recover-password',
@@ -26,7 +27,8 @@ export class RecoverPassword implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private alertService: AlertService
   ) {
     const navigation = this.router.getCurrentNavigation();
     this.username = navigation?.extras.state?.['username'] || '';
@@ -93,6 +95,9 @@ export class RecoverPassword implements OnInit {
     this.auth.updatePassword(requestData).subscribe({
       next: () => {
         this.showSuccessMessage = true;
+         this.alertService.createAlert('✅ Contraseña actualizada con exito', 'success', false).then(() => {
+          this.router.navigate(['/']);
+        });
         this.userForm.reset();
         this.isLoading = false;
         setTimeout(() => this.showSuccessMessage = false, 5000);

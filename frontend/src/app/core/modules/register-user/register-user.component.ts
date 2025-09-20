@@ -76,14 +76,16 @@ export class RegisterUserComponent implements OnInit {
     };
 
     this.usuarioService.createUser(userData).subscribe({
-      next: (response) => {
-        console.log('✅ Usuario registrado exitosamente:', response);
-        alert('Usuario registrado exitosamente');
-        this.userForm.reset();
-        this.resetRecaptcha();
-        this.router.navigate(['/login']); 
+      next: () => {
+        this.isSubmitting = false;
+        this.alertService.createAlert('✅ Usuario registrado exitosamente', 'success', false).then(() => {
+          this.userForm.reset();
+          this.resetRecaptcha();
+          this.router.navigate(['/login']);
+        });
       },
       error: (error) => {
+        this.isSubmitting = false;
         console.error('❌ Error al registrar usuario:', error);
 
         let errorMessage = 'Error al registrar usuario. ';
@@ -95,18 +97,13 @@ export class RegisterUserComponent implements OnInit {
           errorMessage += 'Problema de conexión.';
         }
 
-        this.alertService.createAlert(errorMessage, "error", false);
+        this.alertService.createAlert(`❌ ${errorMessage}`, 'error', false);
         this.resetRecaptcha();
-
-        this.isSubmitting = false;
-      },
-      complete: () => {
-        this.isSubmitting = false;
       }
     });
   } else {
-    console.warn('❌ Formulario inválido o reCAPTCHA no completado');
-    alert('Por favor completa todos los campos requeridos y el reCAPTCHA.');
+    Object.values(this.userForm.controls).forEach(c => c.markAsTouched());
+    this.alertService.createAlert('⚠️ Por favor completa todos los campos requeridos y el reCAPTCHA.', 'warning', false);
   }
 }
 

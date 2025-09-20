@@ -1,88 +1,120 @@
-.module-container {
+/* --- Contenedor principal con fondo borroso --- */
+.module-page-wrapper {
+  position: relative;
   display: flex;
-  gap: 20px;
-  padding: 1rem;
+  gap: 2rem;
+  padding: 2rem;
+  min-height: calc(100vh - 70px); /* Ajusta la altura para descontar el navbar */
+  width: 100%;
 }
 
-.module-list,
-.module-actions {
+.module-page-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  
+  /* ⚠️ Usando una de las imágenes que subiste */
+  background-image: url('../../../../assets/img/fondo-cafe.avif');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  filter: blur(5px);
+}
+
+/* --- Estilo de las columnas como tarjetas "Glassmorphism" --- */
+.module-column {
+  position: relative; /* Para que el contenido esté sobre el fondo */
   flex: 1;
-  border: 1px solid #ddd;
-  padding: 1rem;
-  border-radius: 8px;
-  background-color: #fafafa;
-}
-
-.module-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-.module-list li {
-  display: flex;
-  justify-content: space-between; /* izquierda info, derecha botones */
-  align-items: flex-start;
-  margin-bottom: 15px;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #ffffff;
-}
-
-.module-info {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 5px;
+}
+
+/* --- Encabezado de la columna derecha --- */
+.column-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.btn-back {
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-back:hover {
+  transform: scale(1.1);
+}
+
+/* --- Lista de Módulos --- */
+.module-list {
+  overflow-y: auto; /* Scroll si la lista es muy larga */
+  padding-right: 10px; /* Espacio para el scroll */
+}
+
+.module-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  color: #000000;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.module-item:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
 }
 
 .module-info strong {
-  font-size: 16px;
-  color: #333;
+  font-size: 1.1rem;
 }
-
 .module-info p {
-  margin: 0;
-  font-size: 14px;
-  color: #555;
-}
-
-/* Botón Ver lecciones debajo de la info, alineado a la izquierda */
-.module-info button {
-  align-self: flex-start;
-  margin-top: 5px;
-}
-
-/* Botón eliminar a la derecha */
-.module-actions-btn {
-  display: flex;
-  align-items: flex-start;
-}
-
-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.3s;
-}
-
-button:hover {
+  font-size: 0.9rem;
   opacity: 0.8;
+  margin: 0;
 }
 
-.btn-danger {
-  background-color: #d32f2f;
-  color: white;
-}
-
-.module-actions {
+.module-buttons {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 0.5rem;
 }
 
-.error {
-  color: red;
-  font-weight: bold;
+/* --- Sección de Acciones --- */
+.module-actions {
+  margin-top: auto; /* Empuja las acciones al final */
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.actions-title {
+  color: #fff;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* --- Responsive para Móviles --- */
+@media (max-width: 992px) {
+  .module-page-wrapper {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="create-modules-table" author="proyecto-ingsoft">
+        <createTable tableName="modules">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="deleted_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="name" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(800)"/>
+            <column name="course_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="display_order" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lifecycle_status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_visible" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fk_module_course"
+                                 baseTableName="modules"
+                                 baseColumnNames="course_id"
+                                 referencedTableName="courses"
+                                 referencedColumnNames="id"/>
+
+        <addUniqueConstraint tableName="modules" columnNames="name, course_id" constraintName="uk_module_name_course"/>
+        <addUniqueConstraint tableName="modules" columnNames="display_order, course_id" constraintName="uk_module_order_course"/>
+
+        <createIndex tableName="modules" indexName="idx_module_course" unique="false">
+            <column name="course_id"/>
+        </createIndex>
+        <createIndex tableName="modules" indexName="idx_module_order" unique="false">
+            <column name="course_id"/>
+            <column name="display_order"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,9 +1,0 @@
-databaseChangeLog:
-  - changeSet:
-      id: 4
-      author: juan
-      comment: Eliminar el usuario de prueba creado para Juan.
-      changes:
-        - delete:
-            tableName: users
-            where: id = 1

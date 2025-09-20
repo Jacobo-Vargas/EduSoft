@@ -1,95 +1,199 @@
-/* Estilo para el contenedor con fondo verde claro y caja */
-.form-container-bg {
-  background-color: rgba(144, 238, 144, 0.1);
-  /* Fondo verde claro muy suave y transparente */
-  padding: 30px;
-  /* Añade algo de espacio interno */
-  border-radius: 12px;
-  /* Bordes redondeados */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* Sombra suave para darle énfasis */
+/* --- Contenedor principal --- */
+.form-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* CLAVE: Ocupa el 100% de la altura de la pantalla */
+  padding: 2rem;
+  overflow: hidden;
 }
 
-h2 {
-  color: black !important;
-  /* Fuerza el color negro en el h2 */
+/* --- Pseudo-elemento para el FONDO BORROSO --- */
+.form-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -10px; right: -10px; bottom: -10px; left: -10px;
+  z-index: -1;
+  background-image: url('../../../../assets/img/fondo-cafe.avif');
+  background-size: cover;
+  background-position: center;
+  filter: blur(8px);
 }
 
-/* Estilo para el formulario */
-.form-container {
-  background-color: rgba(212, 255, 212, 0.2);
-  /* Fondo verde claro con algo más de opacidad para el formulario */
-  padding: 20px;
+/* --- Tarjeta de formulario con efecto "Glassmorphism" --- */
+.form-card {
+  width: 100%;
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  color: #fff;
+  max-height: 95vh;
+  overflow-y: auto; /* Permite scroll DENTRO de la tarjeta si es necesario */
+}
+
+/* ... (El resto de tus estilos para .form-header, .btn-back, .image-preview, etc. se mantienen igual) ... */
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+.form-title {
+  color: #fff;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+  flex-grow: 1;
+}
+.btn-back {
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.btn-back:hover {
+  transform: scale(1.1);
+}
+.image-preview-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.image-preview {
+  max-width: 100%;
+  max-height: 250px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
+  border: 3px solid white;
+}
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.form-control,
+.form-select {
+  background-color: #fff   !important;
+  color: #000000 !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
   border-radius: 8px;
-  /* Bordes redondeados */
-  color: black;
-  /* Cambia todo el texto dentro del formulario a negro */
 }
-
-/* Asegúrate de que las etiquetas también tengan texto negro */
-.form-label {
-  color: black !important;
-  /* Asegura que las etiquetas sean negras */
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+  opacity: 1;
 }
-
-/* Botón verde */
-.btn-success {
-  background-color: #28a745;
-  /* Color verde para el fondo del botón */
-  border-color: #28a745;
-  /* Borde verde para el botón */
+.form-floating > label {
+  color: rgba(0, 0, 0, 0.7);
+}
+.form-floating > .form-control:focus,
+.form-floating > .form-select:focus {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.3) !important;
+}
+.invalid-feedback {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  height: 1.5em;
+  color: #ffcdd2;
+  font-weight: 500;
+  transition: opacity 0.2s ease-in-out;
+}
+.form-control.is-invalid ~ .invalid-feedback,
+.form-field-group .invalid-feedback:not(:empty) {
+  visibility: visible;
+  opacity: 1;
+}
+.form-field-group textarea.form-control {
+  height: 140px;
+}
+.form-field-group .form-control[type="file"] {
+  flex-grow: 1;
+}
+.custom-file-label {
+  color: #fff !important;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.btn-submit {
+  background: linear-gradient(45deg, #28a745, #218838);
   color: white;
-  /* Color de texto blanco para el botón */
-}
-
-/* Aseguramos que el botón sea más grande */
-button {
-  max-width: 200px;
-  margin: 0 auto;
-}
-
-.btn-custom-outline-sm {
-  color: #198754;
-  border: 2px solid #198754;
-  background-color: transparent;
-  font-size: 1rem;
-  padding: 0.25rem 0.5rem;
-  line-height: 1.2;
-  border-radius: 6px;
+  border: none;
+  padding: 0.75rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+}
+.btn-submit:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
+}
+.btn-submit:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
-.btn-custom-outline-sm:hover {
-  background-color: #198754;
+
+/* --- 📱 Media Queries para Responsividad --- */
+@media (max-width: 768px) {
+  .form-wrapper {
+    padding: 1rem; /* Menos padding en pantallas pequeñas */
+    align-items: flex-start; /* Alinea la tarjeta arriba en móvil */
+    padding-top: 2rem;
+  }
+
+  .form-card {
+    padding: 1.5rem; /* Ajusta el padding interno de la tarjeta */
+    max-height: 95vh;
+  }
+  
+  .form-title {
+    font-size: 1.25rem; /* Título más pequeño */
+  }
+
+  /* Bootstrap apila las columnas .col-md-6 automáticamente. 
+     El g-4 en el .row debería agregar espacio. 
+     Si no, puedes forzarlo así: */
+  .row .col-md-6 {
+    margin-bottom: 1rem;
+  }
+  .row .col-md-6:last-child {
+    margin-bottom: 0;
+  }
+  .row.mb-3 {
+    margin-bottom: 0 !important;
+  }
+}
+
+
+
+
+/* --- Estilo de tarjeta SIN FONDO (Borde y sombra simple) --- */
+.form-wrapper-sin-fondo .form-card {
+  background: transparent; /* ✅ CAMBIO: Haz el fondo transparente */
+  border: none;          /* ✅ CAMBIO: Quita el borde */
+  box-shadow: none;      /* ✅ CAMBIO: Quita la sombra */
+  color: #fff;           /* ✅ CAMBIO: Asegura que el texto sea blanco para que contraste */
+}
+
+/* --- También ajusta el color de los títulos y botones cuando no hay fondo --- */
+.form-wrapper-sin-fondo .form-title,
+.form-wrapper-sin-fondo .btn-back {
   color: #fff;
 }
 
-.form-box {
-  border: 1px solid #ddd;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.form-container-bg {
-  background-color: rgba(144, 238, 144, 0.1);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.btn-custom-outline-sm {
-  color: #198754;
-  border: 2px solid #198754;
-  background-color: transparent;
-  font-size: 1rem;
-  padding: 0.25rem 0.5rem;
-  line-height: 1.2;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-}
-
-.btn-custom-outline-sm:hover {
-  background-color: #198754;
-  color: #fff;
-}
+/* ... (mantén el resto del CSS igual) ... */

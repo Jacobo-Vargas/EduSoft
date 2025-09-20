@@ -16,10 +16,11 @@ export class CardCourseComponent {
   @Input() buttonText!: string;
   @Input() iconColor!: string;
   @Input() action!: number;
+  cursos: any;
 
   constructor(public router: Router, public alertService: AlertService) { }
 
-    generateAction() {
+  generateAction() {
     if (this.action === 1) {
       this.router.navigate(['/invest']);
     }

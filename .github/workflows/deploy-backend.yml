@@ -78,6 +78,7 @@ jobs:
             export MAIL_PASSWORD="${{ secrets.MAIL_PASSWORD }}"
             export SSL_PASS="${{ secrets.SSL_PASS }}"
             export SSL_ALIAS="${{ secrets.SSL_ALIAS }}"
+            export APP_URL_BASE="${{ secrets.APP_URL_BASE }}"
 
             echo "Login to ECR on EC2..."
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
@@ -103,4 +104,5 @@ jobs:
               -e MAIL_PASSWORD \
               -e SSL_PASS \
               -e SSL_ALIAS \
+              -e APP_URL_BASE \
               "$ECR_REGISTRY/$IMAGE_NAME"

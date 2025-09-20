@@ -1,61 +1,67 @@
-<div class="module-container">
-  <div class="course-form">
-    <app-create-courses [tituloFormulario]="'Editar Curso'" [textoBoton]="'Actualizar Curso'" [usarFondo]="false"
-      [cursoEditar]="courseData">
-    </app-create-courses>
-  </div>
-  <div class="module-list">
+<div class="module-page-wrapper">
 
-    <!-- Botón de regresar arriba a la izquierda -->
-    <button type="button" class="btn btn-link p-0 mb-2" (click)="goBack()" title="Regresar">
-      <i class="bi bi-arrow-left" style="font-size: 1.5rem;"></i>
-    </button>
-
-    <h3>Mis Módulos</h3>
-
-    <div *ngIf="loading">Cargando módulos...</div>
-    <div *ngIf="error" class="error">{{ error }}</div>
-
-    <ul *ngIf="!loading && modules.length > 0">
-      <li *ngFor="let module of modules" class="module-item">
-        <!-- Info del módulo -->
-        <div class="module-info">
-          <strong>{{ module.name }}</strong>
-          <p>{{ module.description }}</p>
-
-          <button [routerLink]="['/modules', courseId, 'lessons', module.id]">
-            Ver lecciones
-          </button>
-        </div>
-
-        <div class="module-actions-btn">
-          <button class="btn btn-danger" (click)="deleteModule(module)">
-            🗑 Eliminar
-          </button>
-        </div>
-      </li>
-    </ul>
-
-    <div *ngIf="!loading && modules.length === 0">
-      <p>No tienes módulos creados.</p>
+  <div class="module-column">
+    <div class="p-3 h-100">
+      <app-create-courses 
+        [tituloFormulario]="'Editar Información del Curso'" 
+        [textoBoton]="'Actualizar Curso'"
+        [cursoEditar]="courseData" 
+        [conFondo]="false">
+      </app-create-courses>
     </div>
   </div>
 
-  <!-- Columna derecha -->
-  <div class="module-actions">
-    <h3>Acciones</h3>
-    <div class="d-grid gap-2">
-      <button class="btn btn-primary" [routerLink]="['/modules', courseId, 'create']">
-        ➕ Crear Módulo
-      </button>
+  <div class="module-column">
+    <div class="p-3 h-100 d-flex flex-column">
 
-      <button class="btn btn-info" [routerLink]="['/history', courseId]">
-        📜 Ver Historial
-      </button>
+      <div class="column-header">
+        <button type="button" class="btn-back" (click)="goBack()" title="Regresar a Mis Cursos">
+          <i class="bi bi-arrow-left"></i>
+        </button>
+        <h3>Módulos del Curso</h3>
+      </div>
 
-      <button class="btn btn-success" (click)="submitForAudit()">
-        📤 Enviar a Auditoría
-      </button>
+      <div class="module-list flex-grow-1">
+        <div *ngIf="loading" class="text-center p-4">Cargando módulos...</div>
+        <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+        <ul *ngIf="!loading && modules.length > 0" class="list-unstyled">
+          <li *ngFor="let module of modules" class="module-item">
+            <div class="module-info">
+              <strong>{{ module.name }}</strong>
+              <p>{{ module.description }}</p>
+            </div>
+            <div class="module-buttons">
+              <button class="btn btn-sm btn-outline-primary" [routerLink]="['/modules', courseId, 'lessons', module.id]">
+                <i class="bi bi-card-list"></i> Lecciones
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteModule(module)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </li>
+        </ul>
+
+        <div *ngIf="!loading && modules.length === 0" class="text-center p-4">
+          <p>Este curso aún no tiene módulos.</p>
+        </div>
+      </div>
+
+      <div class="module-actions">
+        <h4 class="actions-title">Acciones del Curso</h4>
+        <div class="d-flex flex-column gap-2">
+          <button class="btn btn-primary" [routerLink]="['/modules', courseId, 'create']">
+            <i class="bi bi-plus-circle-fill me-2"></i> Crear Módulo
+          </button>
+          <button class="btn btn-secondary" [routerLink]="['/history', courseId]">
+            <i class="bi bi-clock-history me-2"></i> Ver Historial
+          </button>
+          <button class="btn btn-success" (click)="submitForAudit()">
+            <i class="bi bi-check2-circle me-2"></i> Enviar a Auditoría
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

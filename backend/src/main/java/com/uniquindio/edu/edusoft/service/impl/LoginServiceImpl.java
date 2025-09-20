@@ -162,7 +162,7 @@ public class LoginServiceImpl implements LoginService {
                 return ResponseEntity.ok(verificationCode);
         } else {
             // Si el dominio del email no es válido, lanzar una excepción o retornar un mensaje adecuado
-            throw new IllegalArgumentException("Dominio de correo no válido");
+            throw new IllegalArgumentException("Credenciales inválidas");
         }
     }
 
