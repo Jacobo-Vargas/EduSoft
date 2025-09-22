@@ -54,7 +54,7 @@ public class Content extends BaseEntity {
 
     @NotNull
     @Column(name = "is_visible", nullable = false)
-    private Boolean isVisible = true;
+    private Boolean isVisible = false;
 
     @Size(max = 10)
     @Column(name = "file_extension", length = 10)

@@ -9,8 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import java.math.BigDecimal;
-
-
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
@@ -80,5 +79,13 @@ public class Course extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "course_state", nullable = false, length = 20)
     private EnumState state = EnumState.ACTIVE;
+
+    @NotNull
+    @Column(name = "is_visible", nullable = false)
+    private Boolean isVisible = false;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Module> modules;
+
 
 }

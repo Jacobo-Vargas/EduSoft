@@ -23,7 +23,7 @@ public interface CourseMapper {
     @Mapping(source = "auditStatus.id", target = "auditStatusId")
     @Mapping(source = "auditStatus.name", target = "auditStatusName")
     @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "user.name", target = "userName") // suponiendo que tu entidad User tiene "name"
+    @Mapping(source = "user.name", target = "userName")
     @Mapping(source = "state", target = "state")
     CourseResponseDto toResponseDto(Course course);
 
