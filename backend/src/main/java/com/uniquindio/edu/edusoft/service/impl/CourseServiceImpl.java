@@ -314,4 +314,15 @@ public class CourseServiceImpl implements CourseService {
 
         return ResponseEntity.ok(courseMapper.toResponseDto(course));
     }
+
+    @Override
+    public ResponseEntity<?> getVisibleActiveCourses() {
+        List<Course> courses = courseRepository.findAllVisibleActiveCourses();
+        return ResponseEntity.ok(
+                courses.stream()
+                        .map(courseMapper::toResponseDto)
+                        .toList()
+        );
+    }
+
 }

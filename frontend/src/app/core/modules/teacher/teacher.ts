@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { CourseService, courseResponseDTO } from '../../services/course-service';
+import { CourseService, courseResponseDTO } from '../../services/course.service';
 import { AuthService, UserData } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { AlertService } from '../../services/alert.service';

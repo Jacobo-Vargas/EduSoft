@@ -4,7 +4,7 @@ import { ModuleService, ModuleResponseDto, CategorieResponseDTO, courseResponseD
 import { AuthService, UserData } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { AlertService } from '../../services/alert.service';
-import { CourseService } from '../../services/course-service';
+import { CourseService } from '../../services/course.service';
 
 @Component({
   selector: 'app-module',

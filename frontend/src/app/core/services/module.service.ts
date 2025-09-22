@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CourseService } from './course-service';
+import { CourseService } from './course.service';
 
 const API = environment.urlServer;
 export interface ModuleResponseDto {

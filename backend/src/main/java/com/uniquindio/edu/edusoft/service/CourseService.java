@@ -16,4 +16,5 @@ public interface CourseService {
     public List<Course> searchCourses(String title)throws Exception;
     ResponseEntity<?> updateStatusAudit(long courseId)throws Exception;
     ResponseEntity<?> searchCoursesByid(long id);
+    ResponseEntity<?> getVisibleActiveCourses()throws Exception;
 }

@@ -55,4 +55,10 @@ public class CourseController {
     public ResponseEntity<?> searchCoursesByid(@PathVariable Long id) throws Exception {
         return ResponseEntity.ok(courseService.searchCoursesByid(id));
     }
+
+    @GetMapping("/visible")
+    public ResponseEntity<?> getVisibleCourses() throws Exception {
+        return courseService.getVisibleActiveCourses();
+    }
+
 }

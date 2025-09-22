@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { CourseService } from '../../services/course-service';
+import { CourseService } from '../../services/course.service';
 import { finalize } from 'rxjs';
 
 @Component({

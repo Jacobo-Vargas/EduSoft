@@ -106,9 +106,14 @@ export class CourseService {
         null,  // body vacío
         { withCredentials: true }  // opciones
     );
-}
-updateCourse(courseId: number, body: FormData): Observable<courseResponseDTO> {
+  }
+  updateCourse(courseId: number, body: FormData): Observable<courseResponseDTO> {
   return this.http.put<courseResponseDTO>(`${API}/course/update/${courseId}`, body, { withCredentials: true });
-}
+  }
 
+  getVisibleCourses(): Observable<courseResponseDTO[]> {
+  return this.http.get<courseResponseDTO[]>(`${API}/course/visible`, {
+    withCredentials: true
+  });
+  }
 }
