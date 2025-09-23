@@ -37,10 +37,10 @@
                 <input type="text" id="username" formControlName="username"
                   class="form-control form-control-lg"
                   placeholder="Correo o teléfono *"
-                  [class.is-invalid]="f['username']?.touched && f['username']?.invalid" />
+                  [class.is-invalid]="f['username'].touched && f['username'].invalid" />
 
                 <div class="invalid-feedback d-block"
-                  *ngIf="f['username']?.touched && f['username']?.hasError('required')">
+                  *ngIf="f['username'].touched && f['username'].hasError('required')">
                   El correo o teléfono es obligatorio.
                 </div>
               </div>
@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="invalid-feedback d-block mt-2"
-                  *ngIf="(f['code1']?.invalid || f['code2']?.invalid || f['code3']?.invalid || f['code4']?.invalid) && formSubmitted">
+                  *ngIf="(f['code1'].invalid || f['code2'].invalid || f['code3'].invalid || f['code4'].invalid) && formSubmitted">
                   El código es obligatorio y debe contener 4 dígitos numéricos.
                 </div>
               </div>

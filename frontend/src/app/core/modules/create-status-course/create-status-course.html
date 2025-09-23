@@ -23,7 +23,7 @@
               class="form-control"
               formControlName="name"
               placeholder="Nombre del estado"
-              [class.is-invalid]="f['name']?.touched && f['name']?.invalid"
+              [class.is-invalid]="f['name'].touched && f['name'].invalid"
             />
             <div class="invalid-feedback" *ngIf="f['name']?.errors?.['required']">El nombre es obligatorio.</div>
             <div class="invalid-feedback" *ngIf="f['name']?.errors?.['minlength']">Mínimo 3 caracteres.</div>
@@ -41,7 +41,7 @@
               class="form-control"
               formControlName="description"
               placeholder="Breve descripción del estado"
-              [class.is-invalid]="f['description']?.touched && f['description']?.invalid"
+              [class.is-invalid]="f['description'].touched && f['description'].invalid"
             ></textarea>
             <div class="invalid-feedback" *ngIf="f['description']?.errors?.['required']">La descripción es obligatoria.</div>
             <div class="invalid-feedback" *ngIf="f['description']?.errors?.['minlength']">Mínimo 10 caracteres.</div>

@@ -15,17 +15,21 @@ export class HomeComponent implements OnInit {
   constructor(
     private courseService: CourseService,
     private cdRef: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.courseService.getVisibleCourses().subscribe({
       next: (res) => {
+        console.log("Respondió", res);
         this.cursos = res;
-        this.crearGruposCursos();
-        this.cdRef.detectChanges();
+        if (this.cursos.length > 0) {
+
+          this.crearGruposCursos();
+          this.cdRef.detectChanges();
+        }
       },
       error: (err) => {
-        console.error("❌ Error cargando cursos visibles:", err);
+        console.error("Error cargando cursos visibles:", err);
       }
     });
   }
