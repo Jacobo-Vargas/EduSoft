@@ -8,14 +8,21 @@
         </div>
 
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title course-card__title">{{ curso.title }}</h5>
+          <h5 class="card-title course-card__title text-center">{{ curso.title }}</h5>
 
           <div class="course-card__details">
-            <p class="card-text">
+             
+            <p class="card-text d-flex align-items-center gap-2">
               <span class="fw-bold">Auditoría:</span> {{ curso.auditStatusName }}
+              <span [ngSwitch]="curso.auditStatusName">
+                <i *ngSwitchCase="'En-revision'" class="bi bi-card-checklist " title="En-Revisión"></i>
+                <i *ngSwitchCase="'Sin-revision'" class="bi bi-send " title="Sin Revisión"></i>
+                <i *ngSwitchDefault class="bi bi-question-circle text-muted" title="Estado desconocido"></i>
+              </span>
+
             </p>
             <p class="card-text">
-               <span class="fw-bold">Precio:</span> {{ curso.price | currency:'COP' }}
+                 <i class="bi bi-currency-dollar "></i> {{ curso.price }} COP
             </p>
           </div>
 

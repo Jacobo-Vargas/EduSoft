@@ -278,7 +278,6 @@ public class CourseServiceImpl implements CourseService {
         }
 
         Course course = isExistingCourse.get();
-
         AuditStatus auditStatus = auditStatusRepository.findByName("En-revision")
                 .orElseGet(() -> {
                     AuditStatus newStatus = new AuditStatus();
@@ -286,6 +285,11 @@ public class CourseServiceImpl implements CourseService {
                     newStatus.setDescription("Significa que el curso se encuentra en revisión por auditoría");
                     return auditStatusRepository.save(newStatus);
                 });
+
+        if(course.getAuditStatus().getName().equals("En-revision")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("El curso ya se encuentra en revision");
+        }
         course.setAuditStatus(auditStatus);
 
         course.setIsVisible(true);

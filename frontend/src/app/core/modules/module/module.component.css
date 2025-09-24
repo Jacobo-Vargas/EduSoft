@@ -24,14 +24,12 @@
 
 /* --- Estilo de las columnas como tarjetas "Glassmorphism" --- */
 .module-column {
+  border: 2px solid #8f8f8f;
   position: relative; /* Para que el contenido esté sobre el fondo */
   flex: 1;
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  background-color: #ffffff;
   border-radius: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
   display: flex;
   flex-direction: column;
 }
@@ -44,7 +42,7 @@
   padding-bottom: 1rem;
   margin-bottom: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  color: #fff;
+  color: #000000;
 }
 
 .btn-back {
@@ -62,11 +60,13 @@
 
 /* --- Lista de Módulos --- */
 .module-list {
+   
   overflow-y: auto; /* Scroll si la lista es muy larga */
   padding-right: 10px; /* Espacio para el scroll */
 }
 
 .module-item {
+  border: 2px solid #b8b8b8;
   display: flex;
   justify-content: space-between;
   align-items: center;

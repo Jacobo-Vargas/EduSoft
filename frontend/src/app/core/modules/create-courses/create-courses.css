@@ -8,6 +8,16 @@
   padding: 2rem;
   overflow: hidden;
 }
+/* Para Chrome, Edge y Safari */
+.form-card {
+  overflow-y: scroll;   /* mantiene el scroll */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE y Edge antiguo */
+}
+
+.form-card::-webkit-scrollbar {
+  display: none; /* Chrome, Safari y Opera */
+}
 
 /* --- Pseudo-elemento para el FONDO BORROSO --- */
 .form-wrapper::before {
@@ -24,13 +34,9 @@
 /* --- Tarjeta de formulario con efecto "Glassmorphism" --- */
 .form-card {
   width: 100%;
-  max-width: 900px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background-color: #ffffff;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   color: #fff;
   max-height: 95vh;
   overflow-y: auto; /* Permite scroll DENTRO de la tarjeta si es necesario */
@@ -44,9 +50,10 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   padding-bottom: 1rem;
   margin-bottom: 1.5rem;
+  color : #000000;
 }
 .form-title {
-  color: #fff;
+  color: #000000;
   font-weight: 700;
   margin: 0;
   text-align: center;
@@ -85,15 +92,15 @@
 .form-select {
   background-color: #fff   !important;
   color: #000000 !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
   border-radius: 8px;
+  border: 1px solid #b8b8b8 !important;
 }
 .form-control::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(0, 0, 0, 0.6);
   opacity: 1;
 }
 .form-floating > label {
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(7, 7, 7, 0.7);
 }
 .form-floating > .form-control:focus,
 .form-floating > .form-select:focus {
@@ -105,7 +112,7 @@
   visibility: hidden;
   opacity: 0;
   height: 1.5em;
-  color: #ffcdd2;
+  color: #ff0019;
   font-weight: 500;
   transition: opacity 0.2s ease-in-out;
 }
@@ -187,13 +194,13 @@
   background: transparent; /* ✅ CAMBIO: Haz el fondo transparente */
   border: none;          /* ✅ CAMBIO: Quita el borde */
   box-shadow: none;      /* ✅ CAMBIO: Quita la sombra */
-  color: #fff;           /* ✅ CAMBIO: Asegura que el texto sea blanco para que contraste */
+  color: #000000;           /* ✅ CAMBIO: Asegura que el texto sea blanco para que contraste */
 }
 
 /* --- También ajusta el color de los títulos y botones cuando no hay fondo --- */
 .form-wrapper-sin-fondo .form-title,
 .form-wrapper-sin-fondo .btn-back {
-  color: #fff;
+  color: #000000;
 }
 
 /* ... (mantén el resto del CSS igual) ... */
