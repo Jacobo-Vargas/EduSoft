@@ -41,16 +41,32 @@ export interface courseRequestDTO {
 export interface courseResponseDTO {
   id: number;
   title: string;
-  description: string; // <-- Corregido
+  description: string;
   price: number;
   coverUrl: string;
   semester: number;
-  priorKnowledge: string; // <-- Corregido
+  priorKnowledge: string;
   estimatedDurationMinutes: number;
+
+  // Relaciones enriquecidas
   categoryId: number;
-  userId: string; // <-- Mantener como string para que coincida con el backend y evitar errores de mapeo
+  categoryName: string;
+
+  currentStatusId: number;
+  currentStatusName: string;
+
+  auditStatusId: number;
   auditStatusName: string;
+
+  userId: string;   // en backend es String
+  userName: string;
+
+  // Fechas
+  createdAt: string;   // puedes mapear a Date si prefieres
+  updatedAt: string;
+  state: string;
 }
+
 
 @Injectable({
   providedIn: 'root'

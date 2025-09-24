@@ -1,50 +1,44 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CourseService, courseResponseDTO } from '../../../services/course.service';
+
+interface CategoriaCursos {
+  nombre: string;
+  gruposCursos: courseResponseDTO[][];
+}
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
-  standalone: false
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  categoriasCursos: CategoriaCursos[] = [];
 
-  cursos: courseResponseDTO[] = [];
-  gruposCursos: courseResponseDTO[][] = [];
-
-  constructor(
-    private courseService: CourseService,
-    private cdRef: ChangeDetectorRef
-  ) { }
+  constructor(private courseService: CourseService) {}
 
   ngOnInit(): void {
-    this.courseService.getVisibleCourses().subscribe({
-      next: (res) => {
-        console.log("Respondió", res);
-        this.cursos = res;
-        if (this.cursos.length > 0) {
-
-          this.crearGruposCursos();
-          this.cdRef.detectChanges();
-        }
-      },
-      error: (err) => {
-        console.error("Error cargando cursos visibles:", err);
-      }
+    this.courseService.getVisibleCourses().subscribe(cursos => {
+      this.categoriasCursos = this.agruparPorCategoria(cursos);
     });
   }
 
-  crearGruposCursos() {
-    const temp = [...this.cursos];
+  private agruparPorCategoria(cursos: courseResponseDTO[]): CategoriaCursos[] {
+    const categoriasMap = new Map<string, courseResponseDTO[]>();
 
-    // Si hay menos de 3 cursos, repetir hasta tener al menos 3
-    while (temp.length < 3) {
-      temp.push(...this.cursos);
-    }
+    cursos.forEach(curso => {
+      const categoria = curso.categoryName || 'Sin categoría';
+      if (!categoriasMap.has(categoria)) {
+        categoriasMap.set(categoria, []);
+      }
+      categoriasMap.get(categoria)!.push(curso);
+    });
 
-    this.gruposCursos = [];
-    for (let i = 0; i < temp.length; i += 3) {
-      this.gruposCursos.push(temp.slice(i, i + 3));
-    }
+    return Array.from(categoriasMap.entries()).map(([nombre, cursos]) => {
+      const grupos: courseResponseDTO[][] = [];
+      for (let i = 0; i < cursos.length; i += 3) {
+        grupos.push(cursos.slice(i, i + 3));
+      }
+      return { nombre, gruposCursos: grupos };
+    });
   }
 }
