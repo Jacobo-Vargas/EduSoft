@@ -28,11 +28,11 @@ export interface CategorieResponseDTO {
 export interface courseRequestDTO {
   id: number;
   title: string;
-  description: string; // <-- Corregido
+  description: string;
   price: number;
   coverUrl: string;
   semester: number;
-  priorKnowledge: string; // <-- Corregido
+  priorKnowledge: string;
   estimatedDurationMinutes: number;
   categoryId: number;
   userId: string;
@@ -48,7 +48,6 @@ export interface courseResponseDTO {
   priorKnowledge: string;
   estimatedDurationMinutes: number;
 
-  // Relaciones enriquecidas
   categoryId: number;
   categoryName: string;
 
@@ -58,11 +57,10 @@ export interface courseResponseDTO {
   auditStatusId: number;
   auditStatusName: string;
 
-  userId: string;   // en backend es String
+  userId: string;
   userName: string;
 
-  // Fechas
-  createdAt: string;   // puedes mapear a Date si prefieres
+  createdAt: string; 
   updatedAt: string;
   state: string;
 }

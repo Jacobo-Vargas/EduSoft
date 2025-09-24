@@ -1,6 +1,3 @@
-/* === SOLUCIÓN COMPLETA PARA OCULTAR SCROLLBAR === */
-
-/* Método 1: Para HTML y BODY */
 html {
   overflow: -moz-scrollbars-none; /* Firefox antiguo */
   scrollbar-width: none; /* Firefox */
@@ -46,8 +43,6 @@ body::-webkit-scrollbar {
   background: transparent !important;
   display: none !important;
 }
-
-/* === RESTO DEL CSS DEL CARRUSEL === */
 
 /* Contenedor del carrusel */
 .custom-carousel {
@@ -110,15 +105,15 @@ body::-webkit-scrollbar {
 
 /* === Ajustes de tarjetas === */
 .card {
-  width: 18rem;   /* 🔹 Ajusta aquí el ancho (antes 18rem) */
-  height: 340px;  /* 🔹 Ajusta aquí la altura (antes 340px) */
+  width: 18rem;
+  height: 340px;
   display: flex;
   flex-direction: column;
 }
 
 /* Imagen con altura fija */
 .card-img-top {
-  height: 120px; /* 🔹 Reducir imagen (antes 160px) */
+  height: 120px;
   object-fit: cover;
 }
 
@@ -148,8 +143,6 @@ body::-webkit-scrollbar {
   }
 }
 
-/* === SOLUCIÓN ADICIONAL SI AÚN NO FUNCIONA === */
-/* Agrega esta clase al elemento que contiene toda tu página */
 .no-scrollbar {
   overflow-y: scroll;
   scrollbar-width: none;

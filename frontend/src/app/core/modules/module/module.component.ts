@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModuleService, ModuleResponseDto, CategorieResponseDTO, courseResponseDTO } from '../../services/module.service';
+import { ModuleService, ModuleResponseDto, CategorieResponseDTO } from '../../services/module.service';
 import { AuthService, UserData } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { AlertService } from '../../services/alert.service';
-import { CourseService } from '../../services/course.service';
+import { CourseService, courseResponseDTO } from '../../services/course.service';
+
 
 @Component({
   selector: 'app-module',
