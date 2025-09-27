@@ -3,6 +3,9 @@ html {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE y Edge */
 }
+.padding-top {
+  padding-top: 84px;
+}
 
 html::-webkit-scrollbar {
   width: 0px;

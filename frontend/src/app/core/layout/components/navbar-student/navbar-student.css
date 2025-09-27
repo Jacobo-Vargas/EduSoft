@@ -1,0 +1,48 @@
+/* Fuente más moderna y limpia para toda la barra de navegación */
+.navbar, .offcanvas {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Espaciado y estilo mejorado para los elementos del menú */
+.user-menu .nav-item {
+    margin-bottom: 1rem; /* Aumenta el espacio vertical entre opciones */
+}
+
+.user-menu .nav-link {
+    font-size: 1.2rem; /* Tamaño de letra ligeramente más grande */
+    padding: 0.8rem 1rem; /* Aumenta el padding para un mejor tacto */
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.user-menu .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Estilo específico para el enlace de cerrar sesión */
+.logout-link {
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.logout-link:hover {
+    background-color: rgba(220, 53, 69, 0.2); /* Fondo rojo muy suave */
+}
+
+/* Íconos de Bootstrap */
+.nav-link i {
+    font-size: 1.3rem; /* Tamaño del ícono */
+    width: 24px; /* Ancho fijo para alineación */
+    text-align: center;
+}
+
+.btnColor{
+    color: white;
+}

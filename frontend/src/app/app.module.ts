@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { LayoutModule } from "./core/layout/layout.module";
 import { NavbarComponent } from './core/layout/components/navbar/navbar.component';
 import { MooduleModule } from './core/modules/module.module';
+import { NavbarStudent } from "./core/layout/components/navbar-student/navbar-student";
 
 export function httpTranslateLoader() {
   return new TranslateHttpLoader();

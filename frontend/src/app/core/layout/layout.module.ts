@@ -14,6 +14,7 @@ import { HttpClient } from '@angular/common/http';
 import { CardCourseComponent } from './components/card-course/card-course.component';
 import { httpTranslateLoader } from '../../app.module';
 import { RouterModule } from '@angular/router';
+import { NavbarStudent } from './components/navbar-student/navbar-student';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { RouterModule } from '@angular/router';
     ProgressBarComponent,
     DropdownHelpComponent,
     AccordionInfoComponent,
-    DocumentViewerComponent
+    DocumentViewerComponent,
+    NavbarStudent
   ], schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
@@ -41,7 +43,8 @@ import { RouterModule } from '@angular/router';
     ProgressComponent,
     DropdownHelpComponent,
     AccordionInfoComponent,
-    DocumentViewerComponent
+    DocumentViewerComponent,
+    NavbarStudent
   ]
 })
 export class LayoutModule { }

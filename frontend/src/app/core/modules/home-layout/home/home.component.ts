@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService, courseResponseDTO } from '../../../services/course.service';
-
 interface CategoriaCursos {
   nombre: string;
   gruposCursos: courseResponseDTO[][];

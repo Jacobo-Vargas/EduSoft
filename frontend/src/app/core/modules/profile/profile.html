@@ -1,0 +1,106 @@
+<div class='form-wrapper'>
+  <div class="form-card">
+    <div class="p-4 p-md-5">
+
+      <div class="form-header">
+        <button type="button" class="btn-back" (click)="goBack()">
+          <i class="bi bi-arrow-left"></i>
+        </button>
+        <h1 class="form-title">Informacion de usuario</h1>
+        <div style="width: 40px;"></div>
+      </div>
+
+      <div class="image-preview-container " *ngIf="previewUrl">
+        <img [src]="previewUrl" alt="Previsualización de la portada" class="image-preview" />
+      </div>
+      <div class="text-danger mt-1 text-center" *ngIf="imageError">{{ imageError }}</div>
+
+      <form [formGroup]="userDataForm" (ngSubmit)="onSubmit()" novalidate autocomplete="off" class="mt-4">
+
+        <div class="row g-4 mb-3">
+
+          <div class="col-md-6">
+            <div class="form-field-group">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="nombre" formControlName="nombre" placeholder="">
+                <label for="title"><i class="bi bi-person"></i> Nombre</label>
+              </div>
+              <div class="invalid-feedback" *ngIf="f['nombre'].touched && f['nombre'].invalid">
+                El nombre es obligatorio.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-field-group h-100">
+
+              <input class="form-control" type="file" id="formFile" accept="image/png,image/jpeg"
+                (change)="onFileSelected($event)">
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4 mb-3">
+          <div class="col-md-6">
+            <div class="form-field-group">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="telefono" formControlName="telefono" placeholder="">
+                <label for="title"><i class="bi bi-phone"></i> Telefono</label>
+              </div>
+              <div class="invalid-feedback" *ngIf="f['telefono'].touched && f['telefono'].invalid">
+                El telefono es obligatorio.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-field-group">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="email" formControlName="email" placeholder="">
+                <label for="title"><i class="bi bi-envelope-at"></i> Email</label>
+              </div>
+              <div class="invalid-feedback" *ngIf="f['email'].touched && f['email'].invalid">
+                El email es obligatorio.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4 mb-3">
+          <div class="col-md-6">
+            <div class="form-field-group">
+              <div class="form-floating">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="direccion" formControlName="direccion" placeholder="">
+                  <label for="title"><i class="bi bi-geo-alt"></i> Direccion</label>
+                </div>
+                <div class="invalid-feedback" *ngIf="f['direccion'].touched && f['direccion'].invalid">
+                  La direccion es obligatoria.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-field-group">
+              <div class="form-floating">
+                <input type="number" id="semester" formControlName="semester" class="form-control" placeholder=""
+                  min="0">
+                <label for="semester"><i class="bi bi-bookmark-star me-2"></i>Semestre</label>
+              </div>
+              <div class="invalid-feedback" *ngIf="f['semester'].touched && f['semester'].invalid">
+                El semestre es obligatorio (0-13).
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="text-center mt-5">
+          <button type="submit" [disabled]=" isLoading" class="btn-submit">
+            <span *ngIf="!isLoading">Actualizar informacion</span>
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

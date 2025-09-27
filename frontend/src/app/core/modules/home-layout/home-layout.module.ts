@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    HomeComponent
+    HomeComponent,
   ], schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,

@@ -3,14 +3,17 @@ package com.uniquindio.edu.edusoft.service.impl;
 import com.uniquindio.edu.edusoft.model.dto.respose.ResponseDTO;
 import com.uniquindio.edu.edusoft.model.dto.user.RequestUserDTO;
 import com.uniquindio.edu.edusoft.model.dto.user.ResponseUserDTO;
+import com.uniquindio.edu.edusoft.model.entities.Category;
 import com.uniquindio.edu.edusoft.model.entities.User;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import com.uniquindio.edu.edusoft.model.mapper.UserMapper;
 import com.uniquindio.edu.edusoft.repository.UserRepository;
 import com.uniquindio.edu.edusoft.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -103,4 +106,14 @@ public class UserServiceImpl implements UserService {
 
         return ResponseEntity.ok(new ResponseDTO(200, "¡Cuenta verificada exitosamente! Revisa tu correo.", null));
     }
+
+    @Override
+    public ResponseEntity<?> userInformation(Authentication authentication) throws Exception {
+        User user = userRepository.findByEmail(authentication.getName().toLowerCase())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        ResponseUserDTO reponseUserDTO = userMapper.toSafeResponseDTO(user);
+        return ResponseEntity.ok(new ResponseDTO(200, "Usuario encontrado", reponseUserDTO));
+    }
+
 }
