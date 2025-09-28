@@ -12,10 +12,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
+    @Mapping(target = "coverUrl", ignore = true)
     User toEntity(RequestUserDTO requestUserDTO);
-
+    @Mapping(target = "coverUrl", ignore = true)
     ResponseUserDTO toResponseDTO(User user);
-
+    @Mapping(target = "coverUrl", ignore = true)
     List<ResponseUserDTO> toResponseDTOList(List<User> users);
 
     @Named("safeMapping")

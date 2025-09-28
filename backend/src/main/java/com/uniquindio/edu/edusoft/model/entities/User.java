@@ -4,6 +4,7 @@ import com.uniquindio.edu.edusoft.model.enums.EnumUserType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.web.multipart.MultipartFile;
 
 @SuppressWarnings("ALL")
 @Data
@@ -38,6 +39,9 @@ public class User extends BaseEntity {
     @Column(name = "verification_token")
     private String verificationToken;
 
+    private String coverUrl;
+
+    private Integer semester;
 
     public boolean isVerification() {
         return verification;

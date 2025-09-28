@@ -44,7 +44,7 @@
           <div class="col-md-6">
             <div class="form-field-group">
               <div class="form-floating">
-                <input type="text" class="form-control" id="telefono" formControlName="telefono" placeholder="">
+                <input type="number" class="form-control" id="telefono" formControlName="telefono" placeholder="">
                 <label for="title"><i class="bi bi-phone"></i> Telefono</label>
               </div>
               <div class="invalid-feedback" *ngIf="f['telefono'].touched && f['telefono'].invalid">
@@ -55,7 +55,7 @@
           <div class="col-md-6">
             <div class="form-field-group">
               <div class="form-floating">
-                <input type="text" class="form-control" id="email" formControlName="email" placeholder="">
+                <input type="text" class="form-control" id="email" formControlName="email" placeholder=""  >
                 <label for="title"><i class="bi bi-envelope-at"></i> Email</label>
               </div>
               <div class="invalid-feedback" *ngIf="f['email'].touched && f['email'].invalid">
@@ -87,7 +87,7 @@
                 <label for="semester"><i class="bi bi-bookmark-star me-2"></i>Semestre</label>
               </div>
               <div class="invalid-feedback" *ngIf="f['semester'].touched && f['semester'].invalid">
-                El semestre es obligatorio (0-13).
+                El semestre es obligatorio (1-13).
               </div>
             </div>
           </div>

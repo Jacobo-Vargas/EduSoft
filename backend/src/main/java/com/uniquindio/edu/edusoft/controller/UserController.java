@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -62,4 +63,10 @@ public class UserController {
     public ResponseEntity<?> userInformation(Authentication authentication) throws Exception{
         return userService.userInformation(authentication);
     }
+
+    @PutMapping(value = "/userUpdateInformation", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> userUpdateInformation (Authentication authentication,@ModelAttribute   RequestUserDTO requestUserDTO ) throws Exception{
+        return userService.userUpdateInformation(authentication, requestUserDTO);
+    }
+
 }

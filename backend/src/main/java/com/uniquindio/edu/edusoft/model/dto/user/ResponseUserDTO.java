@@ -18,4 +18,6 @@ public class ResponseUserDTO {
     private String address;
     private EnumUserType userType;
     private LocalDate createdAt;
+    private Integer semester;
+    private String coverUrl;
 }

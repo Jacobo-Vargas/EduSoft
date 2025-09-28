@@ -16,4 +16,6 @@ public interface UserService {
     ResponseEntity<ResponseDTO> verifyUserByToken(String token) throws Exception;
 
     ResponseEntity<?> userInformation(Authentication authentication) throws  Exception;
+
+    ResponseEntity<?> userUpdateInformation(Authentication authentication, RequestUserDTO requestUserDTO   ) throws Exception;
 }
