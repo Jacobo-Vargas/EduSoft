@@ -130,4 +130,13 @@ export class CourseService {
     withCredentials: true
   });
   }
+
+  enrollToCourse(courseId: number): Observable<any> {
+  return this.http.post(
+    `${API}/enrollments/enroll`,
+    { courseId },
+    { withCredentials: true }
+  );
+}
+
 }

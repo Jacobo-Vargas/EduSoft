@@ -39,8 +39,7 @@
                 {{ curso.description || 'Sin descripción' }}
               </p>
 
-              <a [routerLink]="['/course', curso.id]"
-                 class="btn btn-primary">Inscribirse</a>
+              <button class="btn btn-primary" (click)="inscribirse(curso.id)">Inscribirse</button>
             </div>
           </div>
 

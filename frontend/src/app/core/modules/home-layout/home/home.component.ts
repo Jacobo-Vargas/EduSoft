@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService, courseResponseDTO } from '../../../services/course.service';
+import { AlertService } from '../../../services/alert.service';
+
 interface CategoriaCursos {
   nombre: string;
   gruposCursos: courseResponseDTO[][];
@@ -14,7 +16,10 @@ interface CategoriaCursos {
 export class HomeComponent implements OnInit {
   categoriasCursos: CategoriaCursos[] = [];
 
-  constructor(private courseService: CourseService) {}
+  constructor(
+    private courseService: CourseService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit(): void {
     this.courseService.getVisibleCourses().subscribe(cursos => {
@@ -39,6 +44,23 @@ export class HomeComponent implements OnInit {
         grupos.push(cursos.slice(i, i + 3));
       }
       return { nombre, gruposCursos: grupos };
+    });
+  }
+
+  inscribirse(courseId: number): void {
+    this.courseService.enrollToCourse(courseId).subscribe({
+      next: (res) => {
+        this.alertService.createAlert(
+          '✅ Te has inscrito correctamente al curso',
+          'success',
+          false
+        );
+      },
+      error: (err) => {
+        console.error('Error al inscribirse:', err);
+        const msg = err?.error || '❌ No se pudo realizar la inscripción';
+        this.alertService.createAlert(msg, 'error', false);
+      }
     });
   }
 }
