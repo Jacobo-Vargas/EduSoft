@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private courseService: CourseService,
     private alertService: AlertService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.courseService.getVisibleCourses().subscribe(cursos => {
@@ -47,19 +47,41 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  inscribirse(courseId: number): void {
-    this.courseService.enrollToCourse(courseId).subscribe({
-      next: (res) => {
+  inscribirse(curso: courseResponseDTO): void {
+    const mensaje = `<p>Antes de inscribirte verifica lo siguiente:</p>
+                 <p><b>Semestre recomendado:</b> ${curso.semester}<br>
+                 <b>Conocimientos previos:</b> ${curso.priorKnowledge || 'Ninguno'}</p>
+                 <p>¿Deseas continuar con la inscripción?</p>`;
+
+    // Mostrar modal con botones personalizados usando AlertService
+    this.alertService.createAlertHTML(
+      'Confirmar inscripción',
+      mensaje,
+      'info',
+      true // true = es confirmación con botones
+    ).then(result => {
+      if (result.isConfirmed) {
+        // El usuario aceptó, inscribir
+        this.courseService.enrollToCourse(curso.id).subscribe({
+          next: () => {
+            this.alertService.createAlert(
+              '✅ Te has inscrito correctamente al curso',
+              'success',
+              false
+            );
+          },
+          error: (err) => {
+            const msg = err?.error || '❌ No se pudo realizar la inscripción';
+            this.alertService.createAlert(msg, 'error', false);
+          }
+        });
+      } else {
+        // Canceló la inscripción
         this.alertService.createAlert(
-          '✅ Te has inscrito correctamente al curso',
-          'success',
+          '❌ No te has inscrito al curso',
+          'info',
           false
         );
-      },
-      error: (err) => {
-        console.error('Error al inscribirse:', err);
-        const msg = err?.error || '❌ No se pudo realizar la inscripción';
-        this.alertService.createAlert(msg, 'error', false);
       }
     });
   }

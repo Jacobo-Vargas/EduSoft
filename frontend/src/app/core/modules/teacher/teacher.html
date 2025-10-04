@@ -3,26 +3,25 @@
   <div class="row">
     <div *ngFor="let curso of cursos" class="col-lg-4 col-md-6 mb-4">
       <div class="card course-card h-100">
+
         <div class="course-card__image-container">
           <img [src]="curso.coverUrl" class="card-img-top" alt="{{ curso.title }}" />
         </div>
 
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title course-card__title text-center">{{ curso.title }}</h5>
+          <!-- Título con ícono de auditoría al lado -->
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h4 class="card-title mb-0">{{ curso.title }}</h4>
+            <span class="audit-icon-container" [ngSwitch]="curso.auditStatusName">
+              <i *ngSwitchCase="'En-revision'" class="bi bi-card-checklist" title="En Revisión"></i>
+              <i *ngSwitchCase="'sin-revision'" class="bi bi-send" title="Sin Revisión"></i>
+              <i *ngSwitchDefault class="bi bi-question-circle text-muted" title="Estado desconocido"></i>
+            </span>
+          </div>
 
-          <div class="course-card__details">
-             
-            <p class="card-text d-flex align-items-center gap-2">
-              <span class="fw-bold">Auditoría:</span> {{ curso.auditStatusName }}
-              <span [ngSwitch]="curso.auditStatusName">
-                <i *ngSwitchCase="'En-revision'" class="bi bi-card-checklist " title="En-Revisión"></i>
-                <i *ngSwitchCase="'Sin-revision'" class="bi bi-send " title="Sin Revisión"></i>
-                <i *ngSwitchDefault class="bi bi-question-circle text-muted" title="Estado desconocido"></i>
-              </span>
-
-            </p>
-            <p class="card-text">
-                 <i class="bi bi-currency-dollar "></i> {{ curso.price }} COP
+          <div class="course-card__details mb-2">
+            <p class="card-text mb-0">
+              <i class="bi bi-currency-dollar"></i> {{ curso.price }} COP
             </p>
           </div>
 
@@ -31,7 +30,7 @@
           </p>
 
           <div class="mt-auto d-flex gap-2">
-            <button class="btn btn-primary w-100" (click)="verCurso(curso)">
+            <button class="btn btn-verde w-100" (click)="verCurso(curso)">
               Ver Curso
             </button>
             <button class="btn btn-danger w-100" (click)="eliminarCurso(curso)">

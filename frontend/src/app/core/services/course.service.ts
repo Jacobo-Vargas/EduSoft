@@ -60,12 +60,31 @@ export interface courseResponseDTO {
   userId: string;
   userName: string;
 
-  createdAt: string; 
+  createdAt: string;
   updatedAt: string;
   state: string;
 }
 
+export interface EnrollmentResponseDTO {
+  id: number;
+  userId: number;
+  userName: string;
+  course: CourseResponseDTO; 
+  courseTitle: string;
+  enrollmentDate: string;
+  progressPercentage: number;
+  isCompleted: boolean;
+  userCourse: string;
+}
 
+export interface CourseResponseDTO {
+  id: number;
+  title: string;
+  description: string;
+  coverUrl: string;
+  estimatedDurationMinutes: number;
+  createdAt: string;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -116,27 +135,34 @@ export class CourseService {
   }
   setStatusAudit(courseId: number): Observable<courseResponseDTO> {
     return this.http.put<courseResponseDTO>(
-        `${API}/course/updateCourseAuditStatus/${courseId}`,
-        null,  // body vacío
-        { withCredentials: true }  // opciones
+      `${API}/course/updateCourseAuditStatus/${courseId}`,
+      null,  // body vacío
+      { withCredentials: true }  // opciones
     );
   }
   updateCourse(courseId: number, body: FormData): Observable<courseResponseDTO> {
-  return this.http.put<courseResponseDTO>(`${API}/course/update/${courseId}`, body, { withCredentials: true });
+    return this.http.put<courseResponseDTO>(`${API}/course/update/${courseId}`, body, { withCredentials: true });
   }
 
   getVisibleCourses(): Observable<courseResponseDTO[]> {
-  return this.http.get<courseResponseDTO[]>(`${API}/course/visible`, {
-    withCredentials: true
-  });
+    return this.http.get<courseResponseDTO[]>(`${API}/course/visible`, {
+      withCredentials: true
+    });
   }
 
   enrollToCourse(courseId: number): Observable<any> {
-  return this.http.post(
-    `${API}/enrollments/enroll`,
-    { courseId },
-    { withCredentials: true }
-  );
-}
+    return this.http.post(
+      `${API}/enrollments/enroll`,
+      { courseId },
+      { withCredentials: true }
+    );
+  }
+
+  getCoursesStudent(): Observable<any> {
+    return this.http.get(
+      `${API}/enrollments/finByCoursesUser`,
+      { withCredentials: true }
+    );
+  }
 
 }

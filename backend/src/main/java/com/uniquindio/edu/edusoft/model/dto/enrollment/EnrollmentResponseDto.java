@@ -1,5 +1,6 @@
 package com.uniquindio.edu.edusoft.model.dto.enrollment;
 
+import com.uniquindio.edu.edusoft.model.entities.Course;
 import com.uniquindio.edu.edusoft.model.enums.EnumUserCourse;
 import lombok.Data;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ public class EnrollmentResponseDto {
     private Long id;
     private Long userId;
     private String userName;
-    private Long courseId;
+    private EnrollmentCourseResposeDto course;
     private String courseTitle;
     private String enrollmentDate;
     private Integer progressPercentage;

@@ -1,6 +1,7 @@
 package com.uniquindio.edu.edusoft.model.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -37,6 +38,7 @@ public class Course extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
+    @JsonIgnore
     private Category category;
 
     @NotNull
@@ -55,11 +57,13 @@ public class Course extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "current_status_id", nullable = false)
+    @JsonIgnore
     private CurrentStatus currentStatus; //Estado del curso
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @Size(max = 500)
@@ -73,6 +77,7 @@ public class Course extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "audit_status_id", nullable = false)
+    @JsonIgnore
     private AuditStatus auditStatus;//Estados de auditoria
 
     @NotNull

@@ -90,6 +90,9 @@
   flex-direction: column;
   height: 100%;
 }
+.padding-top {
+  padding-top: 70px;
+}
 .form-control,
 .form-select {
   background-color: #fff   !important;

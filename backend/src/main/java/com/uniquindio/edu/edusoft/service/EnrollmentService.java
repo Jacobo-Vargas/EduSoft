@@ -6,4 +6,6 @@ import org.springframework.security.core.Authentication;
 
 public interface EnrollmentService {
     ResponseEntity<?> enrollToCourse(EnrollmentRequestDto request, Authentication authentication) throws Exception;
+
+    ResponseEntity<?>getCoursesStudent(Authentication authentication)throws Exception;
 }

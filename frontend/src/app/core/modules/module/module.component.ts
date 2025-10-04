@@ -44,20 +44,20 @@ export class ModuleComponent implements OnInit, OnDestroy {
     // Cargar categorías
     const catSub = this.moduleService.getCategories().subscribe({
       next: (cats) => this.categories = cats,
-      error: () => { "Error la cargar categorías"}
+      error: () => { "Error la cargar categorías" }
     });
     this.subscriptions.push(catSub);
 
-   const courseSub = this.moduleService.getCourseById(this.courseId).subscribe({
-  next: (response: any) => { // Recibe el objeto completo de respuesta
-    this.courseData = response.body; // Accede a la propiedad body
-    console.log('📌 Datos del curso obtenidos:', this.courseData);
-    // Ahora this.courseData tiene el objeto que esperas: {auditStatusId: 2, ...}
-  },
-  error: (err) => this.handleError('Error obteniendo curso', err)
-});
-this.subscriptions.push(courseSub);
-   
+    const courseSub = this.moduleService.getCourseById(this.courseId).subscribe({
+      next: (response: any) => { // Recibe el objeto completo de respuesta
+        this.courseData = response.body; // Accede a la propiedad body
+        console.log('📌 Datos del curso obtenidos:', this.courseData);
+        // Ahora this.courseData tiene el objeto que esperas: {auditStatusId: 2, ...}
+      },
+      error: (err) => this.handleError('Error obteniendo curso', err)
+    });
+    this.subscriptions.push(courseSub);
+
 
     // Cargar datos del usuario autenticado
     const userDataSub = this.authService.getUserData().subscribe({
@@ -129,7 +129,7 @@ this.subscriptions.push(courseSub);
           this.alertService.createAlert('Curso enviado a auditoría exitosamente', 'success', false)
           this.loading = false;
         },
-        error: (err) => this.handleError('No se pudo enviar el curso a auditoría', err)
+        error: (err) => this.handleError('Este curso ya fue enviado a audioria', err)
       });
     });
   }

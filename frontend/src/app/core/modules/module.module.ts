@@ -21,6 +21,7 @@ import { History } from './history/history';
 import { ContentComponent } from './content/content';
 import { CreateContentComponent } from './create-content-component/create-content-component';
 import { Profile } from './profile/profile';
+import { StudentCourses } from './student-courses/student-courses';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { Profile } from './profile/profile';
     History,
     ContentComponent,
     CreateContentComponent,
-    Profile
+    Profile,
+    StudentCourses
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
@@ -69,7 +71,8 @@ import { Profile } from './profile/profile';
     History,
     ContentComponent,
     CreateContentComponent,
-    Profile
+    Profile,
+    StudentCourses
   ]
 })
 export class MooduleModule { }

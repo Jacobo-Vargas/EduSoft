@@ -20,6 +20,8 @@ import { AuthGuard } from './core/guards/AuthGuard';
 import { TeacherGuard } from './core/guards/TeacherGuard';
 import { AuditGuard } from './core/guards/AuditGuard';
 import { Profile } from './core/modules/profile/profile';
+import { StudentCourses } from './core/modules/student-courses/student-courses';
+import { StudentGuard } from './core/guards/StudentGuard';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -27,7 +29,8 @@ export const routes: Routes = [
   { path: 'app-profile', component: Profile },
   { path: 'recover-password', component: RecoverPassword },
   { path: 'send-code-email', component: SendEmail },
-  { path: 'app-profile', component: Profile },
+  { path: 'app-profile', component: Profile, canActivate: [AuthGuard, StudentGuard] },
+  { path: 'app-student-courses', component: StudentCourses },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'app-create-courses', component: CreateCourses, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'app-create-categories', component: CreateCategories, canActivate: [AuthGuard, TeacherGuard] },

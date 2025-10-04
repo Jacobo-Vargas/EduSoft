@@ -18,4 +18,10 @@ public class EnrollmentController {
     public ResponseEntity<?> enroll(@RequestBody EnrollmentRequestDto request, Authentication authentication) throws Exception {
         return enrollmentService.enrollToCourse(request, authentication);
     }
+
+    @GetMapping("/finByCoursesUser")
+    public ResponseEntity<?> finByCoursesUser(Authentication authentication) throws Exception {
+        return enrollmentService.getCoursesStudent(authentication);
+    }
+
 }
