@@ -1,0 +1,77 @@
+<div *ngIf="loading" class="text-center mt-5">
+    <div class="spinner-border text-success" role="status"></div>
+    <p class="mt-3 text-muted">Cargando curso...</p>
+</div>
+
+<div *ngIf="!loading" class="container py-4">
+    <!-- Header del curso -->
+    <div class="text-center mb-5">
+        <img *ngIf="course.coverUrl" [src]="course.coverUrl" class="course-cover mb-3" alt="Portada del curso" />
+        <h1 class="fw-bold text-primary">{{ course.title }}</h1>
+        <p class="text-muted fs-5">{{ course.description }}</p>
+    </div>
+
+    <!-- Módulos -->
+    <div *ngFor="let module of modules" class="module-card shadow-sm mb-4">
+        <div class="module-header bg-success text-white p-3 rounded-top">
+            <h4 class="m-0">{{ module.name }}</h4>
+        </div>
+        <div class="module-body p-3 bg-white rounded-bottom">
+            <p class="text-muted">{{ module.description }}</p>
+
+            <div *ngIf="lessonsByModule[module.id]?.length; else noLessons">
+                <div *ngFor="let lesson of lessonsByModule[module.id]" class="lesson-card border rounded p-3 mb-3">
+                    <h5 class="fw-semibold text-secondary mb-2">
+                        <i class="bi bi-journal-text me-2"></i>{{ lesson.name }}
+                    </h5>
+                    <p class="text-muted">{{ lesson.description }}</p>
+
+                    <!-- Contenidos -->
+                    <div *ngIf="contentsByLesson[lesson.id]?.length; else noContent">
+                        <div *ngFor="let content of contentsByLesson[lesson.id]"
+                            class="content-item border rounded p-2 mb-3">
+                            <strong>{{ content.title }}</strong>
+                            <p class="text-muted small mb-2">{{ content.description }}</p>
+
+                            <!-- Vista previa -->
+                            <div class="content-preview">
+                                <ng-container [ngSwitch]="getFileType(content.fileUrl)">
+
+                                    <!-- PDF -->
+                                    <iframe *ngSwitchCase="'pdf'" [src]="content.fileUrl | safeUrl"
+                                        class="preview-pdf"></iframe>
+
+                                    <!-- Imagen -->
+                                    <img *ngSwitchCase="'image'" [src]="content.fileUrl"
+                                        class="preview-image rounded shadow-sm" alt="Vista previa de imagen" />
+
+                                    <!-- Video -->
+                                    <video *ngSwitchCase="'video'" controls class="preview-video rounded shadow-sm">
+                                        <source [src]="content.fileUrl" />
+                                        Tu navegador no soporta video.
+                                    </video>
+
+
+                                    <!-- Otro tipo de archivo -->
+                                    <div *ngSwitchDefault class="text-center text-muted small">
+                                        <i class="bi bi-file-earmark"></i>
+                                        <a [href]="content.fileUrl" target="_blank" class="text-decoration-none">Abrir
+                                            archivo</a>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-template #noContent>
+                        <p class="text-muted small">No hay contenidos en esta lección.</p>
+                    </ng-template>
+                </div>
+            </div>
+
+            <ng-template #noLessons>
+                <p class="text-muted">No hay lecciones en este módulo.</p>
+            </ng-template>
+        </div>
+    </div>
+</div>

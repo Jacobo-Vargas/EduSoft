@@ -165,4 +165,9 @@ export class CourseService {
     );
   }
 
+  getCourseById(id: number) {
+  return this.http.get(`${API}/course/${id}`, { withCredentials: true });
+}
+
+
 }

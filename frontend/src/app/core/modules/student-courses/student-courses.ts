@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { courseResponseDTO, CourseService, EnrollmentResponseDTO } from '../../services/course.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
@@ -25,46 +24,49 @@ export class StudentCourses implements OnInit {
     private alertService: AlertService
   ) { }
 
- ngOnInit(): void {
-  this.loading = true;
+  ngOnInit(): void {
+    this.loading = true;
 
-  const coursesSub = this.courseService.getCoursesStudent().subscribe({
-    next: (res: EnrollmentResponseDTO[]) => {
-      this.cursos = res;
-      this.loading = false;
+    const coursesSub = this.courseService.getCoursesStudent().subscribe({
+      next: (res: EnrollmentResponseDTO[]) => {
+        this.cursos = res;
+        this.loading = false;
 
-      // Si no hay cursos, mostrar alerta e invitar al usuario a inscribirse
-      if (!this.cursos || this.cursos.length === 0) {
+        if (!this.cursos || this.cursos.length === 0) {
+          this.alertService.createAlert(
+            'No estás inscrito en ningún curso. ¡Explora nuestros cursos y regístrate!',
+            'info',
+            false
+          );
+
+          setTimeout(() => {
+            this.router.navigate(['/home']);
+          }, 3000);
+        }
+      },
+      error: (err: any) => {
         this.alertService.createAlert(
-          'No estás inscrito en ningún curso. ¡Explora nuestros cursos y regístrate!',
-          'info',
+          'Error cargando cursos. Intenta de nuevo más tarde.',
+          'error',
           false
         );
+        console.error('❌ Error cargando cursos:', err);
+        this.loading = false;
 
-        // Redirigir al home después de unos segundos (opcional)
         setTimeout(() => {
-          this.router.navigate(['/home']);
-        }, 3000); // 3 segundos
+          this.router.navigate(['/app-student-courses']);
+        }, 3000);
       }
-    },
-    error: (err: any) => {
-      this.alertService.createAlert(
-        'Error cargando cursos. Intenta de nuevo más tarde.',
-        'error',
-        false
-      );
-      console.error("❌ Error cargando cursos:", err);
-      this.loading = false;
+    });
 
-      // También podrías redirigir al home si ocurre un error grave
-      setTimeout(() => {
-        this.router.navigate(['/app-student-courses']);
-      }, 3000);
-    }
-  });
+    this.subscriptions.push(coursesSub);
+  }
 
-  this.subscriptions.push(coursesSub);
-}
+  verCurso(courseId: number) {
+    this.router.navigate(['/ver-curso', courseId]);
+  }
 
-
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
 }
