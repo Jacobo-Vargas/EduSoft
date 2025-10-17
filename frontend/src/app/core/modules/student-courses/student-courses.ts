@@ -26,7 +26,10 @@ export class StudentCourses implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
+    this.loadCourses();
+  }
 
+  loadCourses(): void {
     const coursesSub = this.courseService.getCoursesStudent().subscribe({
       next: (res: EnrollmentResponseDTO[]) => {
         this.cursos = res;
@@ -60,7 +63,7 @@ export class StudentCourses implements OnInit {
     });
 
     this.subscriptions.push(coursesSub);
-  }
+}
 
   verCurso(courseId: number) {
     this.router.navigate(['/ver-curso', courseId]);
@@ -69,4 +72,55 @@ export class StudentCourses implements OnInit {
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
+
+  courseUnsubscribe(courseId: number, price: number) {
+  // Si el curso tiene precio, mostrar confirmación
+  if (price > 0) {
+    const mensaje = `
+      <p>Este curso tiene un precio de <b>$${price}</b>.</p>
+      <p>¿Deseas continuar con la anulacion de suscripcion?</p>
+    `;
+    this.alertService.createAlertHTML('Confirmar anulacion de suscripcion', mensaje, 'warning', true)
+      .then(result => {
+        if (result.isConfirmed) {
+          this.ejecutarDesinscripcion(courseId);
+        } else {
+          this.alertService.createAlert('❌ No has anulado la suscripcion del curso', 'info', false);
+        }
+      });
+  } else {
+    this.alertService.createAlertHTML('Confirmar anulacion de suscripcion', '¿Deseas continuar con la anulacion de  suscripcion?', 'warning', true)
+      .then(result => {
+        if (result.isConfirmed) {
+          this.ejecutarDesinscripcion(courseId);
+        } else {
+          this.alertService.createAlert('❌ No has anulado la suscripcion del curso', 'info', false);
+        }
+      });
+  }
+}
+
+// Método privado para mantener la lógica limpia
+private ejecutarDesinscripcion(courseId: number) {
+  this.courseService.courseUnsubscribe(courseId).subscribe({
+    next: () => {
+      this.alertService.createAlert(
+        '✅ Te has desinscrito correctamente del curso.',
+        'success',
+        true
+      );
+      this.loadCourses(); // recargar lista
+    },
+    error: (err) => {
+      this.alertService.createAlert(
+        '❌ Error al desinscribirse. Intenta de nuevo más tarde.',
+        'error',
+        false
+      );
+    }
+  });
+}
+
+
+
 }

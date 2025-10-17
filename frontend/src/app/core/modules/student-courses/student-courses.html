@@ -8,7 +8,7 @@
                     <img [src]="curso.course.coverUrl" class="card-img-top" alt="{{ curso.course.title }}" />
                 </div>
 
-                <div class="mb-3">
+               <!-- <div class="mb-3">
                     <div class="progress custom-progress">
                         <div class="progress-bar custom-progress-bar" role="progressbar"
                             [style.width.%]="curso.progressPercentage" [attr.aria-valuenow]="curso.progressPercentage"
@@ -17,6 +17,7 @@
                         </div>
                     </div>
                 </div>
+                -->
 
                 <div class="card-body d-flex flex-column">
 
@@ -29,7 +30,7 @@
                             Ver Curso
                         </button>
 
-                        <button class="btn btn-danger w-100"> Desinscribirme </button>
+                        <button class="btn btn-danger w-100" (click)="courseUnsubscribe(curso.course.id, curso.course.price)"> Anular suscripcion </button>
                     </div>
 
                 </div>

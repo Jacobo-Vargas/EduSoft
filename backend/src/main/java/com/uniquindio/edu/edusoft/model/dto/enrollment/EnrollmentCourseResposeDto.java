@@ -3,6 +3,8 @@ package com.uniquindio.edu.edusoft.model.dto.enrollment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,5 +18,6 @@ public class EnrollmentCourseResposeDto {
     private String coverUrl;
     private Integer estimatedDurationMinutes;
     private LocalDateTime createdAt;
+    private BigDecimal price;
 
 }

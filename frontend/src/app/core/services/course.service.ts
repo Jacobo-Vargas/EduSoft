@@ -84,6 +84,7 @@ export interface CourseResponseDTO {
   coverUrl: string;
   estimatedDurationMinutes: number;
   createdAt: string;
+  price: number;
 }
 @Injectable({
   providedIn: 'root'
@@ -167,7 +168,12 @@ export class CourseService {
 
   getCourseById(id: number) {
   return this.http.get(`${API}/course/${id}`, { withCredentials: true });
-}
+  }
+
+  courseUnsubscribe(courseId: number): Observable<string> {
+    const body = { courseId };
+    return this.http.put(`${API}/enrollments/courseUnsubscribe`, body, { responseType: 'text', withCredentials: true });
+  }
 
 
 }

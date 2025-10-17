@@ -14,12 +14,14 @@ import com.uniquindio.edu.edusoft.service.EnrollmentService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,32 +35,48 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private final EnrollmentMapper enrollmentMapper;
 
     @Override
-    public ResponseEntity<?> enrollToCourse(EnrollmentRequestDto request, Authentication authentication) throws Exception {
-        // Usuario autenticado desde la cookie
+    public ResponseEntity<?> enrollToCourse(EnrollmentRequestDto request, Authentication authentication) {
+        // Obtener usuario autenticado
         User user = userRepository.findByEmail(authentication.getName().toLowerCase())
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
+        // Buscar curso
         Course course = courseRepository.findById(request.getCourseId())
                 .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado"));
 
-        // Evitar inscripción duplicada
-        if (userCourseRepository.findByUserIdAndCourseId(user.getId(), course.getId()).isPresent()) {
-            return ResponseEntity.badRequest().body("El usuario ya está inscrito en este curso");
+        // Verificar si ya está inscrito
+        Optional<UserCourse> existingEnrollment = userCourseRepository
+                .findByUserIdAndCourseIdAndUserCourse(user.getId(), course.getId(), EnumUserCourse.INSCRITO);
+
+        if (existingEnrollment.isPresent()) {
+            return ResponseEntity.badRequest().body("El usuario ya está inscrito en este curso.");
         }
 
-        // Crear relación usuario-curso
-        UserCourse userCourse = new UserCourse();
-        userCourse.setUser(user);
-        userCourse.setCourse(course);
-        userCourse.setEnrollmentDate(LocalDateTime.now());
-        userCourse.setCompleted(false);
-        userCourse.setProgressPercentage(0.0);
-        userCourse.setUserCourse(EnumUserCourse.INSCRITO);
+        // Si fue eliminado previamente, reactivar inscripción
+        Optional<UserCourse> previouslyDeleted = userCourseRepository
+                .findByUserIdAndCourseIdAndUserCourse(user.getId(), course.getId(), EnumUserCourse.ELIMINADO);
 
-        UserCourse saved = userCourseRepository.save(userCourse);
+        UserCourse saved;
+        if (previouslyDeleted.isPresent()) {
+            UserCourse reactivated = previouslyDeleted.get();
+            reactivated.setUserCourse(EnumUserCourse.INSCRITO);
+            reactivated.setEnrollmentDate(LocalDateTime.now());
+            reactivated.setCompleted(false);
+            reactivated.setProgressPercentage(0.0);
+            saved = userCourseRepository.save(reactivated);
+        } else {
+            //  Crear nueva inscripción
+            UserCourse userCourse = new UserCourse();
+            userCourse.setUser(user);
+            userCourse.setCourse(course);
+            userCourse.setEnrollmentDate(LocalDateTime.now());
+            userCourse.setCompleted(false);
+            userCourse.setProgressPercentage(0.0);
+            userCourse.setUserCourse(EnumUserCourse.INSCRITO);
+            saved = userCourseRepository.save(userCourse);
+        }
 
         EnrollmentResponseDto response = enrollmentMapper.toResponseDto(saved);
-
         return ResponseEntity.ok(response);
     }
 
@@ -71,7 +89,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         User user = userRepository.findByEmail(authentication.getName().toLowerCase())
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
-        List<UserCourse> userCourses = userCourseRepository.findByUserId(user.getId());
+        List<UserCourse> userCourses = userCourseRepository.findByUserIdAndUserCourse(user.getId(), EnumUserCourse.INSCRITO);
         log.debug("Usuario [{}] tiene [{}] cursos inscritos", user.getId(), userCourses.size());
 
         // Usamos el mapper en lugar de construir DTOs manualmente
@@ -81,5 +99,33 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         log.info("Cursos obtenidos para usuario [{}]: {}", user.getId(), responseList.size());
 
         return ResponseEntity.ok(responseList);
+    }
+
+    @Override
+    public ResponseEntity<?> courseUnsubscribe(EnrollmentRequestDto request, Authentication authentication) throws Exception {
+
+        // Usuario autenticado desde la cookie
+        User user = userRepository.findByEmail(authentication.getName().toLowerCase())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        Course course = courseRepository.findById(request.getCourseId())
+                .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado"));
+
+        // Buscar la inscripción existente
+        Optional<UserCourse> temporary = userCourseRepository.findByUserIdAndCourseIdAndUserCourse(user.getId(), course.getId(),EnumUserCourse.INSCRITO);
+
+        if (temporary.isPresent()) {
+
+            UserCourse userCourse = temporary.get();
+            // Actualizar el estado a ELIMINADO
+            userCourseRepository.updateState(userCourse.getId(), EnumUserCourse.ELIMINADO.name());
+            return ResponseEntity.ok("Se ha cancelado la inscripción del curso correctamente.");
+
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontró inscripción para cancelar.");
+        }
+
     }
 }

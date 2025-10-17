@@ -24,4 +24,9 @@ public class EnrollmentController {
         return enrollmentService.getCoursesStudent(authentication);
     }
 
+    @PutMapping("/courseUnsubscribe")
+    public ResponseEntity<?> courseUnsubscribe(@RequestBody EnrollmentRequestDto request, Authentication authentication) throws Exception {
+        return enrollmentService.courseUnsubscribe(request, authentication);
+    }
+
 }

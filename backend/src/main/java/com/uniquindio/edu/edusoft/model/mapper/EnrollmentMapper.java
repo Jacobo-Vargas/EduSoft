@@ -21,6 +21,7 @@ public interface EnrollmentMapper {
     @Mapping(source = "progressPercentage", target = "progressPercentage")
     @Mapping(source = "userCourse", target = "userCourse")
     @Mapping(source = "enrollmentDate", target = "enrollmentDate", dateFormat = "yyyy-MM-dd")
+    @Mapping(source = "course.price", target = "price")
     EnrollmentResponseDto toResponseDto(UserCourse userCourse);
 
     // Convierte la entidad Course → DTO de Course

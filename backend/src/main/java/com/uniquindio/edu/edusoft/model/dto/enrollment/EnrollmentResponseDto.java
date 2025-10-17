@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,4 +21,5 @@ public class EnrollmentResponseDto {
     private Integer progressPercentage;
     private Boolean isCompleted;
     private EnumUserCourse userCourse;
+    private BigDecimal price;
 }
