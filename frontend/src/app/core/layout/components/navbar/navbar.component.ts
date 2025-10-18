@@ -4,6 +4,7 @@ import { AlertService } from '../../../services/alert.service';
 import { CRUDService } from '../../../services/crud.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../services/auth.service';
+import { UsuarioService } from '../../../services/usuario.service';
 
 @Component({
   selector: 'app-navbar',

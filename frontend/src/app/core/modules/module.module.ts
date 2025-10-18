@@ -20,6 +20,12 @@ import { CreateLessonComponent } from './create-lesson-component/create-lesson-c
 import { History } from './history/history';
 import { ContentComponent } from './content/content';
 import { CreateContentComponent } from './create-content-component/create-content-component';
+import { Profile } from './profile/profile';
+import { StudentCourses } from './student-courses/student-courses';
+import { ViewCourseComponent } from './view-course/view-course';
+import { SafeUrlPipe } from '../pipes/safe-url.pipe';
+
+
 
 @NgModule({
   declarations: [
@@ -39,7 +45,11 @@ import { CreateContentComponent } from './create-content-component/create-conten
     CreateLessonComponent,
     History,
     ContentComponent,
-    CreateContentComponent
+    CreateContentComponent,
+    Profile,
+    StudentCourses,
+    SafeUrlPipe,
+    ViewCourseComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
@@ -66,7 +76,11 @@ import { CreateContentComponent } from './create-content-component/create-conten
     CreateLessonComponent,
     History,
     ContentComponent,
-    CreateContentComponent
+    CreateContentComponent,
+    Profile,
+    StudentCourses,
+    SafeUrlPipe,
+    ViewCourseComponent
   ]
 })
 export class MooduleModule { }

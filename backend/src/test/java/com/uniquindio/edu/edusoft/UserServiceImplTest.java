@@ -54,8 +54,11 @@ class UserServiceImplTest {
                 "Calle 123",
                 "juan@uqvirtual.edu.co",
                 "password123",
+                EnumUserType.ESTUDIANTE,
+                null,
                 null
         );
+
 
         user = new User();
         user.setDocumentNumber("12345");

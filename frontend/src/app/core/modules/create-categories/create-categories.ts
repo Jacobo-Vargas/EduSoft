@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { finalize } from 'rxjs/operators';
-import { CourseService } from '../../services/course-service';
+import { CourseService } from '../../services/course.service';
 
 @Component({
   selector: 'app-create-categories',

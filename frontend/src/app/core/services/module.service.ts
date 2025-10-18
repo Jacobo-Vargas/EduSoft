@@ -1,10 +1,11 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CourseService } from './course-service';
+import { CourseService, courseResponseDTO } from './course.service';
 
 const API = environment.urlServer;
+
 export interface ModuleResponseDto {
   id: number;
   name: string;
@@ -14,24 +15,12 @@ export interface ModuleResponseDto {
   isVisible: boolean;
   createdAt: string;
 }
+
 export interface CategorieResponseDTO {
   id: number;
   name: string;
   description?: string;
   createdAt: string;
-}
-export interface courseResponseDTO {
- id: number;
-  title: string;
-  description: string; // <-- Corregido
-  price: number;
-  coverUrl: string;
-  semester: number;
-  priorKnowledge: string; // <-- Corregido
-  estimatedDurationMinutes: number;
-  categoryId: number;
-  userId: string; // <-- Mantener como string para que coincida con el backend y evitar errores de mapeo
-  auditStatusName: string;
 }
 
 @Injectable({

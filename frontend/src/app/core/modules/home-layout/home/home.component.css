@@ -1,17 +1,178 @@
-#cursoCarousel {
-  position: relative;
-  padding-bottom: 40px; /* espacio para los puntos debajo */
+html {
+  overflow: -moz-scrollbars-none; /* Firefox antiguo */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
+}
+.padding-top {
+  padding-top: 84px;
 }
 
-#cursoCarousel .carousel-indicators {
-  bottom: 0; /* fuerza a que estén abajo */
+html::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* Chrome/Safari/Opera */
+  display: none;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
+}
+
+body::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+  display: none;
+}
+
+/* Método 2: Para todos los elementos */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background: transparent;
+  display: none;
+}
+
+/* Método 3: Selector universal más agresivo */
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+*::-webkit-scrollbar {
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
+  display: none !important;
+}
+
+/* Contenedor del carrusel */
+.custom-carousel {
+  position: relative;
+  padding-bottom: 40px;
+  overflow: hidden;
+}
+
+/* Indicadores (puntos) */
+.custom-carousel .carousel-indicators {
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: auto; /* ajusta al contenido */
+  width: auto;
 }
 
-#cursoCarousel .carousel-indicators button {
+.custom-carousel .carousel-indicators button {
   width: 12px;
   height: 12px;
   border-radius: 50%;
+}
+
+/* Flechas personalizadas */
+.custom-carousel .carousel-control-prev-icon,
+.custom-carousel .carousel-control-next-icon {
+  background-image: none;
+  width: 3rem;
+  height: 3rem;
+  background-color: var(--bs-primary);
+  border-radius: 50%;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: 1.5rem;
+}
+
+/* Flecha izquierda */
+.custom-carousel .carousel-control-prev-icon {
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e");
+}
+
+/* Flecha derecha */
+.custom-carousel .carousel-control-next-icon {
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+/* Hover efecto */
+.custom-carousel .carousel-control-prev-icon:hover,
+.custom-carousel .carousel-control-next-icon:hover {
+  background-color: #0a58ca;
+}
+
+/* Mantener flechas centradas */
+.custom-carousel .carousel-control-prev,
+.custom-carousel .carousel-control-next {
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: auto;
+  height: auto;
+}
+
+/* === Ajustes de tarjetas === */
+.card {
+  width: 18rem;
+  height: 340px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Imagen con altura fija */
+.card-img-top {
+  height: 120px;
+  object-fit: cover;
+}
+
+
+/* Forzar que el body ocupe el resto */
+.card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+}
+
+/* Descripción: solo hasta 3 líneas */
+.carousel-card__description {
+  color: #666;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+@media (max-width: 768px) {
+  .carousel-card__description {
+    -webkit-line-clamp: 2;
+  }
+}
+
+.no-scrollbar {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* Para Angular router-outlet y contenedores principales */
+router-outlet,
+app-root,
+.main-wrapper,
+.page-wrapper {
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+router-outlet::-webkit-scrollbar,
+app-root::-webkit-scrollbar,
+.main-wrapper::-webkit-scrollbar,
+.page-wrapper::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }

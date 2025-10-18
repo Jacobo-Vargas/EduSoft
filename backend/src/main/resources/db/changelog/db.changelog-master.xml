@@ -15,5 +15,9 @@
         <include file="db/changelog/juan/db.changelog-08-create-contents-table.xml" relativeToChangelogFile="false"/>
         <include file="db/changelog/juan/db.changelog-09-create-course-events-table.xml" relativeToChangelogFile="false"/>
         <include file="db/changelog/juan/db.changelog-10-create-code-change-password-table.xml" relativeToChangelogFile="false"/>
+        <include file="db/changelog/juan/db.changelog-11-add-coverurl-semester-table.xml" relativeToChangelogFile="false"/>
+
+        <include file="db/changelog/julian/db.changelog-01-is-visible-create-courses-table.xml" relativeToChangelogFile="false"/>
+        <include file="db/changelog/julian/db.changelog-02-create-user-course-table.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

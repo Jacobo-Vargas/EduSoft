@@ -2,6 +2,7 @@ package com.uniquindio.edu.edusoft.service.impl;
 
 import com.uniquindio.edu.edusoft.model.dto.course.CourseRequestDto;
 import com.uniquindio.edu.edusoft.model.entities.*;
+import com.uniquindio.edu.edusoft.model.entities.Module;
 import com.uniquindio.edu.edusoft.model.enums.EnumCourseEventType;
 import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import com.uniquindio.edu.edusoft.model.mapper.CourseMapper;
@@ -270,25 +271,39 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public ResponseEntity<?> updateStatusAudit(long courseId) throws Exception {
-        Optional<Course> isExintgCourse = courseRepository.findById(courseId);
-        if (!isExintgCourse.isPresent()) {
+        Optional<Course> isExistingCourse = courseRepository.findByIdWithRelations(courseId);
+        if (isExistingCourse.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No se encontró el curso proporcionado");
         }
-        Optional<AuditStatus> existingAuditStatus = auditStatusRepository.findByName("En-revision");
-        AuditStatus auditStatus;
-        if (existingAuditStatus.isPresent()) {
-            auditStatus = existingAuditStatus.get();
-        } else {
-            auditStatus = new AuditStatus();
-            auditStatus.setName("En-revision");
-            auditStatus.setDescription("Significa que el curso se encuentra en revisión por auditoría");
-            auditStatus = auditStatusRepository.save(auditStatus);
+
+        Course course = isExistingCourse.get();
+        AuditStatus auditStatus = auditStatusRepository.findByName("En-revision")
+                .orElseGet(() -> {
+                    AuditStatus newStatus = new AuditStatus();
+                    newStatus.setName("En-revision");
+                    newStatus.setDescription("Significa que el curso se encuentra en revisión por auditoría");
+                    return auditStatusRepository.save(newStatus);
+                });
+
+        if(course.getAuditStatus().getName().equals("En-revision")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("El curso ya se encuentra en revision");
         }
-        Course course = isExintgCourse.get();
         course.setAuditStatus(auditStatus);
-        course = courseRepository.save(course);
-        // Ahora toResponseDto puede acceder a todas las relaciones lazy
+
+        course.setIsVisible(true);
+        for (Module module : course.getModules()) {
+            module.setIsVisible(true);
+            for (Lesson lesson : module.getLessons()) {
+                lesson.setIsVisible(true);
+                for (Content content : lesson.getContents()) {
+                    content.setIsVisible(true);
+                }
+            }
+        }
+        courseRepository.save(course);
+
         return ResponseEntity.ok(courseMapper.toResponseDto(course));
     }
 
@@ -304,5 +319,14 @@ public class CourseServiceImpl implements CourseService {
         return ResponseEntity.ok(courseMapper.toResponseDto(course));
     }
 
+    @Override
+    public ResponseEntity<?> getVisibleActiveCourses() {
+        List<Course> courses = courseRepository.findAllVisibleActiveCourses();
+        return ResponseEntity.ok(
+                courses.stream()
+                        .map(courseMapper::toResponseDto)
+                        .toList()
+        );
+    }
 
 }

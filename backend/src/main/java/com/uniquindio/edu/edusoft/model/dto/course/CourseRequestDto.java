@@ -15,10 +15,10 @@ public class CourseRequestDto {
     private Integer semester;
     private String priorKnowledge;
     private Integer estimatedDurationMinutes;
-    // Relacionados solo por ID
     private Long categoryId;
     private Long currentStatusId;
     private Long auditStatusId;
     private String userId;
     private String state;
+    private Boolean isVisible = false;
 }

@@ -28,11 +28,11 @@ export interface CategorieResponseDTO {
 export interface courseRequestDTO {
   id: number;
   title: string;
-  description: string; // <-- Corregido
+  description: string;
   price: number;
   coverUrl: string;
   semester: number;
-  priorKnowledge: string; // <-- Corregido
+  priorKnowledge: string;
   estimatedDurationMinutes: number;
   categoryId: number;
   userId: string;
@@ -41,17 +41,51 @@ export interface courseRequestDTO {
 export interface courseResponseDTO {
   id: number;
   title: string;
-  description: string; // <-- Corregido
+  description: string;
   price: number;
   coverUrl: string;
   semester: number;
-  priorKnowledge: string; // <-- Corregido
+  priorKnowledge: string;
   estimatedDurationMinutes: number;
+
   categoryId: number;
-  userId: string; // <-- Mantener como string para que coincida con el backend y evitar errores de mapeo
+  categoryName: string;
+
+  currentStatusId: number;
+  currentStatusName: string;
+
+  auditStatusId: number;
   auditStatusName: string;
+
+  userId: string;
+  userName: string;
+
+  createdAt: string;
+  updatedAt: string;
+  state: string;
 }
 
+export interface EnrollmentResponseDTO {
+  id: number;
+  userId: number;
+  userName: string;
+  course: CourseResponseDTO; 
+  courseTitle: string;
+  enrollmentDate: string;
+  progressPercentage: number;
+  isCompleted: boolean;
+  userCourse: string;
+}
+
+export interface CourseResponseDTO {
+  id: number;
+  title: string;
+  description: string;
+  coverUrl: string;
+  estimatedDurationMinutes: number;
+  createdAt: string;
+  price: number;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -102,13 +136,44 @@ export class CourseService {
   }
   setStatusAudit(courseId: number): Observable<courseResponseDTO> {
     return this.http.put<courseResponseDTO>(
-        `${API}/course/updateCourseAuditStatus/${courseId}`,
-        null,  // body vacío
-        { withCredentials: true }  // opciones
+      `${API}/course/updateCourseAuditStatus/${courseId}`,
+      null,  // body vacío
+      { withCredentials: true }  // opciones
     );
-}
-updateCourse(courseId: number, body: FormData): Observable<courseResponseDTO> {
-  return this.http.put<courseResponseDTO>(`${API}/course/update/${courseId}`, body, { withCredentials: true });
-}
+  }
+  updateCourse(courseId: number, body: FormData): Observable<courseResponseDTO> {
+    return this.http.put<courseResponseDTO>(`${API}/course/update/${courseId}`, body, { withCredentials: true });
+  }
+
+  getVisibleCourses(): Observable<courseResponseDTO[]> {
+    return this.http.get<courseResponseDTO[]>(`${API}/course/visible`, {
+      withCredentials: true
+    });
+  }
+
+  enrollToCourse(courseId: number): Observable<any> {
+    return this.http.post(
+      `${API}/enrollments/enroll`,
+      { courseId },
+      { withCredentials: true }
+    );
+  }
+
+  getCoursesStudent(): Observable<any> {
+    return this.http.get(
+      `${API}/enrollments/finByCoursesUser`,
+      { withCredentials: true }
+    );
+  }
+
+  getCourseById(id: number) {
+  return this.http.get(`${API}/course/${id}`, { withCredentials: true });
+  }
+
+  courseUnsubscribe(courseId: number): Observable<string> {
+    const body = { courseId };
+    return this.http.put(`${API}/enrollments/courseUnsubscribe`, body, { responseType: 'text', withCredentials: true });
+  }
+
 
 }

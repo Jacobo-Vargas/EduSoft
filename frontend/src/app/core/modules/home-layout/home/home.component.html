@@ -1,109 +1,66 @@
+<div  *ngFor="let categoria of categoriasCursos; let catIndex = index" class="mb-5 padding-top">
+  <h2 class="mb-3 text-primary fw-bold">{{ categoria.nombre }}</h2>
 
-<!-- Bienvenida -->
-<div class="text-center mb-5">
-  <h1 class="display-4 fw-bold text-primary mb-3">Bienvenido a EduSoft</h1>
-  <p class="lead text-secondary">Explora nuestros cursos y comienza a aprender hoy mismo 🚀</p>
-</div>
+  <div id="cursoCarousel{{catIndex}}"
+       class="carousel slide custom-carousel"
+       data-bs-ride="carousel"
+       data-bs-interval="5000">
 
-<!-- Carousel de cursos multi-card -->
-<div id="cursoCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+    <!-- Indicadores -->
+    <div class="carousel-indicators">
+      <button *ngFor="let grupo of categoria.gruposCursos; let i = index"
+              type="button"
+              [attr.data-bs-target]="'#cursoCarousel' + catIndex"
+              [attr.data-bs-slide-to]="i"
+              [class.active]="i === 0"
+              aria-label="Slide {{i + 1}}">
+      </button>
+    </div>
 
-  <!-- Indicadores -->
-  <div class="carousel-indicators">
-    <button *ngFor="let grupo of gruposCursos; let i = index" type="button" data-bs-target="#cursoCarousel" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" aria-label="Slide {{i + 1}}"></button>
-  </div>
+    <!-- Contenido -->
+    <div class="carousel-inner">
+      <div class="carousel-item"
+           *ngFor="let grupo of categoria.gruposCursos; let i = index"
+           [class.active]="i === 0">
+        <div class="d-flex justify-content-center">
+          
+          <div *ngFor="let curso of grupo"
+               class="card shadow-sm border-0 mx-2">
+            
+            <img [src]="curso.coverUrl"
+                 class="card-img-top"
+                 [alt]="curso.title">
 
-  <!-- Carousel inner -->
-  <div class="carousel-inner">
-    <div class="carousel-item" *ngFor="let grupo of gruposCursos; let i = index" [class.active]="i === 0">
-      <div class="d-flex justify-content-center">
-        <div *ngFor="let curso of grupo" class="card h-100 shadow-sm border-0 mx-2" style="width: 18rem;">
-          <img [src]="curso.imagen" class="card-img-top" alt="{{curso.titulo}}" style="height: 180px; object-fit: cover;">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ curso.titulo }}</h5>
-            <p class="card-text text-secondary flex-grow-1">{{ curso.descripcion }}</p>
-            <a [routerLink]="curso.link" class="btn btn-primary mt-3">Inscribirse</a>
+            <div class="card-body">
+              <h5 class="card-title">{{ curso.title }}</h5>
+
+              <p class="card-text carousel-card__description"
+                 [title]="curso.description">
+                {{ curso.description || 'Sin descripción' }}
+              </p>
+
+              <button class="btn btn-primary" (click)="inscribirse(curso)">Inscribirse</button>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Controles -->
-  <button class="carousel-control-prev" type="button" data-bs-target="#cursoCarousel" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Anterior</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#cursoCarousel" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Siguiente</span>
-  </button>
-</div>
-
-<!-- Sección de planes -->
-<div class="container py-5">
-  <div class="row g-4">
-
-    <!-- Plan Basic -->
-    <div class="col-md-4">
-      <div class="card text-center h-100 shadow bg-dark text-white border-0">
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title">Plan Basic <span class="badge bg-secondary">Mensual</span></h5>
-          <p class="card-text text-muted">Para 1 estudiante</p>
-          <h3 class="text-warning">🇨🇴 $179.000/mes</h3>
-          <p class="text-muted">Cobro mensual recurrente</p>
-          <ul class="list-unstyled mt-3 mb-4 text-start">
-            <li>✔ Contenido profesional y actualizado con certificados digitales</li>
-            <li>✖ Certificados físicos para las rutas de aprendizaje profesional</li>
-            <li>✖ Acceso a las escuelas de Startups, Inglés y liderazgo</li>
-            <li>✖ Eventos exclusivos como Edusoft Conf</li>
-          </ul>
-          <a href="#" class="btn btn-outline-success mt-auto">Suscríbete a Plan Basic</a>
         </div>
       </div>
     </div>
 
-    <!-- Plan Expert -->
-    <div class="col-md-4">
-      <div class="card text-center h-100 shadow bg-dark text-white border border-primary">
-        <div class="card-body d-flex flex-column">
-          <span class="badge bg-danger mb-2">PRECIO ESPECIAL</span>
-          <h5 class="card-title">Plan Expert <span class="badge bg-secondary">Anual</span></h5>
-          <p class="card-text text-muted">Para 1 estudiante</p>
-          <h3 class="text-warning">🇨🇴 $849.149/año</h3>
-          <p class="text-muted">Antes <del>$999.000</del> <span class="text-success">Ahorras $149.851</span></p>
-          <ul class="list-unstyled mt-3 mb-4 text-start">
-            <li>✔ Contenido profesional y actualizado con certificados digitales</li>
-            <li>✔ Certificados físicos para las rutas de aprendizaje profesional</li>
-            <li>✔ Acceso a las escuelas de Startups, Inglés y liderazgo</li>
-            <li>✔ Eventos exclusivos como Edusoft Conf</li>
-          </ul>
-          <p class="small text-muted">Paga a 4 cuotas sin intereses de $212.288</p>
-          <a href="#" class="btn btn-success mt-auto">Suscríbete a Plan Expert</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Plan Expert Duo -->
-    <div class="col-md-4">
-      <div class="card text-center h-100 shadow bg-dark text-white border border-primary">
-        <div class="card-body d-flex flex-column">
-          <span class="badge bg-danger mb-2">PRECIO ESPECIAL</span>
-          <h5 class="card-title">Plan Expert Duo <span class="badge bg-secondary">Anual</span></h5>
-          <p class="card-text text-muted">2 estudiantes</p>
-          <h3 class="text-warning">🇨🇴 $1.274.190/año</h3>
-          <p class="text-muted">Antes <del>$1.499.000</del> <span class="text-success">Ahorras $224.810</span></p>
-          <ul class="list-unstyled mt-3 mb-4 text-start">
-            <li>✔ Contenido profesional y actualizado con certificados digitales</li>
-            <li>✔ Certificados físicos para las rutas de aprendizaje profesional</li>
-            <li>✔ Acceso a las escuelas de Startups, Inglés y liderazgo</li>
-            <li>✔ Eventos exclusivos como Edusoft Conf</li>
-          </ul>
-          <p class="small text-muted">Paga a 4 cuotas sin intereses de $318.548</p>
-          <a href="#" class="btn btn-success mt-auto">Suscríbete a Plan Expert Duo</a>
-        </div>
-      </div>
-    </div>
-
+    <!-- Controles -->
+    <button class="carousel-control-prev"
+            type="button"
+            [attr.data-bs-target]="'#cursoCarousel' + catIndex"
+            data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next"
+            type="button"
+            [attr.data-bs-target]="'#cursoCarousel' + catIndex"
+            data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
   </div>
 </div>

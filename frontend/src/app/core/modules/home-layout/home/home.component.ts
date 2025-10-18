@@ -1,52 +1,99 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { CRUDService } from '../../../services/crud.service';
+import { Component, OnInit } from '@angular/core';
+import { CourseService, courseResponseDTO } from '../../../services/course.service';
+import { AlertService } from '../../../services/alert.service';
+import Swal from 'sweetalert2';
+
+interface CategoriaCursos {
+  nombre: string;
+  gruposCursos: courseResponseDTO[][];
+}
 
 @Component({
   selector: 'app-home',
+  standalone: false,
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
-  standalone: false
+  styleUrls: ['./home.component.css']
 })
-
 export class HomeComponent implements OnInit {
-
-  cursos: any[] = [];
-
-  gruposCursos: any[][] = [];
-
+  categoriasCursos: CategoriaCursos[] = [];
 
   constructor(
-    public crudService: CRUDService,
-    public translate: TranslateService,
-    private cdRef: ChangeDetectorRef
-  ) {}
+    private courseService: CourseService,
+    private alertService: AlertService
+  ) { }
 
   ngOnInit(): void {
-
-    this.cursos = [
-      { titulo: 'Curso de Angular', descripcion: 'Aprende Angular desde cero.', imagen: '../../../assets/img/angular.png' },
-      { titulo: 'Curso de Spring Boot', descripcion: 'Construye APIs con Spring.', imagen: '../../../assets/img/spring.png' },
-      { titulo: 'Curso de PostgreSQL', descripcion: 'Domina bases de datos relacionales.', imagen: '../../../assets/img/postgres.png' },
-      { titulo: 'Curso de Angular', descripcion: 'Aprende Angular desde cero.', imagen: '../../../assets/img/angular.png' },
-      { titulo: 'Curso de Spring Boot', descripcion: 'Construye APIs con Spring.', imagen: '../../../assets/img/spring.png' },
-      { titulo: 'Curso de PostgreSQL', descripcion: 'Domina bases de datos relacionales.', imagen: '../../../assets/img/postgres.png' }
-    ]
-    this.crearGruposCursos();
-    this.cdRef.detectChanges();
+    this.courseService.getVisibleCourses().subscribe(cursos => {
+      this.categoriasCursos = this.agruparPorCategoria(cursos);
+    });
   }
 
-  crearGruposCursos() {
-    const temp = [...this.cursos];
-    // Si hay menos de 3, repetir cursos hasta tener al menos 3
-    while (temp.length < 3) {
-      temp.push(...this.cursos);
-    }
+  private agruparPorCategoria(cursos: courseResponseDTO[]): CategoriaCursos[] {
+    const categoriasMap = new Map<string, courseResponseDTO[]>();
 
-    // Crear grupos de 3 cursos
-    this.gruposCursos = [];
-    for (let i = 0; i < temp.length; i += 3) {
-      this.gruposCursos.push(temp.slice(i, i + 3));
-    }
+    cursos.forEach(curso => {
+      const categoria = curso.categoryName || 'Sin categoría';
+      if (!categoriasMap.has(categoria)) {
+        categoriasMap.set(categoria, []);
+      }
+      categoriasMap.get(categoria)!.push(curso);
+    });
+
+    return Array.from(categoriasMap.entries()).map(([nombre, cursos]) => {
+      const grupos: courseResponseDTO[][] = [];
+      for (let i = 0; i < cursos.length; i += 3) {
+        grupos.push(cursos.slice(i, i + 3));
+      }
+      return { nombre, gruposCursos: grupos };
+    });
+  }
+
+  inscribirse(curso: courseResponseDTO): void {
+    const mensaje = `
+    <p>Antes de inscribirte verifica lo siguiente:</p>
+    <p><b>Semestre recomendado:</b> ${curso.semester}</p>
+    <p><b>Precio del curso:</b> ${curso.price > 0 ? '$' + curso.price : 'Gratis'}</p>
+    <p><b>Conocimientos previos:</b> ${curso.priorKnowledge || 'Ninguno'}</p>
+    <p>¿Deseas continuar con la inscripción?</p>
+  `;
+
+    // Primer modal: confirmar inscripción
+    this.alertService.createAlertHTML('Confirmar inscripción', mensaje, 'info', true)
+      .then(result => {
+        if (result.isConfirmed) {
+          // Si el curso tiene precio, mostramos otra alerta para confirmar pago
+          if (curso.price > 0) {
+            const pagoMensaje = `
+            <p>El curso tiene un costo de <b>$${curso.price}</b>.</p>
+            <p>¿Deseas proceder con el pago e inscribirte?</p>
+          `;
+            this.alertService.createAlertHTML('Confirmar pago', pagoMensaje, 'info', true)
+              .then(resPago => {
+                if (resPago.isConfirmed) {
+                  //aca se debe integrar el metodo de pago
+                } else {
+                  this.alertService.createAlert('❌ Inscripción cancelada', 'info', false);
+                }
+              });
+          } else {
+            // Curso gratuito, inscribimos directamente
+            this.courseService.enrollToCourse(curso.id).subscribe({
+              next: () => {
+                this.alertService.createAlert(
+                  '✅ Te has inscrito correctamente al curso',
+                  'success',
+                  false
+                );
+              },
+              error: (err) => {
+                const msg = err?.error || '❌ No se pudo realizar la inscripción';
+                this.alertService.createAlert(msg, 'error', false);
+              }
+            });
+          }
+        } else {
+          this.alertService.createAlert('❌ Inscripción cancelada', 'info', false);
+        }
+      });
   }
 }

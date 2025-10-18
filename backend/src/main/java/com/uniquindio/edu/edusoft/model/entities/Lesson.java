@@ -52,7 +52,7 @@ public class Lesson extends BaseEntity {
 
     @NotNull
     @Column(name = "is_visible", nullable = false)
-    private Boolean isVisible = true;
+    private Boolean isVisible = false;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Content> contents;

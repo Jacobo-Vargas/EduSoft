@@ -1,6 +1,7 @@
 package com.uniquindio.edu.edusoft.model.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -9,8 +10,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import java.math.BigDecimal;
-
-
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
@@ -38,6 +38,7 @@ public class Course extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
+    @JsonIgnore
     private Category category;
 
     @NotNull
@@ -56,11 +57,13 @@ public class Course extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "current_status_id", nullable = false)
+    @JsonIgnore
     private CurrentStatus currentStatus; //Estado del curso
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @Size(max = 500)
@@ -74,11 +77,20 @@ public class Course extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "audit_status_id", nullable = false)
+    @JsonIgnore
     private AuditStatus auditStatus;//Estados de auditoria
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "course_state", nullable = false, length = 20)
     private EnumState state = EnumState.ACTIVE;
+
+    @NotNull
+    @Column(name = "is_visible", nullable = false)
+    private Boolean isVisible = false;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Module> modules;
+
 
 }

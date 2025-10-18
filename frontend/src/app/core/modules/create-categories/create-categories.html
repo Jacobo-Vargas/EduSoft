@@ -18,7 +18,7 @@
           <label for="name" class="col-sm-3 col-form-label">Nombre*</label>
           <div class="col-sm-9">
             <input id="name" type="text" class="form-control" formControlName="name" placeholder="Ej: Programación"
-              [class.is-invalid]="f['name']?.touched && f['name']?.invalid" />
+              [class.is-invalid]="f['name'].touched && f['name'].invalid" />
             <div class="invalid-feedback" *ngIf="f['name']?.errors?.['required']">El nombre es obligatorio.</div>
             <div class="invalid-feedback" *ngIf="f['name']?.errors?.['minlength']">Mínimo 3 caracteres.</div>
             <div class="invalid-feedback" *ngIf="f['name']?.errors?.['maxlength']">Máximo 60 caracteres.</div>
@@ -31,7 +31,7 @@
           <div class="col-sm-9">
             <textarea id="description" rows="3" class="form-control" formControlName="description"
               placeholder="Breve descripción de la categoría"
-              [class.is-invalid]="f['description']?.touched && f['description']?.invalid"></textarea>
+              [class.is-invalid]="f['description'].touched && f['description'].invalid"></textarea>
             <div class="invalid-feedback" *ngIf="f['description']?.errors?.['required']">La descripción es obligatoria.
             </div>
             <div class="invalid-feedback" *ngIf="f['description']?.errors?.['minlength']">Mínimo 10 caracteres.</div>

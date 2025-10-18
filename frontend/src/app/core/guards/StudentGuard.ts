@@ -12,7 +12,7 @@ export class StudentGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean | UrlTree {
-    if (this.authService.getCurrentUserRole() === 'PROFESOR') {
+    if (this.authService.getCurrentUserRole() === 'ESTUDIANTE') {
       return true;
     }
     this.alertService.createAlert('No tienes permisos para acceder a esta sección', 'error', false);

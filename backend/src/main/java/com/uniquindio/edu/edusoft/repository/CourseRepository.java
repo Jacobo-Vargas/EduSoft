@@ -29,4 +29,13 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             "JOIN FETCH c.auditStatus " +
             "WHERE c.id = :id AND c.state = 'ACTIVE'")
     Optional<Course> findByIdWithRelations(@Param("id") Long id);
+
+    @Query("SELECT c FROM Course c " +
+            "JOIN FETCH c.category " +
+            "JOIN FETCH c.user " +
+            "JOIN FETCH c.currentStatus " +
+            "JOIN FETCH c.auditStatus " +
+            "WHERE c.state = 'ACTIVE' AND c.isVisible = true")
+    List<Course> findAllVisibleActiveCourses();
+
 }

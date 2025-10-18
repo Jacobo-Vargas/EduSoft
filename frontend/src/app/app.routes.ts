@@ -16,16 +16,22 @@ import { CreateLessonComponent } from './core/modules/create-lesson-component/cr
 import { ContentComponent } from './core/modules/content/content';
 import { CreateContentComponent } from './core/modules/create-content-component/create-content-component';
 import { History } from './core/modules/history/history';
-
 import { AuthGuard } from './core/guards/AuthGuard';
 import { TeacherGuard } from './core/guards/TeacherGuard';
 import { AuditGuard } from './core/guards/AuditGuard';
+import { Profile } from './core/modules/profile/profile';
+import { StudentCourses } from './core/modules/student-courses/student-courses';
+import { StudentGuard } from './core/guards/StudentGuard';
+import { ViewCourseComponent } from './core/modules/view-course/view-course';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'register', component: RegisterUserComponent },
+  { path: 'app-profile', component: Profile },
   { path: 'recover-password', component: RecoverPassword },
   { path: 'send-code-email', component: SendEmail },
+  { path: 'app-profile', component: Profile, canActivate: [AuthGuard, StudentGuard] },
+  { path: 'app-student-courses', component: StudentCourses },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'app-create-courses', component: CreateCourses, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'app-create-categories', component: CreateCategories, canActivate: [AuthGuard, TeacherGuard] },
@@ -39,5 +45,8 @@ export const routes: Routes = [
   { path: 'modules/:courseId/lessons/:moduleId/contents/:lessonId', component: ContentComponent, canActivate: [AuthGuard] },
   { path: 'modules/:courseId/lessons/:moduleId/contents/:lessonId/create', component: CreateContentComponent, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'history/:courseId', component: History, canActivate: [AuthGuard, TeacherGuard] },
+  { path: 'ver-curso/:id', component: ViewCourseComponent, canActivate: [AuthGuard, StudentGuard] },
+
+
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];

@@ -1,10 +1,8 @@
 package com.uniquindio.edu.edusoft.controller;
 
-import com.uniquindio.edu.edusoft.model.dto.auditStatus.AuditStatusRequestDto;
 import com.uniquindio.edu.edusoft.model.dto.course.CourseRequestDto;
 import com.uniquindio.edu.edusoft.model.entities.Course;
 import com.uniquindio.edu.edusoft.service.CourseService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +56,9 @@ public class CourseController {
         return ResponseEntity.ok(courseService.searchCoursesByid(id));
     }
 
-
+    @GetMapping("/visible")
+    public ResponseEntity<?> getVisibleCourses() throws Exception {
+        return courseService.getVisibleActiveCourses();
+    }
 
 }

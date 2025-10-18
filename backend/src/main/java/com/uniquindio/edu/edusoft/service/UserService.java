@@ -3,6 +3,7 @@ package com.uniquindio.edu.edusoft.service;
 import com.uniquindio.edu.edusoft.model.dto.respose.ResponseDTO;
 import com.uniquindio.edu.edusoft.model.dto.user.RequestUserDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 
 public interface UserService {
 
@@ -14,4 +15,7 @@ public interface UserService {
 
     ResponseEntity<ResponseDTO> verifyUserByToken(String token) throws Exception;
 
+    ResponseEntity<?> userInformation(Authentication authentication) throws  Exception;
+
+    ResponseEntity<?> userUpdateInformation(Authentication authentication, RequestUserDTO requestUserDTO   ) throws Exception;
 }

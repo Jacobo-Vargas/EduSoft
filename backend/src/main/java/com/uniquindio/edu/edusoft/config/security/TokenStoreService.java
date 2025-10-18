@@ -16,7 +16,7 @@ public class TokenStoreService {
 
     // Guardar token con TTL (se recomienda guardar por jti, no todo el token)
     public void storeToken(String jti, String username) {
-        long ttlMillis = 3600_000; // 1 hora
+        long ttlMillis = 600_000; // 1 hora
         redisTemplate.opsForValue().set(jti, username, ttlMillis, TimeUnit.MILLISECONDS);
     }
 

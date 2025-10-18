@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CourseService } from '../../services/course-service';
+import { CourseService } from '../../services/course.service';
 import { finalize } from 'rxjs';
 
 @Component({

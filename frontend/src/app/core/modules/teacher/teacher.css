@@ -3,6 +3,20 @@
   padding: 2rem 1rem;
   background-color: #f8f9fa; /* Un fondo suave para dar contraste */
 }
+.btn-verde {
+  background-color: #28a745;
+  color: white;
+  border: none;
+}
+.audit-icon-container i {
+  font-size: 1.5rem; /* ícono más grande */
+  color: #198754; /* verde, puedes cambiar según el diseño */
+}
+
+.btn-verde:hover {
+  transform: scale(1.02);
+  background-color: #286637;
+}
 
 /* Estilo general de la tarjeta del curso */
 .course-card {
