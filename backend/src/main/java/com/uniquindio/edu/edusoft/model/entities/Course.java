@@ -1,6 +1,5 @@
 package com.uniquindio.edu.edusoft.model.entities;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.uniquindio.edu.edusoft.model.enums.EnumState;
 import jakarta.persistence.*;
@@ -9,11 +8,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Table(
         name = "courses",
@@ -28,47 +29,54 @@ public class Course extends BaseEntity {
     @NotBlank
     @Size(max = 120)
     @Column(name = "title", length = 120, nullable = false)
+    @ToString.Include
     private String title;
 
     @NotBlank
     @Size(max = 500)
     @Column(name = "description", length = 500, nullable = false)
+    @ToString.Include
     private String description;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     @JsonIgnore
+    @ToString.Exclude
     private Category category;
 
     @NotNull
     @Column(name = "price", precision = 10, scale = 2, nullable = false)
+    @ToString.Include
     private BigDecimal price;
 
     @NotNull
     @Size(max = 1000)
     @Column(name = "cover_url", length = 1000, nullable = false)
-    private String coverUrl;//Url de la portada
+    @ToString.Include
+    private String coverUrl;
 
     @NotNull
     @Column(name = "semester", nullable = false)
-    private int semester; //Semestre
+    private int semester;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "current_status_id", nullable = false)
     @JsonIgnore
-    private CurrentStatus currentStatus; //Estado del curso
+    @ToString.Exclude
+    private CurrentStatus currentStatus;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
+    @ToString.Exclude
     private User user;
 
     @Size(max = 500)
     @Column(name = "prior_knowledge", length = 500)
-    private String priorKnowledge; //saberes previos
+    private String priorKnowledge;
 
     @NotNull
     @Column(name = "estimated_duration_minutes", nullable = false)
@@ -78,7 +86,8 @@ public class Course extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "audit_status_id", nullable = false)
     @JsonIgnore
-    private AuditStatus auditStatus;//Estados de auditoria
+    @ToString.Exclude
+    private AuditStatus auditStatus;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -90,7 +99,6 @@ public class Course extends BaseEntity {
     private Boolean isVisible = false;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Module> modules;
-
-
 }
