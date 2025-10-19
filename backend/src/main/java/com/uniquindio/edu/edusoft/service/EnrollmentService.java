@@ -11,4 +11,6 @@ public interface EnrollmentService {
     ResponseEntity<?>getCoursesStudent(Authentication authentication)throws Exception;
 
     public ResponseEntity<?> courseUnsubscribe(@RequestBody EnrollmentRequestDto request, Authentication authentication) throws Exception;
+
+    boolean alreadyEnrolled(Long courseId, Authentication authentication) throws Exception;
 }

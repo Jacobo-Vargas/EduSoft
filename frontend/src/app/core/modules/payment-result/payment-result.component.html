@@ -1,0 +1,55 @@
+<section class="vh-100 image-background">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-10 col-lg-8">
+        <div class="card shadow" style="border-radius: 1rem;">
+          <div class="card-body p-4 p-lg-5 text-black">
+
+            <!-- Botón atrás -->
+            <button type="button" class="person me-2" (click)="goBack()">
+              <i class="bi bi-arrow-left"></i> Volver
+            </button>
+
+            <!-- Mensaje de pago -->
+            <div class="text-center mt-4 mb-4">
+              <ng-container [ngSwitch]="status">
+                <div *ngSwitchCase="'approved'">
+                  <h1 class="text-success">✅ ¡Pago aprobado!</h1>
+                  <p>ID de pago: {{ paymentId }}</p>
+                </div>
+
+                <div *ngSwitchCase="'pending'">
+                  <h1 class="text-warning">⏳ Pago pendiente</h1>
+                  <p>Debes completar el pago en el medio elegido.</p>
+                </div>
+
+                <div *ngSwitchCase="'failed'">
+                  <h1 class="text-danger">❌ Pago cancelado o fallido</h1>
+                  <p>{{ message }}</p>
+                </div>
+
+                <div *ngSwitchDefault>
+                  <h1 class="text-secondary">ℹ️ Estado desconocido</h1>
+                </div>
+              </ng-container>
+            </div>
+
+            <!-- Spinner mientras se inscribe el curso -->
+            <div *ngIf="isProcessing" class="text-center my-3">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Procesando...</span>
+              </div>
+              <p>Procesando tu inscripción...</p>
+            </div>
+
+            <!-- Botón de ir al home -->
+            <div class="text-center mt-4">
+              <button class="btn btn-primary" (click)="goHome()">Ir al inicio</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

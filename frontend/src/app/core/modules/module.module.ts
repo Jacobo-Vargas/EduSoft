@@ -24,6 +24,7 @@ import { Profile } from './profile/profile';
 import { StudentCourses } from './student-courses/student-courses';
 import { ViewCourseComponent } from './view-course/view-course';
 import { SafeUrlPipe } from '../pipes/safe-url.pipe';
+import { PaymentResultComponent } from './payment-result/payment-result.component';
 
 
 
@@ -49,7 +50,8 @@ import { SafeUrlPipe } from '../pipes/safe-url.pipe';
     Profile,
     StudentCourses,
     SafeUrlPipe,
-    ViewCourseComponent
+    ViewCourseComponent,
+    PaymentResultComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
@@ -80,7 +82,8 @@ import { SafeUrlPipe } from '../pipes/safe-url.pipe';
     Profile,
     StudentCourses,
     SafeUrlPipe,
-    ViewCourseComponent
+    ViewCourseComponent,
+    PaymentResultComponent
   ]
 })
 export class MooduleModule { }
