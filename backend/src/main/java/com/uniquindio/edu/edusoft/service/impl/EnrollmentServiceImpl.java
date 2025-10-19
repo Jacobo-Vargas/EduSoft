@@ -1,5 +1,6 @@
 package com.uniquindio.edu.edusoft.service.impl;
 
+import com.uniquindio.edu.edusoft.config.security.JwtService;
 import com.uniquindio.edu.edusoft.model.dto.enrollment.EnrollmentRequestDto;
 import com.uniquindio.edu.edusoft.model.dto.enrollment.EnrollmentResponseDto;
 import com.uniquindio.edu.edusoft.model.entities.Course;
@@ -11,6 +12,7 @@ import com.uniquindio.edu.edusoft.repository.CourseRepository;
 import com.uniquindio.edu.edusoft.repository.UserCourseRepository;
 import com.uniquindio.edu.edusoft.repository.UserRepository;
 import com.uniquindio.edu.edusoft.service.EnrollmentService;
+import io.jsonwebtoken.Claims;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private final CourseRepository courseRepository;
     private final UserCourseRepository userCourseRepository;
     private final EnrollmentMapper enrollmentMapper;
+    private final JwtService jwtService;
 
     @Override
     public ResponseEntity<?> enrollToCourse(EnrollmentRequestDto request, Authentication authentication) {
@@ -127,5 +130,17 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                     .body("No se encontró inscripción para cancelar.");
         }
 
+    }
+
+    public boolean alreadyEnrolled(Long courseId, Authentication authentication) {
+
+        String email = (String) authentication.getPrincipal();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        Optional<UserCourse> existingEnrollment = userCourseRepository
+                .findByUserIdAndCourseIdAndUserCourse(user.getId(), courseId, EnumUserCourse.INSCRITO);
+
+        return existingEnrollment.isPresent();
     }
 }

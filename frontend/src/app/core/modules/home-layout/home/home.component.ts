@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CourseService, courseResponseDTO } from '../../../services/course.service';
 import { AlertService } from '../../../services/alert.service';
 import Swal from 'sweetalert2';
+import { PaymentService } from '../../../services/payment.service';
 
 interface CategoriaCursos {
   nombre: string;
@@ -65,12 +66,23 @@ export class HomeComponent implements OnInit {
           if (curso.price > 0) {
             const pagoMensaje = `
             <p>El curso tiene un costo de <b>$${curso.price}</b>.</p>
-            <p>¿Deseas proceder con el pago e inscribirte?</p>
-          `;
+            <p>¿Deseas proceder con el pago e inscribirte?</p>`;
             this.alertService.createAlertHTML('Confirmar pago', pagoMensaje, 'info', true)
               .then(resPago => {
+
                 if (resPago.isConfirmed) {
-                  //aca se debe integrar el metodo de pago
+
+                  this.courseService.getInitpoint(curso.id).subscribe({
+                    next: (res) => {
+                      window.location.href = res.init_point;
+                    },
+                    error: (err) => {
+                      const msg = err?.error?.error || '❌ No se pudo iniciar el pago';
+                      this.alertService.createAlert(msg, 'error', false);
+                    }
+                  });
+
+
                 } else {
                   this.alertService.createAlert('❌ Inscripción cancelada', 'info', false);
                 }

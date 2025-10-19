@@ -159,6 +159,13 @@ export class CourseService {
     );
   }
 
+  getInitpoint(courseId: number): Observable<any> {
+    return this.http.get(
+      `${API}/payment/mercado?courseId=${courseId}`,
+      { withCredentials: true }
+    );
+  }
+
   getCoursesStudent(): Observable<any> {
     return this.http.get(
       `${API}/enrollments/finByCoursesUser`,

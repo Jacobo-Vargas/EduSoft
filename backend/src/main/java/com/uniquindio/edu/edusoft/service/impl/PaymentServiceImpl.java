@@ -6,8 +6,10 @@ import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.resources.preference.Preference;
+import com.uniquindio.edu.edusoft.config.security.JwtService;
 import com.uniquindio.edu.edusoft.model.entities.Course;
 import com.uniquindio.edu.edusoft.service.CourseService;
+import com.uniquindio.edu.edusoft.service.EnrollmentService;
 import com.uniquindio.edu.edusoft.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +39,14 @@ public class PaymentServiceImpl implements PaymentService {
     private String appUrlBase;
 
     private final CourseService courseService;
+    private final EnrollmentService enrollmentService;
 
     @Override
     public ResponseEntity<?> getInitPoint(Long courseId, Authentication authentication) throws Exception {
 
         Course course = courseService.getCourseById(courseId);
+
+        validateEnrollment(courseId, authentication);
         String url = course.getCoverUrl();
         BigDecimal amount = course.getPrice();
 
@@ -59,21 +64,37 @@ public class PaymentServiceImpl implements PaymentService {
                         .build();
         List<PreferenceItemRequest> items = new ArrayList<>();
         items.add(itemRequest);
-        PreferenceRequest preferenceRequest = PreferenceRequest.builder().items(items).backUrls(getBackUrls()).build();
+        PreferenceRequest preferenceRequest = PreferenceRequest
+                .builder()
+                .items(items)
+                .externalReference(courseId.toString())
+                .backUrls(getBackUrls())
+                .build();
         PreferenceClient client = new PreferenceClient();
         Preference preference = client.create(preferenceRequest);
 
         Map<String, String> response = new HashMap<>();
         response.put("init_point", preference.getInitPoint());
         response.put("id", preference.getId());
+
+        log.info("Pago: {}", preference.getId());
         return ResponseEntity.ok(response);
     }
 
     private PreferenceBackUrlsRequest getBackUrls() {
+        log.info("getBackUrls {}", appUrlBase);
         return PreferenceBackUrlsRequest.builder()
                 .success(appUrlBase + "/successPayment")
                 .pending(appUrlBase + "/pendingPayment")
                 .failure(appUrlBase + "/failurePayment")
                 .build();
+    }
+
+    private void validateEnrollment(Long courseId, Authentication authentication) throws Exception {
+        boolean flag = enrollmentService.alreadyEnrolled(courseId, authentication);
+
+        if (flag) {
+            throw new Exception("Ya te encuentras registrado en este curso");
+        }
     }
 }

@@ -23,6 +23,7 @@ import { Profile } from './core/modules/profile/profile';
 import { StudentCourses } from './core/modules/student-courses/student-courses';
 import { StudentGuard } from './core/guards/StudentGuard';
 import { ViewCourseComponent } from './core/modules/view-course/view-course';
+import { PaymentResultComponent } from './core/modules/payment-result/payment-result.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -46,6 +47,9 @@ export const routes: Routes = [
   { path: 'modules/:courseId/lessons/:moduleId/contents/:lessonId/create', component: CreateContentComponent, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'history/:courseId', component: History, canActivate: [AuthGuard, TeacherGuard] },
   { path: 'ver-curso/:id', component: ViewCourseComponent, canActivate: [AuthGuard, StudentGuard] },
+  { path: 'successPayment', component: PaymentResultComponent },
+  { path: 'pendingPayment', component: PaymentResultComponent },
+  { path: 'failurePayment', component: PaymentResultComponent },
 
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
