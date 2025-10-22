@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
 import { ModuleService, ModuleResponseDto } from '../../services/module.service';
 import { LessonService, LessonResponseDto } from '../../services/lesson.service';
@@ -22,6 +22,7 @@ export class ViewCourseComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private courseService: CourseService,
     private moduleService: ModuleService,
     private lessonService: LessonService,
@@ -96,5 +97,11 @@ export class ViewCourseComponent implements OnInit {
     if (ext === 'pdf') return 'pdf';
     return 'other';
   }
+
+  goBack(): void {
+    this.router.navigate(['/app-student-courses']);
+  }
+
+  
 
 }
